@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://rickytan.github.io/blog/2013/06/05/ce-shi/</loc>
+        <loc>http://rickytan.me/blog/2013/06/05/ce-shi/</loc>
         <lastmod>2013-06-05T02:18:49+08:00</lastmod>
     </url>
     <url>
-        <loc>http://rickytan.github.io/404.html</loc>
+        <loc>http://rickytan.me/404.html</loc>
         <lastmod>2013-06-05T02:18:49+08:00</lastmod>
     </url>
     <url>
-        <loc>http://rickytan.github.io/blog/archives/</loc>
+        <loc>http://rickytan.me/blog/archives/</loc>
         <lastmod>2013-06-05T02:18:49+08:00</lastmod>
     </url>
     <url>
-        <loc>http://rickytan.github.io/</loc>
+        <loc>http://rickytan.me/</loc>
         <lastmod>2013-06-05T02:18:49+08:00</lastmod>
     </url>
     <url>
-        <loc>http://rickytan.github.io/robots.txt</loc>
+        <loc>http://rickytan.me/robots.txt</loc>
         <lastmod>2013-06-05T02:18:49+08:00</lastmod>
     </url>
     <url>
-        <loc>http://rickytan.github.io/search.html</loc>
+        <loc>http://rickytan.me/search.html</loc>
         <lastmod>2013-06-05T02:18:49+08:00</lastmod>
     </url>
 </urlset>

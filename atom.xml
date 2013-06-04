@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.github.io/atom.xml" rel="self"/>
-  <link href="http://rickytan.github.io/"/>
-  <updated>2013-06-05T02:19:08+08:00</updated>
-  <id>http://rickytan.github.io/</id>
+  <link href="http://rickytan.me/atom.xml" rel="self"/>
+  <link href="http://rickytan.me/"/>
+  <updated>2013-06-05T02:28:37+08:00</updated>
+  <id>http://rickytan.me/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[测试]]></title>
-    <link href="http://rickytan.github.io/blog/2013/06/05/ce-shi/"/>
+    <link href="http://rickytan.me/blog/2013/06/05/ce-shi/"/>
     <updated>2013-06-05T02:06:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2013/06/05/ce-shi</id>
+    <id>http://rickytan.me/blog/2013/06/05/ce-shi</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
