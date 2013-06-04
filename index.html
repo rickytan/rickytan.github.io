@@ -3,7 +3,7 @@
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head lang="zh-CN">
+<head>
   <meta charset="utf-8">
   <title>I'm Ricky -- 个人主页</title>
   <meta name="author" content="Ricky">
@@ -16,87 +16,55 @@
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-  <meta name="ujian" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   
-  <link rel="canonical" href="http://rickytan.github.io
-  
-  
-  
-  ">
-  <link href="./favicon.ico" rel="icon">
-  
-  <link href="./assets/bootstrap/css/spacelab.min.css" rel="stylesheet" type="text/css">
-  <link href="./assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
-  <link href="./assets/bootstrap/css/custom.css" rel="stylesheet" type="text/css">
-  <link href="./assets/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css">
-  
+  <link rel="canonical" href="http://rickytan.github.io">
+  <link href="./favicon.png" rel="icon">
+  <link href="./stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="./atom.xml" rel="alternate" title="I'm Ricky -- 个人主页" type="application/atom+xml">
-  <script src="./assets/bootstrap/js/jquery.min.js"></script>
-  <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
-  
+  <script src="./javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="./javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
   
 
 </head>
 
-<body    data-spy="scroll">
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="./">I'm Ricky -- 个人主页</a></h1>
+  
+    <h2>Talk is Cheap, show me the Code. Talk LESS, Code MORE</h2>
+  
+</hgroup>
 
-  <div class="container">
-    <header class="jumbotron subhead" id="overview">
-      
-<div class="subscribe">
-  <table>
-    <tr>
-      <td><span>Get Updates: &nbsp;</span></td>
-      
-      
-      <td><a href="./atom.xml" class="btn"><i class="icon-cog"></i> By RSS</a></td>
-      
-      
-    </tr>
-  </table>
-</div>
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="./atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rickytan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="./">Blog</a></li>
+  <li><a href="./blog/archives">Archives</a></li>
+</ul>
 
-<h1 class="title">I'm Ricky -- 个人主页</h1>
-
-  <p class="lead">Talk is Cheap, show me the Code. Talk LESS, Code MORE</p>
-
-
-      <div class="navbar">
-  <div class="navbar-inner">
-    <div class="container" style="width: auto;">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <div class="nav-collapse">
-                <ul class="nav">
-          <li><a href="./">Home</a></li>
-          <li><a href="./blog/archives">Blog</a></li>
-          <li><a href="./projects">Projects</a></li>
-          <li><a href="./contact">Contact</a></li>
-        </ul>
-
-        
-          <form action="http://google.com/search" method="get" class="navbar-search pull-left">
-            <fieldset role="search">
-              <input type="hidden" name="q" value="site:rickytan.github.io" />
-              <input type="text" name="q" results="0" placeholder="Search" class="search-query span2" />
-            </fieldset>
-          </form>
-        
-        
-      </div><!-- /.nav-collapse -->
-    </div>
-  </div><!-- /navbar-inner -->
-</div>
-
-    </header>
-    <div id="main">
-      <div id="content">
-        
-<div class="blog-index">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
   
   
   
@@ -141,13 +109,10 @@
     
   </div>
 </div>
-
+<aside class="sidebar">
   
-  <div class="span sidebar">
-    <div class="well">
-      
-        <section>
-  <h2>Recent Posts</h2>
+    <section>
+  <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
@@ -158,15 +123,15 @@
 </section>
 
 <section>
-  <h2>GitHub Repos</h2>
+  <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">更新状态中&#8230;</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/rickytan">@rickytan</a> on GitHub
   
   <script type="text/javascript">
-    document.onready = function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -181,7 +146,7 @@
             skip_forks: true,
             target: '#gh_repos'
         });
-    };
+    });
   </script>
   <script src="./javascripts/github.js" type="text/javascript"> </script>
 </section>
@@ -190,27 +155,38 @@
 
 
 
-      
+  
+</aside>
+
     </div>
   </div>
-
-
-
-
-      </div>
-    </div>
-    <footer class="footer"><p>
+  <footer role="contentinfo"><p>
   Copyright &copy; 2013 - Ricky -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> -
-  
-    <span class="credit">Theme by <a href="http://brianarmstrong.org">Brian Armstrong</a></span>
-  
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
+
 </footer>
-    
+  
 
 
 
-  </div>
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
 </body>
 </html>
