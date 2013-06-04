@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.github.io/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2013-06-05T01:20:52+08:00</updated>
+  <id>http://rickytan.github.io/</id>
+  <author>
+    <name><![CDATA[Ricky]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+</feed>
