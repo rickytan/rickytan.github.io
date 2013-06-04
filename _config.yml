@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://rickytan.github.io
+url: http://rickytan.me
 title: "I'm Ricky -- 个人主页"
 subtitle: "Talk is Cheap, show me the Code. Talk LESS, Code MORE"
 author: Ricky
@@ -16,7 +16,7 @@ description:
 date_format: "ordinal"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
-subscribe_rss: ./atom.xml
+subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
 email:
@@ -26,13 +26,14 @@ email:
 # ----------------------- #
 
 # If publishing to a subdirectory as in http://site.com/project set 'root: /project'
-root: ./
+root: /
 permalink: /blog/:year/:month/:day/:title/
 source: source
 destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
+categories: [CSS3, Sass, Media Queries]
 markdown: rdiscount
 rdiscount:
   extensions:
@@ -70,7 +71,7 @@ github_skip_forks: true
 
 # Twitter
 twitter_user:
-twitter_tweet_button: true
+twitter_tweet_button: false
 
 # Google +1
 google_plus_one: false
