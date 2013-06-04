@@ -4,7 +4,7 @@
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2013-06-05T01:54:42+08:00</updated>
+  <updated>2013-06-05T02:07:16+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -12,5 +12,14 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[测试]]></title>
+    <link href="http://rickytan.github.io/blog/2013/06/05/ce-shi/"/>
+    <updated>2013-06-05T02:06:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2013/06/05/ce-shi</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>
