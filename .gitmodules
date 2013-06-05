@@ -4,3 +4,6 @@
 [submodule ".themes/fabric"]
 	path = .themes/fabric
 	url = https://github.com/panks/fabric.git
+[submodule ".themes/bootstrap"]
+	path = .themes/bootstrap
+	url = git@github.com:barmstrong/octopress-bootstrap.git
