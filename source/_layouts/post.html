@@ -3,8 +3,9 @@ layout: default
 single: true
 ---
 
-<div>
-<article class="hentry" role="article">
+<div class="row">
+<div class="span9">
+<article class="hentry">
   {% include article.html %}
   <footer>
     <p class="meta">
@@ -44,6 +45,7 @@ single: true
   </section>
 {% endif %}
 </div>
+<div class="span2">
 {% unless page.sidebar == false %}
 <aside class="sidebar">
   {% if site.post_asides.size %}
@@ -53,3 +55,5 @@ single: true
   {% endif %}
 </aside>
 {% endunless %}
+</div>
+</div>

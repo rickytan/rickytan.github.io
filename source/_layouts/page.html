@@ -2,7 +2,8 @@
 layout: default
 ---
 
-<div>
+<div class="row">
+<div class="span9">
 <article role="article">
   {% if page.title %}
   <header>
@@ -39,6 +40,7 @@ layout: default
   </section>
 {% endif %}
 </div>
+<div class="span2">
 {% unless page.sidebar == false %}
 <aside class="sidebar">
   {% if site.page_asides.size %}
@@ -48,3 +50,5 @@ layout: default
   {% endif %}
 </aside>
 {% endunless %}
+</div>
+</div>
