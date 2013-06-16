@@ -49,7 +49,7 @@ window.setTimeout(open, 300);
 
 打包为.crx 后**[安装](/download/zjutel.crx)**，在Chrome访问<http://zjutel.zju.edu.cn/tree.php>，插件就开始工作了，这时你可以坐下来喝喝咖啡，等它停止。
 
-停止之后，将整个网页下载下来，可以用**Vim**等文本编辑器用搜索替换的方式去除HTML标签等不必要的信息，最终整理成如下所示文本文件（tree.txt）：
+停止之后，将整个网页下载下来，可以用`Vim`等文本编辑器用搜索替换的方式去除HTML标签等不必要的信息，最终整理成如下所示文本文件（tree.txt）：
 
 {% codeblock %}
 !+ 浙江大学
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `Number` (
 
 {% endcodeblock %}
 
-然后简单地写了个PHP脚本来处理，并存入数据库。更具体的信息，请访问Github Repo: <https://github.com/rickytan/YellowPage>，所有源代码都是开放的！zjutel.db 是处理好之后的 **Sqlite** 数据库，可以直接在手机等中使用。
+然后简单地写了个PHP脚本来处理，并存入数据库。更具体的信息，请访问Github Repo: <https://github.com/rickytan/YellowPage>，所有源代码都是开放的！zjutel.db 是处理好之后的 `Sqlite` 数据库，可以直接在手机等中使用。
 
 更多利用价值有待大家一起挖掘！
 
