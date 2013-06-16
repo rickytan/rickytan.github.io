@@ -3,52 +3,40 @@ layout: default
 ---
 
 <div class="row">
-<div class="span9">
-<article role="article">
-  {% if page.title %}
-  <header>
-    <h1 class="entry-title">{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
-    {% if page.date %}<p class="meta">{% include post/date.html %}{{ time }}</p>{% endif %}
-  </header>
+  {% if page.sidebar and site.sidebar_posn == "left" %}
+    {% include sidebar.html %}
   {% endif %}
-  {{ content }}
-  {% unless page.footer == false %}
-    <footer>
-      {% if page.date or page.author %}<p class="meta">
-        {% if page.author %}{% include post/author.html %}{% endif %}
-        {% include post/date.html %}{% if updated %}{{ updated }}{% else %}{{ time }}{% endif %}
-        {% if page.categories %}{% include post/categories.html %}{% endif %}
-      </p>{% endif %}
-      {% unless page.sharing == false %}
-        {% include post/sharing.html %}
-      {% endunless %}
-    </footer>
-  {% endunless %}
-</article>
-<!-- UY BEGIN -->
-<div id="uyan_frame"></div>
-<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1792754" async="true"></script>
-<!-- UY END -->
-<!-- UJian Button BEGIN -->
-<div class="ujian-hook"></div>
-<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=1792754"></script>
-<!-- UJian Button END -->
-{% if site.disqus_short_name and page.comments == true %}
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite">{% include post/disqus_thread.html %}</div>
-  </section>
-{% endif %}
-</div>
-<div class="span2">
-{% unless page.sidebar == false %}
-<aside class="sidebar"> 
-  {% if site.page_asides.size %}
-    {% include_array page_asides %}
-  {% else %}
-    {% include_array default_asides %}
+  <div class="{% if page.sidebar == false %}span12{% else %}span8{% endif %}">
+    {% if page.title %}
+      <div class="page-header">
+        <h1>{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
+        {% if page.date %}<p class="meta">{% include post/date.html %}{{ time }}</p>{% endif %}
+      </div>
+    {% endif %}
+    
+    {{ content }}
+    
+    {% unless page.footer == false %}
+      <footer>
+        {% if page.date or page.author %}<p class="meta">
+          {% if page.author %}{% include post/author.html %}{% endif %}
+          {% include post/date.html %}{% if updated %}{{ updated }}{% else %}{{ time }}{% endif %}
+          {% if page.categories %}{% include post/categories.html %}{% endif %}
+        </p>{% endif %}
+        {% unless page.sharing == false %}
+          {% include post/sharing.html %}
+        {% endunless %}
+      </footer>
+    {% endunless %}
+    
+    {% if site.disqus_short_name and page.comments == true %}
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread" aria-live="polite">{% include post/disqus_thread.html %}</div>
+      </section>
+    {% endif %}
+  </div>
+  {% if page.sidebar and site.sidebar_posn != "left" %}
+    {% include sidebar.html %}
   {% endif %}
-</aside>
-{% endunless %}
-</div>
 </div>
