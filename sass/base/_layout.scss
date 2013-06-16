@@ -94,7 +94,7 @@ body {
   > div, > article { width: 100%; }
 }
 
-pside.sidebar {
+aside.sidebar {
   float: none;
   padding: 0 $pad-min 1px;
   background-color: lighten($sidebar-bg, 2);
@@ -155,7 +155,7 @@ body.sidebar-footer {
     background: none;
     clear: none;
     float: left;
-    margin: 0;
+    margin: 0 -100% 0 0;
     section {
       width: auto; margin-left: 0;
       &.odd, &.even { float: none; width: auto; margin-left: 0; }
