@@ -105,6 +105,19 @@ categories: 技术
 		return 0;
 	}
 
+另外，Octopress 有更强大的插件可以突现代码，如你看到的各种有序号开头的部分，可以使用 `codeblock` 和
+`endcodeblock` 将代码包起来，在生成博客时，会自动加亮。
+{% codeblock 这是一小段C程序 lang:c %}
+\{\% codeblock 这是一小段C程序 lang:c \%\}
+int main() {
+	printf("Hello World!\n");
+	return 0;
+}
+\{\% endcodeblock \%\}
+{% endcodeblock %}
+
+加上*lang:c*以告诉插件以何种语法高亮代码。
+
 **链接**
 
 {% codeblock %}
