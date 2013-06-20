@@ -23,7 +23,7 @@ categories: ['技术', 'iZJU']
 于是乎花了些时间写了个Chrome 小插件，如果还有节点，点开那个节点链接，否则无动作。
 主要代码如下，通过一张小gif 图来判断是否可以展开：
 
-{% codeblock %}
+{% codeblock index.user.js lang:js %}
 function open() {
     var img = $("font").find("img");
     img.each(function(k,v){
@@ -75,7 +75,7 @@ window.setTimeout(open, 300);
 
 建立数据表如下：
 
-{% codeblock %}
+{% codeblock lang:sql %}
 
 USE zjutel;
 
@@ -105,6 +105,6 @@ CREATE TABLE IF NOT EXISTS `Number` (
 
 然后简单地写了个PHP脚本来处理，并存入数据库。更具体的信息，请访问Github Repo: <https://github.com/rickytan/YellowPage>，所有源代码都是开放的！zjutel.db 是处理好之后的 `Sqlite` 数据库，可以直接在手机等中使用。
 
-更多利用价值有待大家一起挖掘！
+此电话信息的更多利用价值，有待大家一起挖掘！
 
 

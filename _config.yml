@@ -97,7 +97,7 @@ disqus_show_comment_count: false
 uyan_id: 1792754
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-41902529-1
 
 # Facebook Like
 facebook_like: false
