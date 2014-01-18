@@ -30,13 +30,7 @@ categories: ['技术', '破解', '蛐蛐儿']
 
 - (void)didReceiveDataToken:(NSString *)dataToken
 {
-    self.tokenReceived = dataToken;
-    NSString *decode = [self decodeToken:dataToken];
-    if ([ZTokenManager verifyToken:decode]) {
-        NSString *host = [ZTokenManager hostForToken:decode];
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7777/t/%@", host, decode]];
-        [self downloadFile:url];
-    }
+	...
 }
 {% endcodeblock %}
 
