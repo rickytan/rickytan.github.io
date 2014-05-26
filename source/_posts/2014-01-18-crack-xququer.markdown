@@ -10,6 +10,7 @@ categories: ['技术', '破解', '蛐蛐儿']
 
 当然，其实大部分情况下这个过程已经够用了，因为开发者可以将自己需要传输的任何字符串编码为_Token_（这个字符串可以是`BASE64`编码，也可以是一个文件的下载链接），通过声音传输，然后再解码。
 
+<!--more-->
 {% codeblock viewcontroller.m lang:objc %}
 - (void)viewDidLoad
 {

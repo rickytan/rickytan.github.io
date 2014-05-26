@@ -18,7 +18,7 @@ label.font = [UIFont fontWithName:@"myFont"];
 {% endcodeblock %}
 
 如果你的界面全部是代码实现的，而且项目初期就已经定下统一用什么字体了，这就不是什么难事。但是，试想，如果你的界面是由大量`IB`实现的，而且用的是自定义的字体，在`IB`中选都没法选；或是项目已经完成差不多了，上面要求统一改字体，那该如何是好？
-
+<!--more-->
 其实利用`objective-c`的动态性就可以轻松搞定。
 
 # Method swizzling

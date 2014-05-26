@@ -22,7 +22,7 @@ categories: ['技术', 'iZJU']
 
 于是乎花了些时间写了个Chrome 小插件，如果还有节点，点开那个节点链接，否则无动作。
 主要代码如下，通过一张小gif 图来判断是否可以展开：
-
+<!--more-->
 {% codeblock index.user.js lang:js %}
 function open() {
     var img = $("font").find("img");
