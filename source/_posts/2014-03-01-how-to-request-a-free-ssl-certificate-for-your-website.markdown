@@ -24,3 +24,5 @@ categories: ['服务器', 'ssl', '安全', 'https', 'startssl']
 
 ### 如何申请
 
+> 算了，网上关于 [StartSSL](https://startssl.com) 的文章太多了，自己搜吧，不写了……
+
