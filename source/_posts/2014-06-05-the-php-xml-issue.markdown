@@ -3,7 +3,7 @@ layout: post
 title: "PHP 中读 XML 的一个坑"
 date: 2014-06-05 01:47
 comments: true
-categories: 
+categories: ['php', 'xml', '微信']
 ---
 
 在做一个微信的 `PHP` 后台时需要读微信服务器 `POST` 过来的 `XML`，然后保存到 `Memcache` 中。
