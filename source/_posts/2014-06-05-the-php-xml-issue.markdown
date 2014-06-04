@@ -6,6 +6,7 @@ comments: true
 categories: ['php', 'xml', '微信']
 ---
 
+## 问题
 在做一个微信的 `PHP` 后台时需要读微信服务器 `POST` 过来的 `XML`，然后保存到 `Memcache` 中。
 
 {% codeblock index.php lang:php %}
@@ -22,6 +23,7 @@ public index() {
 
 怎么也出不来结果，然后发现运行到 `save` 时有异常<!--more-->，是 `Memcache` 抛出的，说无法串行化。通过 `var_dump` 后发现 `$postObj->FromUserName` 是个 `SimepleXMLElement` 类型，而用 `var_dump` `$postObj` 时发现是 `string`！！
 
+## 解决方法
 解决方法有多种:
 
 1. 强制转换为 `string`
