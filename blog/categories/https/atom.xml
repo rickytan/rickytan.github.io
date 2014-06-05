@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: https | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.me/blog/categories/https/atom.xml" rel="self"/>
-  <link href="http://rickytan.me/"/>
-  <updated>2014-06-05T03:20:29+08:00</updated>
-  <id>http://rickytan.me/</id>
+  <link href="http://rickytan.github.io/blog/categories/https/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2014-06-06T01:47:18+08:00</updated>
+  <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何为您的站点请求一个免费的ssl证书？]]></title>
-    <link href="http://rickytan.me/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/"/>
+    <link href="http://rickytan.github.io/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/"/>
     <updated>2014-03-01T02:39:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website</id>
+    <id>http://rickytan.github.io/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website</id>
     <content type="html"><![CDATA[<h3>SSL证书</h3>
 
 <p>关于什么是<code>SSL</code>证书请自行<code>Google</code>，你的每次<code>https</code>请求，都有一个证书在幕后做支持，它为网络上的服务器之间建立起了信任，保障了每次线上交易、浏览的安全。</p>

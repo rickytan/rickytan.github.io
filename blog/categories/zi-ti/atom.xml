@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: 字体 | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.me/blog/categories/zi-ti/atom.xml" rel="self"/>
-  <link href="http://rickytan.me/"/>
-  <updated>2014-06-05T03:20:29+08:00</updated>
-  <id>http://rickytan.me/</id>
+  <link href="http://rickytan.github.io/blog/categories/zi-ti/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2014-06-06T01:47:18+08:00</updated>
+  <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS 下如何设置全局字体？]]></title>
-    <link href="http://rickytan.me/blog/2014/02/20/global-font-of-ios/"/>
+    <link href="http://rickytan.github.io/blog/2014/02/20/global-font-of-ios/"/>
     <updated>2014-02-20T01:52:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/02/20/global-font-of-ios</id>
+    <id>http://rickytan.github.io/blog/2014/02/20/global-font-of-ios</id>
     <content type="html"><![CDATA[<h1>背景</h1>
 
 <p><code>iOS 6</code>跟 <code>iOS 7</code>的字体还是有点不一样的，有时候为了两者的统一，或者，应设计师的要求，界面中所有的 Label，Button 等都用自定义字体，一般来说，我们在初始化的时候就需要不断地添加冗余的代码来设置自己的字体。</p>

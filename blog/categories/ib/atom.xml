@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: IB | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.me/blog/categories/ib/atom.xml" rel="self"/>
-  <link href="http://rickytan.me/"/>
-  <updated>2014-06-05T03:20:29+08:00</updated>
-  <id>http://rickytan.me/</id>
+  <link href="http://rickytan.github.io/blog/categories/ib/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2014-06-06T01:47:18+08:00</updated>
+  <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[代码生成的 UIColor 与在 IB 中填写的颜色 RGB 最终颜色不一致的问题]]></title>
-    <link href="http://rickytan.me/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
+    <link href="http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
     <updated>2014-05-26T14:58:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
+    <id>http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
     <content type="html"><![CDATA[<p>iOS 应用界面的编写，按程序员的习惯可以分为两派：代码党和 <code>IB</code> 党。本人是倾向于 <code>Interface Builder</code> 的，毕竟能少写点就少写点，能用 <code>IB</code> 实现坚决不用代码。</p>
 
 <p>但是在实际使用中，却发现一些问题，这个问题早有发现，我以为只是色差的原因，但是最近发现不那么简单了。</p>

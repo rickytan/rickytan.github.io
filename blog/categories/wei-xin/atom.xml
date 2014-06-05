@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: 微信 | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.me/blog/categories/wei-xin/atom.xml" rel="self"/>
-  <link href="http://rickytan.me/"/>
-  <updated>2014-06-05T03:20:29+08:00</updated>
-  <id>http://rickytan.me/</id>
+  <link href="http://rickytan.github.io/blog/categories/wei-xin/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2014-06-06T01:47:18+08:00</updated>
+  <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[PHP 中读 XML 的一个坑]]></title>
-    <link href="http://rickytan.me/blog/2014/06/05/the-php-xml-issue/"/>
+    <link href="http://rickytan.github.io/blog/2014/06/05/the-php-xml-issue/"/>
     <updated>2014-06-05T01:47:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/06/05/the-php-xml-issue</id>
+    <id>http://rickytan.github.io/blog/2014/06/05/the-php-xml-issue</id>
     <content type="html"><![CDATA[<h2>问题</h2>
 
 <p>在做一个微信的 <code>PHP</code> 后台时需要读微信服务器 <code>POST</code> 过来的 <code>XML</code>，然后保存到 <code>Memcache</code> 中。</p>

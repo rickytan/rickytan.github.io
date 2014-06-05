@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: iZJU | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.me/blog/categories/izju/atom.xml" rel="self"/>
-  <link href="http://rickytan.me/"/>
-  <updated>2014-06-05T03:20:29+08:00</updated>
-  <id>http://rickytan.me/</id>
+  <link href="http://rickytan.github.io/blog/categories/izju/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2014-06-06T01:47:18+08:00</updated>
+  <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[iZJU中浙大黄页的实现]]></title>
-    <link href="http://rickytan.me/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/"/>
+    <link href="http://rickytan.github.io/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/"/>
     <updated>2013-06-16T11:33:00+08:00</updated>
-    <id>http://rickytan.me/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian</id>
+    <id>http://rickytan.github.io/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian</id>
     <content type="html"><![CDATA[<h2>简介</h2>
 
 <p>用过<a href="https://itunes.apple.com/cn/app/izju/id573810521?mt=8">iZJU iOS</a>版的同学应该会注意到，在2.1.1版本之后新增了“浙大黄页”的功能。</p>

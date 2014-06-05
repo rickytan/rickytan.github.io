@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: 破解 | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.me/blog/categories/po-jie/atom.xml" rel="self"/>
-  <link href="http://rickytan.me/"/>
-  <updated>2014-06-05T03:20:29+08:00</updated>
-  <id>http://rickytan.me/</id>
+  <link href="http://rickytan.github.io/blog/categories/po-jie/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2014-06-06T01:47:18+08:00</updated>
+  <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[蛐蛐儿 SDK 破解]]></title>
-    <link href="http://rickytan.me/blog/2014/01/18/crack-xququer/"/>
+    <link href="http://rickytan.github.io/blog/2014/01/18/crack-xququer/"/>
     <updated>2014-01-18T15:23:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/01/18/crack-xququer</id>
+    <id>http://rickytan.github.io/blog/2014/01/18/crack-xququer</id>
     <content type="html"><![CDATA[<p><a href="http://xququ.com">蛐蛐儿</a> 是一套利用声音传输信息的解决方案，大家可能知道 <code>支付宝</code> 在早些时候就推出了当面付的功能，其实就是利用超声波将加密后的支付信息传输给附近的人。蛐蛐儿SDK可以在其官网上下载到，通过它的提供的Demo可以看出，它需要将一段任意字符串<em>S</em>上传它们的后台，然后生成一段16字节的<em>Token</em>，发送时只能发送此<em>Token</em>。同时，在接收方接收到<em>Token</em>后，需要访问它们的后台把原始字符串<em>S</em>下载下来。这个过程也正好解释了，为什么无论发送什么东西，声音长度是一致的，真正的数据并不是通过声音传的，而是通过网络下载的。</p>
 
 <p>当然，其实大部分情况下这个过程已经够用了，因为开发者可以将自己需要传输的任何字符串编码为<em>Token</em>（这个字符串可以是<code>BASE64</code>编码，也可以是一个文件的下载链接），通过声音传输，然后再解码。</p>

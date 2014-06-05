@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.me/atom.xml" rel="self"/>
-  <link href="http://rickytan.me/"/>
-  <updated>2014-06-05T03:20:29+08:00</updated>
-  <id>http://rickytan.me/</id>
+  <link href="http://rickytan.github.io/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2014-06-06T01:47:18+08:00</updated>
+  <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -14,10 +14,92 @@
 
   
   <entry>
+    <title type="html"><![CDATA[RTID]]></title>
+    <link href="http://rickytan.github.io/blog/2014/06/06/rtid/"/>
+    <updated>2014-06-06T01:44:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2014/06/06/rtid</id>
+    <content type="html"><![CDATA[<h1><a href="https://github.com/rickytan/RTID">RTID</a></h1>
+
+<h1>背景</h1>
+
+<p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
+
+<h2>网卡地址</h2>
+
+<p>读 <code>MAC</code> 地址是个不错的想法，但在目前最新的 <code>iOS 7.0</code> 中返回 <strong>02:00:00:00</strong> ，已经失效。即使是在 <code>iOS 6.0</code> 中，读 <code>MAC</code> 地址也是做为私有接口存在。</p>
+
+<h2>OpenUDID</h2>
+
+<p>这是一个不错的实现，它不依赖 <code>iOS</code> 设备的任何硬件和系统中的 <code>ID</code>，而是随机生成一串字符，并保存在某处。它的限制也很明显，就是当系统升级后，或者所有用到 <code>OpenUDID</code> SDK 的应用都删除了，再安装一个新的用到 <code>OpenUDID</code> 的应用，它返回的 <code>UDID</code> 就变了。</p>
+
+<p>例如，在应用 A 中调用 <code>OpenUDID</code> 接口，返回如下：</p>
+
+<pre><code>3a2ee6eea4d427abcf7e8ce6a0463bfcacf957df
+</code></pre>
+
+<p>再安装一个 <em>bundle identifier</em> 不同的应用 B，也返回</p>
+
+<pre><code>3a2ee6eea4d427abcf7e8ce6a0463bfcacf957df
+</code></pre>
+
+<p>这时删除 A，返回还是一样。无论关机、重启也好。很大程度上可以保存它是设备的唯一标识。但是这时把 B 也删了了，关机重启，再安装，
+就返回一个新的了：</p>
+
+<pre><code>22f76530318d5cdad310dd2d8e89c7c03aebb82b
+</code></pre>
+
+<p>这还不算，毕竟用户把所有用到 <code>OpenUDID</code> 的应用全删除可能性不大。问题是，<code>OpenUDID</code> 的实现用到了公共剪切板，而貌似以后苹果将
+限制跨应用的剪切板访问，所以最终 <code>OpenUDID</code> 也会失效！</p>
+
+<h1>需求</h1>
+
+<p>我们不一定需要一个设备的唯一标识，我们只要在我们自己的应用中能读到一个<strong>唯一</strong>、<strong>不变</strong>的标识，这样就可以做统计分析，或是<em>无帐号</em>系统的游戏登录（因为有帐号的话，用户很大可能就不去玩了，流失率比较高）。它应该有以下特点：</p>
+
+<ul>
+<li>是自己生成的随机串，与系统硬件无关</li>
+<li>只生成一次，以后每次打开读到一样的内容</li>
+<li>用户删除本应用，然后重装，读到一样的内容</li>
+<li>用户升级系统（不是重装系统），仍能读到一样的内容</li>
+</ul>
+
+
+<p>为此，实现了 <code>RTID</code>！</p>
+
+<h1>RTID</h1>
+
+<h2>使用方法</h2>
+
+<p>在你的项目中引入 <code>RTID.h</code>，然后在编译设置中 <code>Other Link Flags</code> 中增加 <code>-ObjC</code>，可能需要添加依赖：</p>
+
+<ul>
+<li>Security.framework</li>
+</ul>
+
+
+<p>然后就可以通过以下方式获取一个唯一且不变的 ID：</p>
+
+<pre><code>NSString *rtid = [UIDevice currentDevice].RTID;
+</code></pre>
+
+<p>经实测，应用删除后，再重装，此 ID 依然不变。除非，重装系统！</p>
+
+<p><img src="https://github.com/rickytan/RTID/raw/master/Screenshot/s0.png" alt="image" /></p>
+
+<h2>风险</h2>
+
+<p>此实现没有调用苹果的私用接口，但本人仍无法保证用到此代码的应用能顺利上线！如果您用到了，且成功上线了，还请<a href="mailto:ricky.tan.xin@gmail.com?subject=%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8%E6%88%90%E5%8A%9F%E4%B8%8A%E7%BA%BF">告知</a>一下，谢谢！</p>
+
+<h2>商用</h2>
+
+<p>本项目开源、免费，但如果您在商用软件中用到此代码，请将您的应用下载链接及简介发送到<a href="mailto:ricky.tan.xin@gmail.com?subject=%E6%88%91%E7%94%A8%E5%88%B0%E4%BA%86RTID">此邮箱</a>，本人感激不尽！</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[PHP 中读 XML 的一个坑]]></title>
-    <link href="http://rickytan.me/blog/2014/06/05/the-php-xml-issue/"/>
+    <link href="http://rickytan.github.io/blog/2014/06/05/the-php-xml-issue/"/>
     <updated>2014-06-05T01:47:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/06/05/the-php-xml-issue</id>
+    <id>http://rickytan.github.io/blog/2014/06/05/the-php-xml-issue</id>
     <content type="html"><![CDATA[<h2>问题</h2>
 
 <p>在做一个微信的 <code>PHP</code> 后台时需要读微信服务器 <code>POST</code> 过来的 <code>XML</code>，然后保存到 <code>Memcache</code> 中。</p>
@@ -104,41 +186,41 @@
   
   <entry>
     <title type="html"><![CDATA[代码生成的 UIColor 与在 IB 中填写的颜色 RGB 最终颜色不一致的问题]]></title>
-    <link href="http://rickytan.me/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
+    <link href="http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
     <updated>2014-05-26T14:58:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
+    <id>http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
     <content type="html"><![CDATA[<p>iOS 应用界面的编写，按程序员的习惯可以分为两派：代码党和 <code>IB</code> 党。本人是倾向于 <code>Interface Builder</code> 的，毕竟能少写点就少写点，能用 <code>IB</code> 实现坚决不用代码。</p>
 
 <p>但是在实际使用中，却发现一些问题，这个问题早有发现，我以为只是色差的原因，但是最近发现不那么简单了。</p>
 
 <p>如下图，美术在 <code>PhotoShop</code> 中标了蓝色为 <code>#3689e5</code>，换成 <code>RGB</code> 为 54，137，229，于是在 <code>IB</code> 的颜色中填入此值，但是看到的颜色有差异。</p>
 
-<p><img src="http://rickytan.me/images/IB/QQ20140510-1.png" alt="image0" /></p>
+<p><img src="http://rickytan.github.io/images/IB/QQ20140510-1.png" alt="image0" /></p>
 
 <!--more-->
 
 
-<p><img src="http://rickytan.me/images/IB/QQ20140510-2.png" alt="image1" /></p>
+<p><img src="http://rickytan.github.io/images/IB/QQ20140510-2.png" alt="image1" /></p>
 
 <p>这点小差异其实一般人都不会太关心，但后来有一部分功能我不想用 <code>IB</code> 了，于是代码写了个界面，就发现颜色差异不能忍了，代码的颜色是对的，<code>IB</code> 的颜色偏深。</p>
 
 <p>自己写了个 Demo ，截图如下：（这里差别还不是很大，因为我是在 Mac Pro Retian 自己的屏上输入的颜色，当你在外接显示器上用 <code>IB</code> 时，颜色差异十分明显）</p>
 
-<p><img src="http://rickytan.me/images/IB/s0.png" alt="image2" /></p>
+<p><img src="http://rickytan.github.io/images/IB/s0.png" alt="image2" /></p>
 
 <p>其中上半部分是用 Color Inspector 输入的值：</p>
 
-<p><img src="http://rickytan.me/images/IB/s1.png" alt="image3" /></p>
+<p><img src="http://rickytan.github.io/images/IB/s1.png" alt="image3" /></p>
 
 <p>可以对比下第 2 张图，与上面这张图，第 2 张图是在外接显示器上输入的，颜色差异之大，不可能是由 228 与 229 造成的！</p>
 
 <p>我一再强调了显示器的不同，对，其实看到这里大家已经猜到，这种不同就来自显示器。点开 <code>RGB Sliders</code> 左边的按钮（我之前都不知道它能点的……），可以看到多种显示器配置文件</p>
 
-<p><img src="http://rickytan.me/images/IB/color-picker.png" alt="image4" /></p>
+<p><img src="http://rickytan.github.io/images/IB/color-picker.png" alt="image4" /></p>
 
 <p>选择 <code>Generic RGB</code>，然后三个值会变掉，不管它，你自己再改成 54 137 229。这时它在这个显示器上显示的颜色可能与你要的不对，但是运行时，在模拟器上显示的就与代码无差别了！</p>
 
-<p><img src="http://rickytan.me/images/IB/s3.png" alt="image5" /></p>
+<p><img src="http://rickytan.github.io/images/IB/s3.png" alt="image5" /></p>
 
 <p>可以用 Mac 自带的 <em>数码测色计</em> 来验证，注意要选 <strong>显示原生值</strong>！</p>
 
@@ -150,9 +232,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何为您的站点请求一个免费的ssl证书？]]></title>
-    <link href="http://rickytan.me/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/"/>
+    <link href="http://rickytan.github.io/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/"/>
     <updated>2014-03-01T02:39:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website</id>
+    <id>http://rickytan.github.io/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website</id>
     <content type="html"><![CDATA[<h3>SSL证书</h3>
 
 <p>关于什么是<code>SSL</code>证书请自行<code>Google</code>，你的每次<code>https</code>请求，都有一个证书在幕后做支持，它为网络上的服务器之间建立起了信任，保障了每次线上交易、浏览的安全。</p>
@@ -180,9 +262,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS 下如何复制一个视图（包括它的所有属性）]]></title>
-    <link href="http://rickytan.me/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios/"/>
+    <link href="http://rickytan.github.io/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios/"/>
     <updated>2014-02-20T02:43:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios</id>
+    <id>http://rickytan.github.io/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios</id>
     <content type="html"><![CDATA[<p>在某些效果中，我们需要在当前视图上创建一个新的、一样的视图，并且叠在老的上面，然后让新的视图移动、缩放，或什么的，这样做出来的动画看起来比较流畅。对于简单的界面，我们可能按原有的样子生成一个新的就好，有没有更好更通用的办法呢？</p>
 
 <h1>NSCoding</h1>
@@ -207,9 +289,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS 下如何设置全局字体？]]></title>
-    <link href="http://rickytan.me/blog/2014/02/20/global-font-of-ios/"/>
+    <link href="http://rickytan.github.io/blog/2014/02/20/global-font-of-ios/"/>
     <updated>2014-02-20T01:52:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/02/20/global-font-of-ios</id>
+    <id>http://rickytan.github.io/blog/2014/02/20/global-font-of-ios</id>
     <content type="html"><![CDATA[<h1>背景</h1>
 
 <p><code>iOS 6</code>跟 <code>iOS 7</code>的字体还是有点不一样的，有时候为了两者的统一，或者，应设计师的要求，界面中所有的 Label，Button 等都用自定义字体，一般来说，我们在初始化的时候就需要不断地添加冗余的代码来设置自己的字体。</p>
@@ -337,9 +419,9 @@
   
   <entry>
     <title type="html"><![CDATA[蛐蛐儿 SDK 破解]]></title>
-    <link href="http://rickytan.me/blog/2014/01/18/crack-xququer/"/>
+    <link href="http://rickytan.github.io/blog/2014/01/18/crack-xququer/"/>
     <updated>2014-01-18T15:23:00+08:00</updated>
-    <id>http://rickytan.me/blog/2014/01/18/crack-xququer</id>
+    <id>http://rickytan.github.io/blog/2014/01/18/crack-xququer</id>
     <content type="html"><![CDATA[<p><a href="http://xququ.com">蛐蛐儿</a> 是一套利用声音传输信息的解决方案，大家可能知道 <code>支付宝</code> 在早些时候就推出了当面付的功能，其实就是利用超声波将加密后的支付信息传输给附近的人。蛐蛐儿SDK可以在其官网上下载到，通过它的提供的Demo可以看出，它需要将一段任意字符串<em>S</em>上传它们的后台，然后生成一段16字节的<em>Token</em>，发送时只能发送此<em>Token</em>。同时，在接收方接收到<em>Token</em>后，需要访问它们的后台把原始字符串<em>S</em>下载下来。这个过程也正好解释了，为什么无论发送什么东西，声音长度是一致的，真正的数据并不是通过声音传的，而是通过网络下载的。</p>
 
 <p>当然，其实大部分情况下这个过程已经够用了，因为开发者可以将自己需要传输的任何字符串编码为<em>Token</em>（这个字符串可以是<code>BASE64</code>编码，也可以是一个文件的下载链接），通过声音传输，然后再解码。</p>
@@ -466,18 +548,18 @@ return Token;
   
   <entry>
     <title type="html"><![CDATA[iZJU中浙大黄页的实现]]></title>
-    <link href="http://rickytan.me/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/"/>
+    <link href="http://rickytan.github.io/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/"/>
     <updated>2013-06-16T11:33:00+08:00</updated>
-    <id>http://rickytan.me/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian</id>
+    <id>http://rickytan.github.io/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian</id>
     <content type="html"><![CDATA[<h2>简介</h2>
 
 <p>用过<a href="https://itunes.apple.com/cn/app/izju/id573810521?mt=8">iZJU iOS</a>版的同学应该会注意到，在2.1.1版本之后新增了“浙大黄页”的功能。</p>
 
-<p><img src="http://rickytan.me/images/screenshot20130616.png" alt="iZJU" /></p>
+<p><img src="http://rickytan.github.io/images/screenshot20130616.png" alt="iZJU" /></p>
 
 <p>这个功能是原先“紧急电话”的加强版，细心的同学会知道，所有的电话号码数据来自“浙大电话黄页”网站（<a href="http://zjutel.zju.edu.cn">http://zjutel.zju.edu.cn</a>），如下图：</p>
 
-<p><img src="http://rickytan.me/images/QQ20130616-1.png" alt="浙大黄页" /></p>
+<p><img src="http://rickytan.github.io/images/QQ20130616-1.png" alt="浙大黄页" /></p>
 
 <h2>数据获取</h2>
 
@@ -537,7 +619,7 @@ return Token;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>打包为.crx 后<strong><a href="http://rickytan.me/download/zjutel.crx">安装</a></strong>，在Chrome访问<a href="http://zjutel.zju.edu.cn/tree.php">http://zjutel.zju.edu.cn/tree.php</a>，插件就开始工作了，这时你可以坐下来喝喝咖啡，等它停止。</p>
+<p>打包为.crx 后<strong><a href="http://rickytan.github.io/download/zjutel.crx">安装</a></strong>，在Chrome访问<a href="http://zjutel.zju.edu.cn/tree.php">http://zjutel.zju.edu.cn/tree.php</a>，插件就开始工作了，这时你可以坐下来喝喝咖啡，等它停止。</p>
 
 <p>停止之后，将整个网页下载下来，可以用<code>Vim</code>等文本编辑器用搜索替换的方式去除HTML标签等不必要的信息，最终整理成如下所示文本文件（tree.txt）：</p>
 
@@ -632,9 +714,9 @@ return Token;
   
   <entry>
     <title type="html"><![CDATA[开始！Hello Markdown]]></title>
-    <link href="http://rickytan.me/blog/2013/06/06/kai-shi-%21hello-markdown/"/>
+    <link href="http://rickytan.github.io/blog/2013/06/06/kai-shi-%21hello-markdown/"/>
     <updated>2013-06-06T13:50:00+08:00</updated>
-    <id>http://rickytan.me/blog/2013/06/06/kai-shi-!hello-markdown</id>
+    <id>http://rickytan.github.io/blog/2013/06/06/kai-shi-!hello-markdown</id>
     <content type="html"><![CDATA[<p><strong>新的开始</strong></p>
 
 <p>在<a href="http://biaobiaoqi.me">biaobiaoqi</a>的影响下，开始学着高端洋气一点，利用
