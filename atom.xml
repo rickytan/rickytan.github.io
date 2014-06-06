@@ -4,7 +4,7 @@
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2014-06-06T12:18:14+08:00</updated>
+  <updated>2014-06-06T13:07:23+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -18,15 +18,13 @@
     <link href="http://rickytan.github.io/blog/2014/06/06/rtid/"/>
     <updated>2014-06-06T01:44:00+08:00</updated>
     <id>http://rickytan.github.io/blog/2014/06/06/rtid</id>
-    <content type="html"><![CDATA[<h1><a href="https://github.com/rickytan/RTID">RTID</a></h1>
-
-<h1>背景</h1>
+    <content type="html"><![CDATA[<h1>背景</h1>
 
 <p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
 
 <h2>网卡地址</h2>
 
-<p>读 <code>MAC</code> 地址是个不错的想法，但在目前最新的 <code>iOS 7.0</code> 中返回 <strong>02:00:00:00</strong> ，已经失效。即使是在 <code>iOS 6.0</code> 中，读 <code>MAC</code> 地址也是做为私有接口存在。</p>
+<p>读 <code>MAC</code> 地址是个不错的想法<!--more-->，但在目前最新的 <code>iOS 7.0</code> 中返回 <strong>02:00:00:00</strong> ，已经失效。即使是在 <code>iOS 6.0</code> 中，读 <code>MAC</code> 地址也是做为私有接口存在。</p>
 
 <h2>OpenUDID</h2>
 
