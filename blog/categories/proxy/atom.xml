@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Proxy | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/proxy/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2014-07-15T01:12:47+08:00</updated>
+  <updated>2014-07-15T01:18:03+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -100,9 +100,9 @@
 
 <p>唯一的缺点是，需要在本地启动一个服务。对于这一点，见仁见智，当然你可以让它开机启动，但我觉得总差那么点意思。</p>
 
-<h1>我的代理服务器</h1>
+<h2>我的代理服务器</h2>
 
-<h2><code>VPS</code></h2>
+<h3><code>VPS</code></h3>
 
 <p>用过一段时间的 <strong>Shadowsocks</strong> ，网友共享的服务器用的人一多，也容易挂，于是就一直想自己搭一个。刚好也听说美国有很多 $15 一年的屌丝 <code>VPS</code> 出售，其性能做为个人使用的代理是绰绰有余的。经过对比之后，在 <strong><a href="https://vpsdime.com/">VPSDime</a></strong> 买了一年的 <code>VPS</code>，配置如下：</p>
 
@@ -119,7 +119,7 @@
 
 <p>我安装了 <code>Ubuntu 14.04</code> 从官方源升级软件达到了惊人的 30M/s！不过从国内 ssh 登录非常慢</p>
 
-<h2><code>HTTPS</code>代理</h2>
+<h3><code>HTTPS</code>代理</h3>
 
 <p><code>Chrome</code> 浏览器支持最新的 <code>HTTPS</code> 代理（Safari 也支持），顾名思义，就是在传统的 <code>HTTP</code> 代理上加了安全协议。搭建代理服务器也是比较简单，可以直接用 <code>NodeJS</code> 安装 <code>spdyproxy</code> 来实现：</p>
 
@@ -176,7 +176,7 @@
 npm install -g node-spdyproxy/package.json
 </code></pre>
 
-<h2>自动代理配置</h2>
+<h3>自动代理配置</h3>
 
 <p>以上工作并没有完，让 <strong>Chrome</strong> 访问所有网站都通过代理不是明智的选择，于是在 <code>VPS</code> 上安装 <code>nginx</code> 或 <code>apache</code> 做为文件服务器，编写一个 <code>PAC</code> 文件，选择性使用代理：</p>
 
@@ -389,7 +389,7 @@ npm install -g node-spdyproxy/package.json
 
 <p><em>更详细的配置，请见：<a href="https://github.com/igrigorik/node-spdyproxy">https://github.com/igrigorik/node-spdyproxy</a></em></p>
 
-<h2>更好的方式</h2>
+<h3>更好的方式</h3>
 
 <p>用自己的 <code>VPS</code> 为文件服务器是可行的，但是不方便。如之前所说，国内 ssh 访问非常慢，如果你要修改 <code>proxy.pac</code> 文件比较麻烦。同时，<strong>Chrome</strong> 启动时加载一个国外的配置文件会导致启动变慢。于是就想到了用 <strong><a href="https://cn.avoscloud.com">AVOSCloud</a></strong> 的云代码功能，可以托管一些静态文件。</p>
 
@@ -407,7 +407,7 @@ npm install -g node-spdyproxy/package.json
 
 <p>以后想添加新的网站到翻墙列表，打开你的 <strong>Repo</strong>，在线编辑之后，登录 <strong>AVOSCloud</strong> 再点一次“部署”，重启你的 <strong>Chrome</strong> 即可，不用 ssh 登录到你的 <code>VPS</code> 了。同时，由于 <strong>AVOSCloud</strong> 在国内，访问速度较快，启动时间也没有影响。</p>
 
-<h1>总结</h1>
+<h2>总结</h2>
 
 <p>越是限制，越是激发人的潜能与创造力。以上，我们就用每年 $15 的费用建立起了一个私人的翻墙服务。感谢各个为人类的自由作出贡献的无私开发者，感谢 <strong><a href="https://cn.avoscloud.com">AVOSCloud</a></strong> 提供的免费托管服务。</p>
 ]]></content>
