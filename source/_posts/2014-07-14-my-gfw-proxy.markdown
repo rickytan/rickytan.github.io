@@ -10,12 +10,12 @@ categories: ['GFW', 'Proxy', '翻墙', 'VPS']
 
 互联网是人类的互联网，人活着就不能放弃追求自由的权利！
 
-# [ZenMate](https://chrome.google.com/webstore/detail/zenmate/fdcgdnkidjaadafnichfpabhfomcebme)
+## [ZenMate](https://chrome.google.com/webstore/detail/zenmate/fdcgdnkidjaadafnichfpabhfomcebme)
 之前用过好长一段时间的 **[Chrome](https://www.google.com/chrome)** 插件，一键翻墙，无需过多配置，免费且连接稳定。后来开始收费了，于是弃用。再后来（也就是现在）又免费了，但大陆已经无法使用了。
 
 当然了，大陆外也许还能用，用它来加密你的网络访问，哪怕是 `HTTP` 的站点。
 
-# [红杏](https://chrome.google.com/webstore/detail/%E7%BA%A2%E6%9D%8F/heehjpdocpefckjobfgnfdbhoebhphkf)
+## [红杏](https://chrome.google.com/webstore/detail/%E7%BA%A2%E6%9D%8F/heehjpdocpefckjobfgnfdbhoebhphkf)
 取名于成语“红杏出墙”，是非常有本土特色的一个翻墙插件，刚出来时可以翻任何网站，稳定快速，免配置。<!--more-->后来开始分免费和`VIP`，免费用户可以上 [facebook](https://www.facebook.com)，[google](https://www.google.com)，和 [twitter](https://twitter.com)。
 
 做为一个还有一定 `Web` 基础的码农，本人有时候也会通过改改插件的代码以访问以上三个之外的网站。也许后来他们监控到大量非 `VIP` 用户在翻其他网站，于是将代码打乱了。其实打不打乱区别不大
@@ -26,7 +26,7 @@ categories: ['GFW', 'Proxy', '翻墙', 'VPS']
 
 随着伟大的防火墙越来越历害，*红杏* 也开始出现不稳定了，*Chrome Web Store* 上骂的人一大堆，一些人刚付了一年的费用结果就不能用了。事实上 *红杏* 的工作人员也是一直在维护，多服务器切换，出现问题后很快就会好的，只是最近挂的次数太多了。然后，最近，免费用户不能再用了……
 
-# [ShadowSocks](http://shadowsocks.org/)
+## [ShadowSocks](http://shadowsocks.org/)
 在朋友的推荐下，前不久开始用 [ShadowSocks](http://shadowsocks.org/)。也许是中国官方见识到了它的威力，于是连 *Shadowsocks* 的官方网站都被墙了。它的代理原理与 `go-agent` 类似，也是分 `server` 和 `client`。`server`监听代理请求，`client`则监听本地的 `SOCKS` 请求，`client`收到请求后，以可选的加密方式通过某种私有协议转发到 `server` 端，`server` 再发起网页请求到互联网。当然了，这个 `server` 是在墙外的，而这个私有协议就起到了穿墙的作用。
 
 同时，如何你不想自己买 `VPS` 在墙外架设服务器的话，<https://www.shadowsocks.net/> 网站有一些热心网友为了人类的自由，分享了自己的 `server`，配置信息通过 `BASE64` 编码，并生成了二维码。读取方式也简单：
@@ -42,7 +42,7 @@ categories: ['GFW', 'Proxy', '翻墙', 'VPS']
 3. 以上信息说明，采用`aes-256-cfb`加密方式，地址为：208.110.83.242，端口：12334，密码为：xoxo
 
 
-## 优点
+### 优点
 **Shadowsocks** 的优点是很明显的。首先，它采用私有协议，不那么容易被墙。其次，它有多种语言实现，安装都异常简单。
 
 - Node 用户：
@@ -70,7 +70,7 @@ categories: ['GFW', 'Proxy', '翻墙', 'VPS']
 
 代理服务器填 `sock5 127.0.0.1:1080`，取决于您的客户端配置。
 
-##缺点
+###缺点
 唯一的缺点是，需要在本地启动一个服务。对于这一点，见仁见智，当然你可以让它开机启动，但我觉得总差那么点意思。
 
 ## 我的代理服务器
