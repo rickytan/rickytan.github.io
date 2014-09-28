@@ -4,7 +4,7 @@
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2014-07-16T14:57:58+08:00</updated>
+  <updated>2014-09-28T20:42:23+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -12,6 +12,70 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[XCode 中如何自动增长 Build 号]]></title>
+    <link href="http://rickytan.github.io/blog/2014/09/28/xcode-build-number/"/>
+    <updated>2014-09-28T19:46:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2014/09/28/xcode-build-number</id>
+    <content type="html"><![CDATA[<h2>iTunes Connect 新步骤</h2>
+
+<p>随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。</p>
+
+<p>几个月前听闻 Apple 收购 <a href="https://testflightapp.com">TestFlight</a>，但一直没有看到任何变化，如今 TestFlight 已经集成到新应用的发布
+、审核过程中了。打开 <a href="https://itunesconnect.apple.com">iTunesConnect</a>，可以看到在 <code>Versions</code> 旁边新
+增了一个 <code>Prerelease</code> 标签页。原先通过 <code>XCode</code> 上传的应用会直接进入苹果的审核队列中，现在它会先出现
+在这里，这里其实就是一个 <code>TestFlight</code> 的功能，你可以在 <strong><em>Users and Roles</em></strong> 中增加测试人员的 <em>Apple ID</em>，
+然后在 <code>Prerelease</code> 下的 <code>Internal Testers</code> 中可以看到。每上传一个新的 <strong><em>Build</em></strong>，苹果会自动发邮件给
+测试人员，测试人号点开邮件中的链接，在 <code>Safari</code> 中打开，然后 <code>Safari</code> 会打开设备上的 <code>Test Flight</code>，
+开始自动下载应用进行测试。</p>
+
+<p>这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
+版使用了不同的签名证书，然后每次加新人又要添加设备 <code>UDID</code> 到 <strong><em>Provisioning Profile</em></strong> 等等。</p>
+
+<p>测试通过之后，回到 <code>iTunesConnect</code> 中的 <code>Versions</code>，下拉找到 <code>Build</code>，选择刚刚测试好的 <strong><em>Build</em></strong> 号，
+点 <code>Save</code>，然后就可以进入正常的审核队列了。</p>
+
+<blockquote><p><strong><em>注意：</em></strong>测试功能只有使用苹果开发者网站最近生成的 <strong><em>Provisioning Profile</em></strong> 才能开启，而且会自
+动加入，不要去 <strong><em>Entitlement</em></strong> 中勾选了。</p></blockquote>
+
+<h2>Build 号</h2>
+
+<p>在 <code>iOS</code> 应用的 <code>Info.plist</code> 中有两个版本号，即 <strong><em>Version</em></strong> 和 <strong><em>Build</em></strong>，对应键值为 <code>CFBundleShortVersionString</code> 和 <code>CFBundleVersion</code>。
+一个是应用程序本身发布时的版本号，一个是表示这个发布版的二进制代码是第几次编译得到的。在 <strong><em>iOS8</em></strong>
+之前由于苹果并没有约束这两者的关系，本人一般就把两个填一样的，如 <code>2.1.4</code> 等，也一直没出过问题，但是
+最近由于苹果加入了测试功能，所有上传的 <strong><em>Build</em></strong> 都会保存，然后第一个因为某原因审核不过，再上传第
+二个就出现了 <strong><em>Build</em></strong> 号冲突的问题。于是想到这才是 <strong><em>Build</em></strong> 的正确使用方法，它本应该是个整数，
+在 <strong><em>Version</em></strong> 保持不变，<strong><em>Build</em></strong> 应该是要随着编译次数增长的！</p>
+
+<h2>自动增长</h2>
+
+<p>那么如何让 <strong><em>Build</em></strong> 号自动增加呢？很早前搜到过一段代码，现在可以用上了：</p>
+
+<ol>
+<li><p>在 <code>XCode</code> 中选中项目，打开 <code>Build Phases</code>，如下图：</p>
+
+<p> <img src="http://rickytan.github.io/images/run-script.png" alt="RunScript" /></p></li>
+<li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p></li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c <span class="s2">&quot;Print CFBundleVersion&quot;</span> <span class="s2">&quot;$INFOPLIST_FILE&quot;</span><span class="k">)</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span><span class='line'>/usr/libexec/PlistBuddy -c <span class="s2">&quot;Set :CFBundleVersion $buildNumber&quot;</span> <span class="s2">&quot;$INFOPLIST_FILE&quot;</span>
+</span><span class='line'>  
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[我的翻墙代理]]></title>
@@ -22,13 +86,13 @@
 
 <p>互联网是人类的互联网，人活着就不能放弃追求自由的权利！</p>
 
-<h1><a href="https://chrome.google.com/webstore/detail/zenmate/fdcgdnkidjaadafnichfpabhfomcebme">ZenMate</a></h1>
+<h2><a href="https://chrome.google.com/webstore/detail/zenmate/fdcgdnkidjaadafnichfpabhfomcebme">ZenMate</a></h2>
 
 <p>之前用过好长一段时间的 <strong><a href="https://www.google.com/chrome">Chrome</a></strong> 插件，一键翻墙，无需过多配置，免费且连接稳定。后来开始收费了，于是弃用。再后来（也就是现在）又免费了，但大陆已经无法使用了。</p>
 
 <p>当然了，大陆外也许还能用，用它来加密你的网络访问，哪怕是 <code>HTTP</code> 的站点。</p>
 
-<h1><a href="https://chrome.google.com/webstore/detail/%E7%BA%A2%E6%9D%8F/heehjpdocpefckjobfgnfdbhoebhphkf">红杏</a></h1>
+<h2><a href="https://chrome.google.com/webstore/detail/%E7%BA%A2%E6%9D%8F/heehjpdocpefckjobfgnfdbhoebhphkf">红杏</a></h2>
 
 <p>取名于成语“红杏出墙”，是非常有本土特色的一个翻墙插件，刚出来时可以翻任何网站，稳定快速，免配置。<!--more-->后来开始分免费和<code>VIP</code>，免费用户可以上 <a href="https://www.facebook.com">facebook</a>，<a href="https://www.google.com">google</a>，和 <a href="https://twitter.com">twitter</a>。</p>
 
@@ -40,7 +104,7 @@
 
 <p>随着伟大的防火墙越来越历害，<em>红杏</em> 也开始出现不稳定了，<em>Chrome Web Store</em> 上骂的人一大堆，一些人刚付了一年的费用结果就不能用了。事实上 <em>红杏</em> 的工作人员也是一直在维护，多服务器切换，出现问题后很快就会好的，只是最近挂的次数太多了。然后，最近，免费用户不能再用了……</p>
 
-<h1><a href="http://shadowsocks.org/">ShadowSocks</a></h1>
+<h2><a href="http://shadowsocks.org/">ShadowSocks</a></h2>
 
 <p>在朋友的推荐下，前不久开始用 <a href="http://shadowsocks.org/">ShadowSocks</a>。也许是中国官方见识到了它的威力，于是连 <em>Shadowsocks</em> 的官方网站都被墙了。它的代理原理与 <code>go-agent</code> 类似，也是分 <code>server</code> 和 <code>client</code>。<code>server</code>监听代理请求，<code>client</code>则监听本地的 <code>SOCKS</code> 请求，<code>client</code>收到请求后，以可选的加密方式通过某种私有协议转发到 <code>server</code> 端，<code>server</code> 再发起网页请求到互联网。当然了，这个 <code>server</code> 是在墙外的，而这个私有协议就起到了穿墙的作用。</p>
 
@@ -59,7 +123,7 @@
 </ol>
 
 
-<h2>优点</h2>
+<h3>优点</h3>
 
 <p><strong>Shadowsocks</strong> 的优点是很明显的。首先，它采用私有协议，不那么容易被墙。其次，它有多种语言实现，安装都异常简单。</p>
 
@@ -96,7 +160,7 @@
 
 <p>代理服务器填 <code>sock5 127.0.0.1:1080</code>，取决于您的客户端配置。</p>
 
-<h2>缺点</h2>
+<h3>缺点</h3>
 
 <p>唯一的缺点是，需要在本地启动一个服务。对于这一点，见仁见智，当然你可以让它开机启动，但我觉得总差那么点意思。</p>
 
@@ -403,15 +467,15 @@ npm install -g node-spdyproxy/package.json
     <link href="http://rickytan.github.io/blog/2014/06/06/rtid/"/>
     <updated>2014-06-06T01:44:00+08:00</updated>
     <id>http://rickytan.github.io/blog/2014/06/06/rtid</id>
-    <content type="html"><![CDATA[<h1>背景</h1>
+    <content type="html"><![CDATA[<h2>背景</h2>
 
 <p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
 
-<h2>网卡地址</h2>
+<h3>网卡地址</h3>
 
 <p>读 <code>MAC</code> 地址是个不错的想法<!--more-->，但在目前最新的 <code>iOS 7.0</code> 中返回 <strong>02:00:00:00</strong> ，已经失效。即使是在 <code>iOS 6.0</code> 中，读 <code>MAC</code> 地址也是做为私有接口存在。</p>
 
-<h2>OpenUDID</h2>
+<h3>OpenUDID</h3>
 
 <p>这是一个不错的实现，它不依赖 <code>iOS</code> 设备的任何硬件和系统中的 <code>ID</code>，而是随机生成一串字符，并保存在某处。它的限制也很明显，就是当系统升级后，或者所有用到 <code>OpenUDID</code> SDK 的应用都删除了，再安装一个新的用到 <code>OpenUDID</code> 的应用，它返回的 <code>UDID</code> 就变了。</p>
 
@@ -434,7 +498,7 @@ npm install -g node-spdyproxy/package.json
 <p>这还不算，毕竟用户把所有用到 <code>OpenUDID</code> 的应用全删除可能性不大。问题是，<code>OpenUDID</code> 的实现用到了公共剪切板，而貌似以后苹果将
 限制跨应用的剪切板访问，所以最终 <code>OpenUDID</code> 也会失效！</p>
 
-<h1>需求</h1>
+<h2>需求</h2>
 
 <p>我们不一定需要一个设备的唯一标识，我们只要在我们自己的应用中能读到一个<strong>唯一</strong>、<strong>不变</strong>的标识，这样就可以做统计分析，或是<em>无帐号</em>系统的游戏登录（因为有帐号的话，用户很大可能就不去玩了，流失率比较高）。它应该有以下特点：</p>
 
@@ -448,9 +512,9 @@ npm install -g node-spdyproxy/package.json
 
 <p>为此，实现了 <code>RTID</code>！</p>
 
-<h1>RTID</h1>
+<h2>RTID</h2>
 
-<h2>使用方法</h2>
+<h3>使用方法</h3>
 
 <p>在你的项目中引入 <code>RTID.h</code>，然后在编译设置中 <code>Other Link Flags</code> 中增加 <code>-ObjC</code>，可能需要添加依赖：</p>
 
@@ -468,11 +532,11 @@ npm install -g node-spdyproxy/package.json
 
 <p><img src="https://github.com/rickytan/RTID/raw/master/Screenshot/s0.png" alt="image" /></p>
 
-<h2>风险</h2>
+<h3>风险</h3>
 
 <p>此实现没有调用苹果的私用接口，但本人仍无法保证用到此代码的应用能顺利上线！如果您用到了，且成功上线了，还请<a href="mailto:ricky.tan.xin@gmail.com?subject=%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8%E6%88%90%E5%8A%9F%E4%B8%8A%E7%BA%BF">告知</a>一下，谢谢！</p>
 
-<h2>商用</h2>
+<h3>商用</h3>
 
 <p>本项目开源、免费，但如果您在商用软件中用到此代码，请将您的应用下载链接及简介发送到<a href="mailto:ricky.tan.xin@gmail.com?subject=%E6%88%91%E7%94%A8%E5%88%B0%E4%BA%86RTID">此邮箱</a>，本人感激不尽！</p>
 ]]></content>

@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS 下如何复制一个视图（包括它的所有属性） - I'm Ricky -- 个人主页</title>
+  <title>XCode 中如何自动增长 Build 号 - I'm Ricky -- 个人主页</title>
   <meta name="author" content="Ricky">
 
   
-  <meta name="description" content="在某些效果中，我们需要在当前视图上创建一个新的、一样的视图，并且叠在老的上面，然后让新的视图移动、缩放，或什么的，这样做出来的动画看起来比较流畅。对于简单的界面，我们可能按原有的样子生成一个新的就好，有没有更好更通用的办法呢？ NSCoding UIView无法通过copy方法来创建一个副本， &hellip;">
+  <meta name="description" content="iTunes Connect 新步骤 随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。 几个月前听闻 Apple 收购 TestFlight，但一直没有看到任何变化，如今 TestFlight 已经集成到新应用的发布
+、审核过程中了。打开 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://rickytan.github.io/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios">
+  <link rel="canonical" href="http://rickytan.github.io/blog/2014/09/28/xcode-build-number">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="I'm Ricky -- 个人主页" type="application/atom+xml">
@@ -80,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">iOS 下如何复制一个视图（包括它的所有属性）</h1>
+      <h1 class="entry-title">XCode 中如何自动增长 Build 号</h1>
     
     
       <p class="meta">
@@ -96,32 +97,69 @@
   
 
 
-<time datetime="2014-02-20T02:43:00+08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2014</time>
+<time datetime="2014-09-28T19:46:00+08:00" pubdate data-updated="true">Sep 28<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>在某些效果中，我们需要在当前视图上创建一个新的、一样的视图，并且叠在老的上面，然后让新的视图移动、缩放，或什么的，这样做出来的动画看起来比较流畅。对于简单的界面，我们可能按原有的样子生成一个新的就好，有没有更好更通用的办法呢？</p>
+<div class="entry-content"><h2>iTunes Connect 新步骤</h2>
 
-<h1>NSCoding</h1>
+<p>随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。</p>
 
-<p><code>UIView</code>无法通过<code>copy</code>方法来创建一个副本，这个想必大家都已经试过了。事实上，<code>UIView</code>是服从<NSCoding>协议的，这样它才能从<code>Xib</code>中反序列化出来，而我们最常用的一个序列化类就是<code>NSKeyedArchiver</code>。</p>
+<p>几个月前听闻 Apple 收购 <a href="https://testflightapp.com">TestFlight</a>，但一直没有看到任何变化，如今 TestFlight 已经集成到新应用的发布
+、审核过程中了。打开 <a href="https://itunesconnect.apple.com">iTunesConnect</a>，可以看到在 <code>Versions</code> 旁边新
+增了一个 <code>Prerelease</code> 标签页。原先通过 <code>XCode</code> 上传的应用会直接进入苹果的审核队列中，现在它会先出现
+在这里，这里其实就是一个 <code>TestFlight</code> 的功能，你可以在 <strong><em>Users and Roles</em></strong> 中增加测试人员的 <em>Apple ID</em>，
+然后在 <code>Prerelease</code> 下的 <code>Internal Testers</code> 中可以看到。每上传一个新的 <strong><em>Build</em></strong>，苹果会自动发邮件给
+测试人员，测试人号点开邮件中的链接，在 <code>Safari</code> 中打开，然后 <code>Safari</code> 会打开设备上的 <code>Test Flight</code>，
+开始自动下载应用进行测试。</p>
 
-<!--more-->
+<p>这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
+版使用了不同的签名证书，然后每次加新人又要添加设备 <code>UDID</code> 到 <strong><em>Provisioning Profile</em></strong> 等等。</p>
 
+<p>测试通过之后，回到 <code>iTunesConnect</code> 中的 <code>Versions</code>，下拉找到 <code>Build</code>，选择刚刚测试好的 <strong><em>Build</em></strong> 号，
+点 <code>Save</code>，然后就可以进入正常的审核队列了。</p>
 
-<p>所以创建一个视图的副本可以这样：</p>
+<blockquote><p><strong><em>注意：</em></strong>测试功能只有使用苹果开发者网站最近生成的 <strong><em>Provisioning Profile</em></strong> 才能开启，而且会自
+动加入，不要去 <strong><em>Entitlement</em></strong> 中勾选了。</p></blockquote>
+
+<h2>Build 号</h2>
+
+<p>在 <code>iOS</code> 应用的 <code>Info.plist</code> 中有两个版本号，即 <strong><em>Version</em></strong> 和 <strong><em>Build</em></strong>，对应键值为 <code>CFBundleShortVersionString</code> 和 <code>CFBundleVersion</code>。
+一个是应用程序本身发布时的版本号，一个是表示这个发布版的二进制代码是第几次编译得到的。在 <strong><em>iOS8</em></strong>
+之前由于苹果并没有约束这两者的关系，本人一般就把两个填一样的，如 <code>2.1.4</code> 等，也一直没出过问题，但是
+最近由于苹果加入了测试功能，所有上传的 <strong><em>Build</em></strong> 都会保存，然后第一个因为某原因审核不过，再上传第
+二个就出现了 <strong><em>Build</em></strong> 号冲突的问题。于是想到这才是 <strong><em>Build</em></strong> 的正确使用方法，它本应该是个整数，
+在 <strong><em>Version</em></strong> 保持不变，<strong><em>Build</em></strong> 应该是要随着编译次数增长的！</p>
+
+<h2>自动增长</h2>
+
+<p>那么如何让 <strong><em>Build</em></strong> 号自动增加呢？很早前搜到过一段代码，现在可以用上了：</p>
+
+<ol>
+<li><p>在 <code>XCode</code> 中选中项目，打开 <code>Build Phases</code>，如下图：</p>
+
+<p> <img src="/images/run-script.png" alt="RunScript" /></p></li>
+<li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p></li>
+</ol>
+
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">UIView</span> <span class="o">*</span><span class="n">view</span> <span class="o">=</span> <span class="p">...;</span>
-</span><span class='line'><span class="n">UIView</span> <span class="o">*</span><span class="n">copy_view</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSKeyedUnarchiver</span> <span class="nl">unarchiveObjectWithData:</span><span class="p">[</span><span class="n">NSKeyedArchiver</span> <span class="nl">archivedDataWithRootObject:</span><span class="n">view</span><span class="p">]];</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c <span class="s2">&quot;Print CFBundleVersion&quot;</span> <span class="s2">&quot;$INFOPLIST_FILE&quot;</span><span class="k">)</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span><span class='line'>/usr/libexec/PlistBuddy -c <span class="s2">&quot;Set :CFBundleVersion $buildNumber&quot;</span> <span class="s2">&quot;$INFOPLIST_FILE&quot;</span>
+</span><span class='line'>  
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>这样，视图中所有能通过<code>Xib</code>设置的属性（底色、字体、Frame等）全部复制到新的视图上了。</p>
+
 </div>
 
 
@@ -144,12 +182,12 @@
   
 
 
-<time datetime="2014-02-20T02:43:00+08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2014</time>
+<time datetime="2014-09-28T19:46:00+08:00" pubdate data-updated="true">Sep 28<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>iOS</a>, <a class='category' href='/blog/categories/ji-zhu/'>技术</a>
+    <a class='category' href='/blog/categories/xcode/'>XCode</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>, <a class='category' href='/blog/categories/ji-zhu/'>技术</a>
   
 </span>
 
@@ -165,10 +203,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/02/20/global-font-of-ios/" title="Previous Post: iOS 下如何设置全局字体？">&laquo; iOS 下如何设置全局字体？</a>
+        <a class="basic-alignment left" href="/blog/2014/07/14/my-gfw-proxy/" title="Previous Post: 我的翻墙代理">&laquo; 我的翻墙代理</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/" title="Next Post: 如何为您的站点请求一个免费的ssl证书？">如何为您的站点请求一个免费的ssl证书？ &raquo;</a>
       
     </p>
   </footer>

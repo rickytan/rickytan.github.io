@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术 | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2014-07-16T14:57:58+08:00</updated>
+  <updated>2014-09-28T20:42:23+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[XCode 中如何自动增长 Build 号]]></title>
+    <link href="http://rickytan.github.io/blog/2014/09/28/xcode-build-number/"/>
+    <updated>2014-09-28T19:46:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2014/09/28/xcode-build-number</id>
+    <content type="html"><![CDATA[<h2>iTunes Connect 新步骤</h2>
+
+<p>随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。</p>
+
+<p>几个月前听闻 Apple 收购 <a href="https://testflightapp.com">TestFlight</a>，但一直没有看到任何变化，如今 TestFlight 已经集成到新应用的发布
+、审核过程中了。打开 <a href="https://itunesconnect.apple.com">iTunesConnect</a>，可以看到在 <code>Versions</code> 旁边新
+增了一个 <code>Prerelease</code> 标签页。原先通过 <code>XCode</code> 上传的应用会直接进入苹果的审核队列中，现在它会先出现
+在这里，这里其实就是一个 <code>TestFlight</code> 的功能，你可以在 <strong><em>Users and Roles</em></strong> 中增加测试人员的 <em>Apple ID</em>，
+然后在 <code>Prerelease</code> 下的 <code>Internal Testers</code> 中可以看到。每上传一个新的 <strong><em>Build</em></strong>，苹果会自动发邮件给
+测试人员，测试人号点开邮件中的链接，在 <code>Safari</code> 中打开，然后 <code>Safari</code> 会打开设备上的 <code>Test Flight</code>，
+开始自动下载应用进行测试。</p>
+
+<p>这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
+版使用了不同的签名证书，然后每次加新人又要添加设备 <code>UDID</code> 到 <strong><em>Provisioning Profile</em></strong> 等等。</p>
+
+<p>测试通过之后，回到 <code>iTunesConnect</code> 中的 <code>Versions</code>，下拉找到 <code>Build</code>，选择刚刚测试好的 <strong><em>Build</em></strong> 号，
+点 <code>Save</code>，然后就可以进入正常的审核队列了。</p>
+
+<blockquote><p><strong><em>注意：</em></strong>测试功能只有使用苹果开发者网站最近生成的 <strong><em>Provisioning Profile</em></strong> 才能开启，而且会自
+动加入，不要去 <strong><em>Entitlement</em></strong> 中勾选了。</p></blockquote>
+
+<h2>Build 号</h2>
+
+<p>在 <code>iOS</code> 应用的 <code>Info.plist</code> 中有两个版本号，即 <strong><em>Version</em></strong> 和 <strong><em>Build</em></strong>，对应键值为 <code>CFBundleShortVersionString</code> 和 <code>CFBundleVersion</code>。
+一个是应用程序本身发布时的版本号，一个是表示这个发布版的二进制代码是第几次编译得到的。在 <strong><em>iOS8</em></strong>
+之前由于苹果并没有约束这两者的关系，本人一般就把两个填一样的，如 <code>2.1.4</code> 等，也一直没出过问题，但是
+最近由于苹果加入了测试功能，所有上传的 <strong><em>Build</em></strong> 都会保存，然后第一个因为某原因审核不过，再上传第
+二个就出现了 <strong><em>Build</em></strong> 号冲突的问题。于是想到这才是 <strong><em>Build</em></strong> 的正确使用方法，它本应该是个整数，
+在 <strong><em>Version</em></strong> 保持不变，<strong><em>Build</em></strong> 应该是要随着编译次数增长的！</p>
+
+<h2>自动增长</h2>
+
+<p>那么如何让 <strong><em>Build</em></strong> 号自动增加呢？很早前搜到过一段代码，现在可以用上了：</p>
+
+<ol>
+<li><p>在 <code>XCode</code> 中选中项目，打开 <code>Build Phases</code>，如下图：</p>
+
+<p> <img src="/images/run-script.png" alt="RunScript" /></p></li>
+<li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p>
+
+<p> <div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;buildNumber<span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c &amp;ldquo;Print CFBundleVersion&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;<span class="k">)</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span><span class='line'>/usr/libexec/PlistBuddy -c &amp;ldquo;Set :CFBundleVersion <span class="nv">$buildNumber</span>&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS 下如何复制一个视图（包括它的所有属性）]]></title>
@@ -526,229 +593,6 @@ return Token;
 <p>然后简单地写了个PHP脚本来处理，并存入数据库。更具体的信息，请访问Github Repo: <a href="https://github.com/rickytan/YellowPage">https://github.com/rickytan/YellowPage</a>，所有源代码都是开放的！zjutel.db 是处理好之后的 <code>Sqlite</code> 数据库，可以直接在手机等中使用。</p>
 
 <p>此电话信息的更多利用价值，有待大家一起挖掘！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[开始！Hello Markdown]]></title>
-    <link href="http://rickytan.github.io/blog/2013/06/06/kai-shi-%21hello-markdown/"/>
-    <updated>2013-06-06T13:50:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2013/06/06/kai-shi-!hello-markdown</id>
-    <content type="html"><![CDATA[<p><strong>新的开始</strong></p>
-
-<p>在<a href="http://biaobiaoqi.me">biaobiaoqi</a>的影响下，开始学着高端洋气一点，利用
-<a href="http://pages.github.com">Github Pages</a>和<a href="http://octopress.org">Octopress</a>框架
-搭起了自己的博客系统，但是此系统是纯静态页面组成的，写作用的是<strong>Markdown</strong>，自己并不熟悉。以这种方
-式写页面还是第一次，真的不一样的体验，有点技术极客的感觉。万事开头难，就以此文作为<strong>Markdown</strong>写作
-的开端吧！</p>
-
-<p>本文以熟悉<strong>Markdown</strong>语法为目的，算是先练练手。</p>
-
-<!--more-->
-
-
-<p><strong>标题</strong></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;h1>这是一级标题&lt;/h1>
-</span><span class='line'>
-</span><span class='line'>&lt;h2>这是二级标题&lt;/h2>
-</span><span class='line'>
-</span><span class='line'>&lt;h3>这是三级标题&lt;/h3>
-</span><span class='line'>
-</span><span class='line'>&lt;p>&hellip;&hellip;(依此类推</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<h1>这是一级标题</h1>
-
-<h2>这是二级标题</h2>
-
-<h3>这是三级标题</h3>
-
-<p>当然也有另外的写法：
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;h1>这是一级标题&lt;/h1>
-</span><span class='line'>
-</span><span class='line'>&lt;h2>这是二级标题&lt;/h2>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<h1>这是一级标题</h1>
-
-<h2>这是二级标题</h2>
-
-<p><strong>段落</strong></p>
-
-<p>段落就是一些连续的文字，只要不出现空行（只有空格和Tab的行），Markdown就会认为是同一段，所以在你的文本编辑器中，一段文字太长，大可以回车另起一段。</p>
-
-<p><strong>引用</strong></p>
-
-<p>像邮件中一样，Markdown的引用以<strong>></strong>开头</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;blockquote>&lt;p>这是一段引用文字。。。
-</span><span class='line'>你会发现，回车后&lt;strong>Vim&lt;/strong>会自动在新行前加上&lt;strong>>&lt;/strong></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>这是一段引用文字。。。
-你会发现，回车后<strong>Vim</strong>会自动在新行前加上<strong>></strong></p></blockquote>
-
-<p><strong>列表</strong></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>* 列表项
-</span><span class='line'>* 列表项
-</span><span class='line'>* 列表项
-</span><span class='line'>+ 列表项
-</span><span class='line'>+ 列表项
-</span><span class='line'>+ 列表项
-</span><span class='line'>&ndash; 列表项
-</span><span class='line'>&ndash; 列表项
-</span><span class='line'>&ndash; 列表项</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>以上列表样式是一样的。</p>
-
-<ul>
-<li>列表项</li>
-<li>列表项</li>
-<li>列表项</li>
-</ul>
-
-
-<p>有序号的列表，用数字+. 构成
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>1. 这是1
-</span><span class='line'>2. 这是2
-</span><span class='line'>8. 这是3</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>你会发现，数字不会影响Markdown最终的样式。</p>
-
-<ol>
-<li>这是1</li>
-<li>这是2</li>
-<li>这是3</li>
-</ol>
-
-
-<p><strong>代码段</strong></p>
-
-<p>简单地，一个Tab或缩进四个空格即可。
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;pre>&lt;code>int main() {
-</span><span class='line'>    printf("Hello World!\n");
-</span><span class='line'>    return 0;
-</span><span class='line'>}
-</span><span class='line'>&lt;/code>&lt;/pre>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>同样，<strong>Vim</strong>会自动在新行上加上四个空格！</p>
-
-<pre><code>int main() {
-    printf("Hello World!\n");
-    return 0;
-}
-</code></pre>
-
-<p>另外，Octopress 有更强大的插件可以突现代码，如你看到的各种有序号开头的部分，可以使用 <code>codeblock</code> 和
-<code>endcodeblock</code> 将代码包起来，在生成博客时，会自动加亮。
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>这是一小段C程序 </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="p">{</span><span class="err">\</span><span class="o">%</span> <span class="n">codeblock</span> <span class="err">这是一小段</span><span class="n">C</span><span class="err">程序</span> <span class="n">lang</span><span class="o">:</span><span class="n">c</span> <span class="err">\</span><span class="o">%</span><span class="p">}</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span><span class='line'><span class="p">{</span><span class="err">\</span><span class="o">%</span> <span class="n">endcodeblock</span> <span class="err">\</span><span class="o">%</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>加上<em>lang:c</em>以告诉插件以何种语法高亮代码。</p>
-
-<p><strong>链接</strong></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>这里有一个&lt;a href="http://www.google.com" title="Google">链接&lt;/a>
-</span><span class='line'>&lt;a href="http://www.google.com">http://www.google.com&lt;/a></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>这里有一个<a href="http://www.google.com" title="Google">链接</a>
-<a href="http://www.google.com">http://www.google.com</a></p>
-
-<p><strong>加粗</strong></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;em>加粗&lt;/em>
-</span><span class='line'>&lt;strong>加粗&lt;/strong>
-</span><span class='line'>&lt;em>加粗&lt;/em>
-</span><span class='line'>&lt;strong>加粗&lt;/strong></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p><em>加粗</em>
-<strong>加粗</strong>
-<em>加粗</em>
-<strong>加粗</strong></p>
-
-<p><strong>图片</strong></p>
-
-<p>跟链接的写法类似，不过以!开头
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;img src="https://www.google.com/images/srpr/logo4w.png" title="Google" alt="图片替代文字" /></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p><img src="https://www.google.com/images/srpr/logo4w.png" title="Google" alt="图片替代文字" /></p>
 ]]></content>
   </entry>
   

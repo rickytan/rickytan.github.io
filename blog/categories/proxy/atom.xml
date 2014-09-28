@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Proxy | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/proxy/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2014-07-16T14:57:58+08:00</updated>
+  <updated>2014-09-28T20:42:23+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -22,13 +22,13 @@
 
 <p>互联网是人类的互联网，人活着就不能放弃追求自由的权利！</p>
 
-<h1><a href="https://chrome.google.com/webstore/detail/zenmate/fdcgdnkidjaadafnichfpabhfomcebme">ZenMate</a></h1>
+<h2><a href="https://chrome.google.com/webstore/detail/zenmate/fdcgdnkidjaadafnichfpabhfomcebme">ZenMate</a></h2>
 
 <p>之前用过好长一段时间的 <strong><a href="https://www.google.com/chrome">Chrome</a></strong> 插件，一键翻墙，无需过多配置，免费且连接稳定。后来开始收费了，于是弃用。再后来（也就是现在）又免费了，但大陆已经无法使用了。</p>
 
 <p>当然了，大陆外也许还能用，用它来加密你的网络访问，哪怕是 <code>HTTP</code> 的站点。</p>
 
-<h1><a href="https://chrome.google.com/webstore/detail/%E7%BA%A2%E6%9D%8F/heehjpdocpefckjobfgnfdbhoebhphkf">红杏</a></h1>
+<h2><a href="https://chrome.google.com/webstore/detail/%E7%BA%A2%E6%9D%8F/heehjpdocpefckjobfgnfdbhoebhphkf">红杏</a></h2>
 
 <p>取名于成语“红杏出墙”，是非常有本土特色的一个翻墙插件，刚出来时可以翻任何网站，稳定快速，免配置。<!--more-->后来开始分免费和<code>VIP</code>，免费用户可以上 <a href="https://www.facebook.com">facebook</a>，<a href="https://www.google.com">google</a>，和 <a href="https://twitter.com">twitter</a>。</p>
 
@@ -40,7 +40,7 @@
 
 <p>随着伟大的防火墙越来越历害，<em>红杏</em> 也开始出现不稳定了，<em>Chrome Web Store</em> 上骂的人一大堆，一些人刚付了一年的费用结果就不能用了。事实上 <em>红杏</em> 的工作人员也是一直在维护，多服务器切换，出现问题后很快就会好的，只是最近挂的次数太多了。然后，最近，免费用户不能再用了……</p>
 
-<h1><a href="http://shadowsocks.org/">ShadowSocks</a></h1>
+<h2><a href="http://shadowsocks.org/">ShadowSocks</a></h2>
 
 <p>在朋友的推荐下，前不久开始用 <a href="http://shadowsocks.org/">ShadowSocks</a>。也许是中国官方见识到了它的威力，于是连 <em>Shadowsocks</em> 的官方网站都被墙了。它的代理原理与 <code>go-agent</code> 类似，也是分 <code>server</code> 和 <code>client</code>。<code>server</code>监听代理请求，<code>client</code>则监听本地的 <code>SOCKS</code> 请求，<code>client</code>收到请求后，以可选的加密方式通过某种私有协议转发到 <code>server</code> 端，<code>server</code> 再发起网页请求到互联网。当然了，这个 <code>server</code> 是在墙外的，而这个私有协议就起到了穿墙的作用。</p>
 
@@ -59,7 +59,7 @@
 </ol>
 
 
-<h2>优点</h2>
+<h3>优点</h3>
 
 <p><strong>Shadowsocks</strong> 的优点是很明显的。首先，它采用私有协议，不那么容易被墙。其次，它有多种语言实现，安装都异常简单。</p>
 
@@ -96,7 +96,7 @@
 
 <p>代理服务器填 <code>sock5 127.0.0.1:1080</code>，取决于您的客户端配置。</p>
 
-<h2>缺点</h2>
+<h3>缺点</h3>
 
 <p>唯一的缺点是，需要在本地启动一个服务。对于这一点，见仁见智，当然你可以让它开机启动，但我觉得总差那么点意思。</p>
 

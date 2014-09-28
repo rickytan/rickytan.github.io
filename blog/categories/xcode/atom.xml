@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Xcode | I'm Ricky -- 个人主页]]></title>
+  <title><![CDATA[Category: XCode | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/xcode/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2014-07-16T14:57:58+08:00</updated>
+  <updated>2014-09-28T20:42:23+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -14,48 +14,69 @@
 
   
   <entry>
-    <title type="html"><![CDATA[代码生成的 UIColor 与在 IB 中填写的颜色 RGB 最终颜色不一致的问题]]></title>
-    <link href="http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
-    <updated>2014-05-26T14:58:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
-    <content type="html"><![CDATA[<p>iOS 应用界面的编写，按程序员的习惯可以分为两派：代码党和 <code>IB</code> 党。本人是倾向于 <code>Interface Builder</code> 的，毕竟能少写点就少写点，能用 <code>IB</code> 实现坚决不用代码。</p>
+    <title type="html"><![CDATA[XCode 中如何自动增长 Build 号]]></title>
+    <link href="http://rickytan.github.io/blog/2014/09/28/xcode-build-number/"/>
+    <updated>2014-09-28T19:46:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2014/09/28/xcode-build-number</id>
+    <content type="html"><![CDATA[<h2>iTunes Connect 新步骤</h2>
 
-<p>但是在实际使用中，却发现一些问题，这个问题早有发现，我以为只是色差的原因，但是最近发现不那么简单了。</p>
+<p>随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。</p>
 
-<p>如下图，美术在 <code>PhotoShop</code> 中标了蓝色为 <code>#3689e5</code>，换成 <code>RGB</code> 为 54，137，229，于是在 <code>IB</code> 的颜色中填入此值，但是看到的颜色有差异。</p>
+<p>几个月前听闻 Apple 收购 <a href="https://testflightapp.com">TestFlight</a>，但一直没有看到任何变化，如今 TestFlight 已经集成到新应用的发布
+、审核过程中了。打开 <a href="https://itunesconnect.apple.com">iTunesConnect</a>，可以看到在 <code>Versions</code> 旁边新
+增了一个 <code>Prerelease</code> 标签页。原先通过 <code>XCode</code> 上传的应用会直接进入苹果的审核队列中，现在它会先出现
+在这里，这里其实就是一个 <code>TestFlight</code> 的功能，你可以在 <strong><em>Users and Roles</em></strong> 中增加测试人员的 <em>Apple ID</em>，
+然后在 <code>Prerelease</code> 下的 <code>Internal Testers</code> 中可以看到。每上传一个新的 <strong><em>Build</em></strong>，苹果会自动发邮件给
+测试人员，测试人号点开邮件中的链接，在 <code>Safari</code> 中打开，然后 <code>Safari</code> 会打开设备上的 <code>Test Flight</code>，
+开始自动下载应用进行测试。</p>
 
-<p><img src="/images/IB/QQ20140510-1.png" alt="image0" /></p>
+<p>这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
+版使用了不同的签名证书，然后每次加新人又要添加设备 <code>UDID</code> 到 <strong><em>Provisioning Profile</em></strong> 等等。</p>
 
-<!--more-->
+<p>测试通过之后，回到 <code>iTunesConnect</code> 中的 <code>Versions</code>，下拉找到 <code>Build</code>，选择刚刚测试好的 <strong><em>Build</em></strong> 号，
+点 <code>Save</code>，然后就可以进入正常的审核队列了。</p>
 
+<blockquote><p><strong><em>注意：</em></strong>测试功能只有使用苹果开发者网站最近生成的 <strong><em>Provisioning Profile</em></strong> 才能开启，而且会自
+动加入，不要去 <strong><em>Entitlement</em></strong> 中勾选了。</p></blockquote>
 
-<p><img src="/images/IB/QQ20140510-2.png" alt="image1" /></p>
+<h2>Build 号</h2>
 
-<p>这点小差异其实一般人都不会太关心，但后来有一部分功能我不想用 <code>IB</code> 了，于是代码写了个界面，就发现颜色差异不能忍了，代码的颜色是对的，<code>IB</code> 的颜色偏深。</p>
+<p>在 <code>iOS</code> 应用的 <code>Info.plist</code> 中有两个版本号，即 <strong><em>Version</em></strong> 和 <strong><em>Build</em></strong>，对应键值为 <code>CFBundleShortVersionString</code> 和 <code>CFBundleVersion</code>。
+一个是应用程序本身发布时的版本号，一个是表示这个发布版的二进制代码是第几次编译得到的。在 <strong><em>iOS8</em></strong>
+之前由于苹果并没有约束这两者的关系，本人一般就把两个填一样的，如 <code>2.1.4</code> 等，也一直没出过问题，但是
+最近由于苹果加入了测试功能，所有上传的 <strong><em>Build</em></strong> 都会保存，然后第一个因为某原因审核不过，再上传第
+二个就出现了 <strong><em>Build</em></strong> 号冲突的问题。于是想到这才是 <strong><em>Build</em></strong> 的正确使用方法，它本应该是个整数，
+在 <strong><em>Version</em></strong> 保持不变，<strong><em>Build</em></strong> 应该是要随着编译次数增长的！</p>
 
-<p>自己写了个 Demo ，截图如下：（这里差别还不是很大，因为我是在 Mac Pro Retian 自己的屏上输入的颜色，当你在外接显示器上用 <code>IB</code> 时，颜色差异十分明显）</p>
+<h2>自动增长</h2>
 
-<p><img src="/images/IB/s0.png" alt="image2" /></p>
+<p>那么如何让 <strong><em>Build</em></strong> 号自动增加呢？很早前搜到过一段代码，现在可以用上了：</p>
 
-<p>其中上半部分是用 Color Inspector 输入的值：</p>
+<ol>
+<li><p>在 <code>XCode</code> 中选中项目，打开 <code>Build Phases</code>，如下图：</p>
 
-<p><img src="/images/IB/s1.png" alt="image3" /></p>
+<p> <img src="/images/run-script.png" alt="RunScript" /></p></li>
+<li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p>
 
-<p>可以对比下第 2 张图，与上面这张图，第 2 张图是在外接显示器上输入的，颜色差异之大，不可能是由 228 与 229 造成的！</p>
+<p> <div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;buildNumber<span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c &amp;ldquo;Print CFBundleVersion&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;<span class="k">)</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span><span class='line'>/usr/libexec/PlistBuddy -c &amp;ldquo;Set :CFBundleVersion <span class="nv">$buildNumber</span>&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
+</ol>
 
-<p>我一再强调了显示器的不同，对，其实看到这里大家已经猜到，这种不同就来自显示器。点开 <code>RGB Sliders</code> 左边的按钮（我之前都不知道它能点的……），可以看到多种显示器配置文件</p>
-
-<p><img src="/images/IB/color-picker.png" alt="image4" /></p>
-
-<p>选择 <code>Generic RGB</code>，然后三个值会变掉，不管它，你自己再改成 54 137 229。这时它在这个显示器上显示的颜色可能与你要的不对，但是运行时，在模拟器上显示的就与代码无差别了！</p>
-
-<p><img src="/images/IB/s3.png" alt="image5" /></p>
-
-<p>可以用 Mac 自带的 <em>数码测色计</em> 来验证，注意要选 <strong>显示原生值</strong>！</p>
-
-<p>个人的理解，每个显示器在制造时就会有色偏，为了纠正这种色偏，在出厂时会调好一个配置文件，指定显示器在显示 240 这个颜色时（打个比方），你应该显示 248 才能让人的眼睛看着是 240，即显示器上显示的颜色是在原生值上纠偏过的，而<em>数码测色计</em>取的的显示器上的原生值，即 248，显示器根本不知道 240 的存在。这就是为什么用取色的方式总有色差了。</p>
-
-<p>附 <a href="http://stackoverflow.com/questions/7488378/weird-colors-in-xcode-interface-builder">StackOverflow</a> 上的链接 <a href="http://stackoverflow.com/questions/7488378/weird-colors-in-xcode-interface-builder">http://stackoverflow.com/questions/7488378/weird-colors-in-xcode-interface-builder</a></p>
 ]]></content>
   </entry>
   
