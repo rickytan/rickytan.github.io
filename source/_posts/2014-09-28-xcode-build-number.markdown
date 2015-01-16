@@ -16,6 +16,7 @@ categories: ["XCode", "iOS", "技术"]
 然后在 `Prerelease` 下的 `Internal Testers` 中可以看到。每上传一个新的 ***Build***，苹果会自动发邮件给
 测试人员，测试人号点开邮件中的链接，在 `Safari` 中打开，然后 `Safari` 会打开设备上的 `Test Flight`，
 开始自动下载应用进行测试。
+<!--more-->
 
 这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
 版使用了不同的签名证书，然后每次加新人又要添加设备 `UDID` 到 ***Provisioning Profile*** 等等。
