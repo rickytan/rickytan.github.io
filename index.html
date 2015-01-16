@@ -9,8 +9,7 @@
   <meta name="author" content="Ricky">
 
   
-  <meta name="description" content="iTunes Connect 新步骤 随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。 几个月前听闻 Apple 收购 TestFlight，但一直没有看到任何变化，如今 TestFlight 已经集成到新应用的发布
-、审核过程中了。打开 &hellip;">
+  <meta name="description" content="原文 Xcode 6 drops armv7s 最新的 Xcode 默认已经不再为 armv7s 构建可执行代码了，这到底是计划之中还是一时疏忽？ 当前最新版 Xcode 6 已经将 ${ARCHS_STANDARD} 定义为 armv7 和 arm64 了，同时当你更新 Xcode &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +83,53 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/01/16/xcode-6-drops-armv7s/">Xcode 6 默认不再构建 Armv7s 指令集的代码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-16T11:21:00+08:00" pubdate data-updated="true">Jan 16<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>原文 <a href="http://www.cocoanetics.com/2014/10/xcode-6-drops-armv7s/">Xcode 6 drops armv7s</a></p></blockquote>
+
+<p>最新的 <code>Xcode</code> 默认已经不再为 <code>armv7s</code> 构建可执行代码了，这到底是计划之中还是一时疏忽？</p>
+
+<p>当前最新版 <code>Xcode 6</code> 已经将 <code>${ARCHS_STANDARD}</code> 定义为 <code>armv7</code> 和 <code>arm64</code> 了，同时当你更新 <code>Xcode</code> 时它会不断提醒你删除你自己的定义，让 <code>Xcode</code> 帮你做决定。而在你不堪骚扰按它的做之后，你会发现你的项目不再构建 <code>armv7s</code> 的代码了。</p>
+
+<p><code>armv7s</code> 的指令集运行于 Apple A6 （iPhone 5）和 Apple A6X （iPad 4）CPU 上。接下来的 Apple A7 （iPhone 5S，iPad Air，iPad Mini Retina）已经使用了 64 位的 <code>arm64</code> 架构。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/01/16/xcode-6-drops-armv7s/">More &#8230;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/09/28/xcode-build-number/">XCode 中如何自动增长 Build 号</a></h1>
     
     
@@ -119,52 +165,12 @@
 测试人员，测试人号点开邮件中的链接，在 <code>Safari</code> 中打开，然后 <code>Safari</code> 会打开设备上的 <code>Test Flight</code>，
 开始自动下载应用进行测试。</p>
 
-<p>这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
-版使用了不同的签名证书，然后每次加新人又要添加设备 <code>UDID</code> 到 <strong><em>Provisioning Profile</em></strong> 等等。</p>
-
-<p>测试通过之后，回到 <code>iTunesConnect</code> 中的 <code>Versions</code>，下拉找到 <code>Build</code>，选择刚刚测试好的 <strong><em>Build</em></strong> 号，
-点 <code>Save</code>，然后就可以进入正常的审核队列了。</p>
-
-<blockquote><p><strong><em>注意：</em></strong>测试功能只有使用苹果开发者网站最近生成的 <strong><em>Provisioning Profile</em></strong> 才能开启，而且会自
-动加入，不要去 <strong><em>Entitlement</em></strong> 中勾选了。</p></blockquote>
-
-<h2>Build 号</h2>
-
-<p>在 <code>iOS</code> 应用的 <code>Info.plist</code> 中有两个版本号，即 <strong><em>Version</em></strong> 和 <strong><em>Build</em></strong>，对应键值为 <code>CFBundleShortVersionString</code> 和 <code>CFBundleVersion</code>。
-一个是应用程序本身发布时的版本号，一个是表示这个发布版的二进制代码是第几次编译得到的。在 <strong><em>iOS8</em></strong>
-之前由于苹果并没有约束这两者的关系，本人一般就把两个填一样的，如 <code>2.1.4</code> 等，也一直没出过问题，但是
-最近由于苹果加入了测试功能，所有上传的 <strong><em>Build</em></strong> 都会保存，然后第一个因为某原因审核不过，再上传第
-二个就出现了 <strong><em>Build</em></strong> 号冲突的问题。于是想到这才是 <strong><em>Build</em></strong> 的正确使用方法，它本应该是个整数，
-在 <strong><em>Version</em></strong> 保持不变，<strong><em>Build</em></strong> 应该是要随着编译次数增长的！</p>
-
-<h2>自动增长</h2>
-
-<p>那么如何让 <strong><em>Build</em></strong> 号自动增加呢？很早前搜到过一段代码，现在可以用上了：</p>
-
-<ol>
-<li><p>在 <code>XCode</code> 中选中项目，打开 <code>Build Phases</code>，如下图：</p>
-
-<p> <img src="/images/run-script.png" alt="RunScript" /></p></li>
-<li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p></li>
-</ol>
-
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c <span class="s2">&quot;Print CFBundleVersion&quot;</span> <span class="s2">&quot;$INFOPLIST_FILE&quot;</span><span class="k">)</span>
-</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
-</span><span class='line'>/usr/libexec/PlistBuddy -c <span class="s2">&quot;Set :CFBundleVersion $buildNumber&quot;</span> <span class="s2">&quot;$INFOPLIST_FILE&quot;</span>
-</span><span class='line'>  
-</span></code></pre></td></tr></table></div></figure>
-
-
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/28/xcode-build-number/">More &#8230;</a>
+    </footer>
   
 
 
@@ -576,62 +582,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/">iZJU中浙大黄页的实现</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-16T11:33:00+08:00" pubdate data-updated="true">Jun 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>简介</h2>
-
-<p>用过<a href="https://itunes.apple.com/cn/app/izju/id573810521?mt=8">iZJU iOS</a>版的同学应该会注意到，在2.1.1版本之后新增了“浙大黄页”的功能。</p>
-
-<p><img src="/images/screenshot20130616.png" alt="iZJU" /></p>
-
-<p>这个功能是原先“紧急电话”的加强版，细心的同学会知道，所有的电话号码数据来自“浙大电话黄页”网站（<a href="http://zjutel.zju.edu.cn">http://zjutel.zju.edu.cn</a>），如下图：</p>
-
-<p><img src="/images/QQ20130616-1.png" alt="浙大黄页" /></p>
-
-<h2>数据获取</h2>
-
-<p>网站管理员我不熟，他也不会主动给我数据，获取这个唯一的办法就是抓取了。但是网站数据没有一次列全，自己点开哪个就能看到哪个，如何一次性抓到所有数据？人工去点开吧，嗯，一开始我是这么想的，可是后来发现能展开的节点太多了，自己点太蛋疼了。于是就想到了让浏览器自动点。</p>
-
-<p>于是乎花了些时间写了个Chrome 小插件，如果还有节点，点开那个节点链接，否则无动作。
-主要代码如下，通过一张小gif 图来判断是否可以展开：</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/">More &#8230;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -647,6 +597,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/16/xcode-6-drops-armv7s/">Xcode 6 默认不再构建 Armv7s 指令集的代码</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/28/xcode-build-number/">XCode 中如何自动增长 Build 号</a>
       </li>
     
@@ -660,10 +614,6 @@
     
       <li class="post">
         <a href="/blog/2014/06/05/the-php-xml-issue/">PHP 中读 XML 的一个坑</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/26/uicolor-and-colorpicker-in-ib/">代码生成的 UIColor 与在 IB 中填写的颜色 RGB 最终颜色不一致的问题</a>
       </li>
     
   </ul>
@@ -706,9 +656,6 @@
 	<ul class="friendlink">
 		<li><a href="http://biaobiaoqi.me" target="_blank">biaobiaoqi.me</a></li>
 	</ul>
-	<ul class="friendlink">
-		<li><a href="http://sophiexu.me" target="_blank">sophiexu.me</a></li>
-	</ul>
 </section>
 
   
@@ -717,7 +664,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Ricky -
+  Copyright &copy; 2015 - Ricky -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

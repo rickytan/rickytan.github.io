@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术 | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2014-09-28T20:42:23+08:00</updated>
+  <updated>2015-01-16T23:58:39+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -29,6 +29,9 @@
 然后在 <code>Prerelease</code> 下的 <code>Internal Testers</code> 中可以看到。每上传一个新的 <strong><em>Build</em></strong>，苹果会自动发邮件给
 测试人员，测试人号点开邮件中的链接，在 <code>Safari</code> 中打开，然后 <code>Safari</code> 会打开设备上的 <code>Test Flight</code>，
 开始自动下载应用进行测试。</p>
+
+<!--more-->
+
 
 <p>这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
 版使用了不同的签名证书，然后每次加新人又要添加设备 <code>UDID</code> 到 <strong><em>Provisioning Profile</em></strong> 等等。</p>
