@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 递归 | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/di-gui/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-04-12T00:03:51+08:00</updated>
+  <updated>2015-04-12T00:08:04+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -39,6 +39,9 @@
   |<code>- 爵士
   </code>&ndash; 摇滚
 ```</p>
+
+<!--more-->
+
 
 <p>这样的数据，在数据库中一般有以下设计：</p>
 
