@@ -9,7 +9,10 @@
   <meta name="author" content="Ricky">
 
   
-  <meta name="description" content="蛐蛐儿 是一套利用声音传输信息的解决方案，大家可能知道 支付宝 在早些时候就推出了当面付的功能，其实就是利用超声波将加密后的支付信息传输给附近的人。蛐蛐儿SDK可以在其官网上下载到，通过它的提供的Demo可以看出，它需要将一段任意字符串S上传它们的后台，然后生成一段16字节的Token， &hellip;">
+  <meta name="description" content="背景 iOS 6跟 iOS 7的字体还是有点不一样的，有时候为了两者的统一，或者，应设计师的要求，界面中所有的 Label，Button 等都用自定义字体，一般来说，我们在初始化的时候就需要不断地添加冗余的代码来设置自己的字体。 1
+2
+3
+UILabel *label = [[UILabel &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,12 +26,10 @@
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="I'm Ricky -- 个人主页" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
 
   
   <script type="text/javascript">
@@ -77,6 +78,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/20/global-font-of-ios/">iOS 下如何设置全局字体？</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-20T01:52:00+08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>背景</h1>
+
+<p><code>iOS 6</code>跟 <code>iOS 7</code>的字体还是有点不一样的，有时候为了两者的统一，或者，应设计师的要求，界面中所有的 Label，Button 等都用自定义字体，一般来说，我们在初始化的时候就需要不断地添加冗余的代码来设置自己的字体。</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">UILabel</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="n">label</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="s">@&quot;myFont&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果你的界面全部是代码实现的，而且项目初期就已经定下统一用什么字体了，这就不是什么难事。但是，试想，如果你的界面是由大量<code>IB</code>实现的，而且用的是自定义的字体，在<code>IB</code>中选都没法选；或是项目已经完成差不多了，上面要求统一改字体，那该如何是好？</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/02/20/global-font-of-ios/">More &#8230;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -241,6 +296,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/04/11/how-to-generate-a-category-list/">如何生成分级的类别列表？</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/17/rtimageassets/">自动生成低清图的 Xcode 插件</a>
       </li>
     
@@ -254,10 +313,6 @@
     
       <li class="post">
         <a href="/blog/2014/07/14/my-gfw-proxy/">我的翻墙代理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/06/rtid/">RTID</a>
       </li>
     
   </ul>

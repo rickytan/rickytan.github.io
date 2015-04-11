@@ -4,7 +4,7 @@
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-01-17T00:23:05+08:00</updated>
+  <updated>2015-04-12T00:03:51+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -12,6 +12,206 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[如何生成分级的类别列表？]]></title>
+    <link href="http://rickytan.github.io/blog/2015/04/11/how-to-generate-a-category-list/"/>
+    <updated>2015-04-11T21:21:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2015/04/11/how-to-generate-a-category-list</id>
+    <content type="html"><![CDATA[<h2>分类问题</h2>
+
+<p>最近在做一个网页时，有这样一个需求，事实上很多电商之类的网站都有这样的需求：分类。然而这种分类又可以有无穷多子类，如：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>书
+</span><span class='line'>  |`- 自然科学
+</span><span class='line'>  |      |`- 物理
+</span><span class='line'>  |      |      |`- 经典物理
+</span><span class='line'>  |      |       `- 量子物理
+</span><span class='line'>  |       `- 数学
+</span><span class='line'>   `- 小说
+</span><span class='line'>         |`- 都市爱情
+</span><span class='line'>          `- 乡村爱情
+</span><span class='line'>唱片
+</span><span class='line'>  |`- 爵士
+</span><span class='line'>   `- 摇滚</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样的数据，在数据库中一般有以下设计：</p>
+
+<ul>
+<li><strong>ID</strong>：分类的唯一标识；</li>
+<li><strong>PID</strong>：父类的 ID；</li>
+<li><strong>Name</strong>：分类名。</li>
+</ul>
+
+
+<p>于是，在上例中，数据库中保存的数据可能是这样的：</p>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>PID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>书       </td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>唱片</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>自然科学</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>小说</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>爵士</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2</td>
+<td>摇滚</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3</td>
+<td>物理</td>
+</tr>
+<tr>
+<td>8</td>
+<td>7</td>
+<td>经典物理</td>
+</tr>
+<tr>
+<td>9</td>
+<td>7</td>
+<td>量子物理</td>
+</tr>
+<tr>
+<td>10</td>
+<td>3</td>
+<td>数学</td>
+</tr>
+<tr>
+<td>&hellip;</td>
+<td>&hellip;</td>
+<td>&hellip;</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>现在需要做一个添加项目的表单，其中一个需要填的数据就是该项目的分类，如何生成一个下拉选择，使得分类条目按层级关系列表出来？如下所示：</p>
+
+<p><select name=cate>
+  <option value=1>书</option>
+  <option value=3>&nbsp;&nbsp;&nbsp;&nbsp;自然科学</option>
+  <option value=7>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;物理</option>
+  <option value=8>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;经典物理</option>
+  <option value=9>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量子物理</option>
+  <option value=10>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数学</option>
+  <option value=?>&hellip;</option>
+</select></p>
+
+<p>很直观的一个思路是先从数据库查出所有的分类保存到一个数组中，然后从 <code>PID = 0</code> 的开始处理，可能用到多重循环。</p>
+
+<h2>树的遍历</h2>
+
+<p>事实上，如何分类的层级关系可以写成一个棵树的话，如下图，那么生成列表这个问题就是一个<strong>前序遍历</strong>问题了。</p>
+
+<p><img src="http://rickytan.github.io/images/post/category-tree.png" title="分类树" alt="分类树" /></p>
+
+<p>假设存在一个虚拟的 <code>Root</code> 节点，从 <code>Root</code> 开始，前序遍历，则遍历顺序依次是：</p>
+
+<ol>
+<li>Root</li>
+<li>书</li>
+<li>自然科学</li>
+<li>物理</li>
+<li>量子物理</li>
+<li>经典物理</li>
+<li>数学</li>
+<li>小说</li>
+<li>都市爱情</li>
+<li>乡村爱情</li>
+<li>唱片</li>
+<li>摇滚</li>
+<li>爵士</li>
+</ol>
+
+
+<p>然后根据节点深度对结果作一下缩进，目的就达到了。我们可以发现，同级中的顺序并不那么重要，先访问<em>数学</em>和先访问<em>物理</em>对下拉选择并没有影响，只要不同分类之间的层级关系正确就好。</p>
+
+<h2>递归的思路</h2>
+
+<p>对于从数据库中取出来的分类数组，要正确构建成一棵树还是有点工作量的，应该可以有更好的方法。于是有了下面的递归的思路：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">categorys</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="nx">pid</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">},</span> <span class="p">{},</span> <span class="p">{}];</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">insert</span><span class="p">(</span><span class="nx">pid</span><span class="p">,</span> <span class="nx">level</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>  <span class="nx">categorys</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">pid</span> <span class="o">==</span> <span class="nx">pid</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">o</span><span class="p">.</span><span class="nx">level</span> <span class="o">=</span> <span class="nx">level</span><span class="p">;</span>
+</span><span class='line'>          <span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">arr</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">insert</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">pid</span><span class="p">,</span> <span class="nx">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">arr</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面代码中，<code>category</code> 是从后台请求的未经处理的所有分类数据，函数 <code>insert</code> 需要两个参数：<code>pid</code> 是父类的 <strong>ID</strong>，<code>level</code> 是分类所处的深度。<code>insert</code> 返回一个数组，该数组的元素是以指定 <code>pid</code> 为祖先的元素。</p>
+
+<p>该算法的效率为 <code>N * d</code>，<code>N</code> 为分类个数，<code>d</code> 为层级深度</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[自动生成低清图的 Xcode 插件]]></title>
@@ -35,7 +235,7 @@
 
 <ul>
 <li>只会填补空位，如果你已经设置好了自己的 @2x 图，则不会生成；</li>
-<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x4e;&#64;&#x32;&#120;&#x2e;&#112;&#110;&#103;">&#78;&#64;&#x32;&#120;&#46;&#x70;&#x6e;&#103;</a> <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#78;&#x40;&#x33;&#120;&#46;&#x70;&#x6e;&#x67;">&#78;&#x40;&#x33;&#x78;&#x2e;&#x70;&#x6e;&#x67;</a> 等）；</li>
+<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#x4e;&#x40;&#50;&#120;&#x2e;&#112;&#x6e;&#x67;">&#78;&#x40;&#x32;&#120;&#46;&#x70;&#110;&#x67;</a> <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x4e;&#64;&#51;&#x78;&#x2e;&#112;&#x6e;&#x67;">&#x4e;&#64;&#51;&#120;&#x2e;&#112;&#x6e;&#x67;</a> 等）；</li>
 <li>使用简单，不用再麻烦美术同学缩放了；</li>
 </ul>
 
