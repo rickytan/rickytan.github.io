@@ -1,0 +1,926 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Gulp + Bower + AngularJS 进行 Web 开发并使用 Coding.net 搭建在线演示最佳实践 - I'm Ricky -- 个人主页</title>
+  <meta name="author" content="Ricky">
+
+  
+  <meta name="description" content="前言 随着 Coding 的迅速发展，它为国内开放者提供了越来越多的便利，其中之一便是免费、一键搭建在线演示站点。它能够自动检测项目所用的语言及运行环境，大多数情况下无需过多配置即可启动演示。本文就如何利用 Coding 提高 Web 开发者效率给出一个最佳实践。 项目初始化 本文假设读者已经具备 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rickytan.github.io/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="I'm Ricky -- 个人主页" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41902529-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">I'm Ricky -- 个人主页</a></h1>
+  
+    <h2>Talk is Cheap, show me the Code. Talk LESS, Code MORE</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rickytan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Gulp + Bower + AngularJS 进行 Web 开发并使用 Coding.net 搭建在线演示最佳实践</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-20T20:59:00+08:00" pubdate data-updated="true">Apr 20<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>前言</h2>
+
+<p>随着 <a href="http://coding.net">Coding</a> 的迅速发展，它为国内开放者提供了越来越多的便利，其中之一便是免费、一键搭建在线演示站点。它能够自动检测项目所用的语言及运行环境，大多数情况下无需过多配置即可启动演示。本文就如何利用 <a href="http://coding.net">Coding</a> 提高 Web 开发者效率给出一个最佳实践。</p>
+
+<h2>项目初始化</h2>
+
+<p>本文假设读者已经具备 <a href="http://gulpjs.com/">Gulp</a> 和 <a href="http://bower.io/">Bower</a> 的基本知识。</p>
+
+<p>首先，新建一个空目录为作您的工作目录，如：testProject。</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mkdir testProject
+</span><span class='line'><span class="nb">cd </span>testProject
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后初始化 <code>git</code>， <code>bower</code> 及 <code>npm</code>：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git init
+</span><span class='line'>bower init
+</span><span class='line'>npm init
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>新建一个 <strong>app</strong> 目录，您自己的所有源代码和资源文件将放在这里，在 <strong>app</strong> 下面创建 <strong>images</strong>，<strong>scripts</strong>，<strong>styles</strong> 目录分别放置项目所需的图片、脚本和样式文件。</p>
+
+<h2>安装前端依赖</h2>
+
+<p>本文以用 <a href="http://angularjs.org/">AngularJS</a> 做一个 <strong>ToDo List</strong> 为例，逐步讲述如何用 <a href="http://coding.net">Coding</a> 搭建演示。</p>
+
+<p>首先安装 <strong>AngularJS</strong>、<strong>Bootstrap</strong>：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bower install angularjs bootstrap --save
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装编译依赖</h2>
+
+<p>这里的编译是指 <strong>Gulp</strong> 的工作流处理流程。</p>
+
+<p>首先在项目目录下添加如下的 <strong>gulpfile.js</strong> （具体解释请参考官方网站：<a href="http://gulpjs.com/">http://gulpjs.com/</a>）：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/*global -$ */</span>
+</span><span class='line'><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="c1">// generated on &lt;%= (new Date).toISOString().split(&#39;T&#39;)[0] %&gt; using &lt;%= pkg.name %&gt; &lt;%= pkg.version %&gt;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-load-plugins&#39;</span><span class="p">)();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">browserSync</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-sync&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">reload</span> <span class="o">=</span> <span class="nx">browserSync</span><span class="p">.</span><span class="nx">reload</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;styles&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;less&#39;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;app/styles/main.css&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">postcss</span><span class="p">([</span>
+</span><span class='line'>      <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;autoprefixer-core&#39;</span><span class="p">)({</span><span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;last 1 version&#39;</span><span class="p">]})</span>
+</span><span class='line'>    <span class="p">]))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;.tmp/styles&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;less&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;app/styles/*.less&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">less</span><span class="p">())</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;app/styles&#39;</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;dist/styles&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;jshint&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;app/scripts/**/*.js&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">reload</span><span class="p">({</span><span class="nx">stream</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">once</span><span class="o">:</span> <span class="kc">true</span><span class="p">}))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">jshint</span><span class="p">())</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">jshint</span><span class="p">.</span><span class="nx">reporter</span><span class="p">(</span><span class="s1">&#39;jshint-stylish&#39;</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">browserSync</span><span class="p">.</span><span class="nx">active</span><span class="p">,</span> <span class="nx">$</span><span class="p">.</span><span class="nx">jshint</span><span class="p">.</span><span class="nx">reporter</span><span class="p">(</span><span class="s1">&#39;fail&#39;</span><span class="p">)));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;styles&#39;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">assets</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">useref</span><span class="p">.</span><span class="nx">assets</span><span class="p">({</span><span class="nx">searchPath</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;.tmp&#39;</span><span class="p">,</span> <span class="s1">&#39;app&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">&#39;app/*.html&#39;</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">assets</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="k">if</span><span class="p">(</span><span class="s1">&#39;*.js&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">.</span><span class="nx">uglify</span><span class="p">()))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="k">if</span><span class="p">(</span><span class="s1">&#39;*.css&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">.</span><span class="nx">csso</span><span class="p">()))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">assets</span><span class="p">.</span><span class="nx">restore</span><span class="p">())</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">useref</span><span class="p">())</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="k">if</span><span class="p">(</span><span class="s1">&#39;*.html&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">.</span><span class="nx">minifyHtml</span><span class="p">({</span><span class="nx">conditionals</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">loose</span><span class="o">:</span> <span class="kc">false</span><span class="p">})))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;dist&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;app/images/**/*&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">cache</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">imagemin</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">progressive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">interlaced</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">})))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;dist/images&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;fonts&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;main-bower-files&#39;</span><span class="p">)().</span><span class="nx">concat</span><span class="p">([</span><span class="s1">&#39;app/fonts/**/*&#39;</span><span class="p">,</span><span class="s1">&#39;bower_components/bootstrap/fonts/**/*&#39;</span><span class="p">]))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="s1">&#39;**/*.{eot,svg,ttf,woff,woff2,otf}&#39;</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">flatten</span><span class="p">())</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;.tmp/fonts&#39;</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;dist/fonts&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;extras&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span>
+</span><span class='line'>    <span class="s1">&#39;app/*.*&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;!app/*.html&#39;</span>
+</span><span class='line'>  <span class="p">],</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">dot</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>  <span class="p">}).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;dist&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;clean&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;del&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;.tmp&#39;</span><span class="p">,</span> <span class="s1">&#39;dist/*&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;serve&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;styles&#39;</span><span class="p">,</span> <span class="s1">&#39;fonts&#39;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">browserSync</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">notify</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">port</span><span class="o">:</span> <span class="mi">9000</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">server</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">baseDir</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;.tmp&#39;</span><span class="p">,</span> <span class="s1">&#39;app&#39;</span><span class="p">],</span>
+</span><span class='line'>      <span class="nx">routes</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s1">&#39;/bower_components&#39;</span><span class="o">:</span> <span class="s1">&#39;bower_components&#39;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// watch for changes</span>
+</span><span class='line'>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">([</span>
+</span><span class='line'>    <span class="s1">&#39;app/*.html&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;.tmp/styles/**/*.css&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;app/scripts/**/*.js&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;app/images/**/*&#39;</span>
+</span><span class='line'>  <span class="p">]).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="nx">reload</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">&#39;app/styles/**/*.less&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;styles&#39;</span><span class="p">,</span> <span class="nx">reload</span><span class="p">]);</span>
+</span><span class='line'>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">&#39;bower.json&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;wiredep&#39;</span><span class="p">,</span> <span class="s1">&#39;fonts&#39;</span><span class="p">,</span> <span class="nx">reload</span><span class="p">]);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// inject bower components</span>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;wiredep&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">wiredep</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wiredep&#39;</span><span class="p">).</span><span class="nx">stream</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;app/styles/*.scss&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">wiredep</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">ignorePath</span><span class="o">:</span> <span class="sr">/^(\.\.\/)+/</span>
+</span><span class='line'>    <span class="p">}))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;app/styles&#39;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;app/*.html&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">wiredep</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">exclude</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;bootstrap-sass-official&#39;</span><span class="p">],</span>
+</span><span class='line'>      <span class="nx">ignorePath</span><span class="o">:</span> <span class="sr">/^(\.\.\/)*\.\./</span>
+</span><span class='line'>    <span class="p">}))</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;dist&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;build&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;jshint&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;images&#39;</span><span class="p">,</span> <span class="s1">&#39;fonts&#39;</span><span class="p">,</span> <span class="s1">&#39;extras&#39;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;dist/**/*&#39;</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">size</span><span class="p">({</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;build&#39;</span><span class="p">,</span> <span class="nx">gzip</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;clean&#39;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s1">&#39;build&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后，使用如下命令安装依赖插件等：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>npm install --save-dev autoprefixer-core browser-sync core-util-is del gulp gulp-bower gulp-cache gulp-csso gulp-filter gulp-flatten gulp-if gulp-imagemin gulp-jshint gulp-less gulp-load-plugins gulp-minify-css gulp-minify-html gulp-postcss gulp-size gulp-uglify gulp-usemin gulp-usemin2 gulp-useref inherits isarray jshint main-bower-files postcss wrapper jshint-stylish
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上步骤完成后，您的目录看起来应该是如下的样子：</p>
+
+<p><img src="/images/gulp-best-practice0.png" alt="project directory" /></p>
+
+<h2>开始编码</h2>
+
+<p>所有项目初始工作已经完成，现在可以开始欢快的编码了！</p>
+
+<p>我们首先在 <strong>app</strong> 目录下添加 <code>index.html</code> 文件：</p>
+
+<figure class='code'><figcaption><span>index.html </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;title&gt;</span>My ToDo List<span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;IE=edge,chrome=1&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- build:css styles/main.css --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;/bower_components/bootstrap/dist/css/bootstrap.css&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;./styles/main.css&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- endbuild --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c">&lt;!-- build:js scripts/app.js --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/bower_components/angularjs/angular.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./scripts/app.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- endbuild --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body</span> <span class="na">ng-app=</span><span class="s">&quot;App&quot;</span> <span class="na">ng-controller=</span><span class="s">&quot;ListCtrl&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-2&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;list-group&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;li</span> <span class="na">ng-repeat=</span><span class="s">&quot;item in todoItems&quot;</span> <span class="na">class=</span><span class="s">&quot;list-group-item&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>              <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;item&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;item.done&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;item-content&quot;</span> <span class="na">ng-class=</span><span class="s">&quot;{&#39;item-done&#39;: item.done}&quot;</span><span class="nt">&gt;&lt;/label&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;a</span> <span class="na">href</span> <span class="na">ng-click=</span><span class="s">&quot;removeItem(item);&quot;</span> <span class="na">class=</span><span class="s">&quot;item-remove glyphicon glyphicon-remove&quot;</span> <span class="na">aria-hidden=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+</span><span class='line'>              <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;form</span> <span class="na">name=</span><span class="s">&quot;addForm&quot;</span> <span class="na">class=</span><span class="s">&quot;form-inline&quot;</span> <span class="na">ng-submit=</span><span class="s">&quot;addForm.$valid &amp;&amp; addItem();&quot;</span> <span class="na">novalidate</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;content&quot;</span> <span class="na">required</span><span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">class=</span><span class="s">&quot;btn btn-success&quot;</span><span class="nt">&gt;&lt;i</span> <span class="na">class=</span><span class="s">&#39;glyphicon glyphicon-plus&#39;</span><span class="nt">&gt;&lt;/i&gt;&lt;/button&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;/form&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-2&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在 <strong>app/styles</strong> 目录下添加 <code>main.less</code> 文件：</p>
+
+<figure class='code'><figcaption><span>main.less </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.item</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">input</span><span class="p">[</span><span class="n">type</span><span class="o">=</span><span class="s1">&#39;checkbox&#39;</span><span class="p">]</span> <span class="err">{</span>
+</span><span class='line'>        <span class="n">appearance</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">appearance</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#aaa</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">vertical-align</span><span class="o">:</span> <span class="k">middle</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">margin-top</span><span class="o">:</span> <span class="m">-6px</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">width</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">height</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">outline</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">&amp;:</span><span class="n">checked</span><span class="o">:</span><span class="n">before</span> <span class="err">{</span>
+</span><span class='line'>            <span class="k">content</span><span class="o">:</span> <span class="s1">&#39;✓&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">font-size</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">line-height</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">color</span><span class="o">:</span> <span class="m">#00a8e6</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'>    <span class="nc">.item-done</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">text-decoration</span><span class="o">:</span> <span class="k">line-through</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nc">.item-content</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">font-size</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nc">.item-remove</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">text-decoration</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">display</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="nd">:hover</span> <span class="p">{</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">item</span><span class="o">-</span><span class="n">remove</span> <span class="err">{</span>
+</span><span class='line'>            <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在 <strong>app/scripts/</strong> 下添加 <code>app.js</code> 文件：</p>
+
+<figure class='code'><figcaption><span>app.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;App&#39;</span><span class="p">,</span> <span class="p">[]).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;ListCtrl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$scope</span><span class="p">.</span><span class="nx">todoItems</span> <span class="o">=</span> <span class="p">[{</span>
+</span><span class='line'>                    <span class="nx">content</span><span class="o">:</span> <span class="s1">&#39;去医院看牙&#39;</span><span class="p">,</span>
+</span><span class='line'>                    <span class="nx">done</span><span class="o">:</span> <span class="kc">false</span>
+</span><span class='line'>                <span class="p">},</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">content</span><span class="o">:</span> <span class="s1">&#39;周末买衣服&#39;</span><span class="p">,</span>
+</span><span class='line'>                    <span class="nx">done</span><span class="o">:</span> <span class="kc">false</span>
+</span><span class='line'>                <span class="p">},</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">content</span><span class="o">:</span> <span class="s1">&#39;完成工作日报&#39;</span><span class="p">,</span>
+</span><span class='line'>                    <span class="nx">done</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>                <span class="p">}];</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nx">$scope</span><span class="p">.</span><span class="nx">addItem</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">$scope</span><span class="p">.</span><span class="nx">todoItems</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+</span><span class='line'>                    <span class="nx">content</span><span class="o">:</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">content</span><span class="p">,</span>
+</span><span class='line'>                    <span class="nx">done</span><span class="o">:</span> <span class="kc">false</span>
+</span><span class='line'>                <span class="p">});</span>
+</span><span class='line'>                <span class="nx">$scope</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">};</span>
+</span><span class='line'>            <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">todoItems</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+</span><span class='line'>                <span class="nx">$scope</span><span class="p">.</span><span class="nx">todoItems</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">};</span>
+</span><span class='line'>        <span class="p">}]);</span>
+</span><span class='line'><span class="p">})(</span><span class="nx">angular</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后，在命令行下运行：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>gulp serve
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你的浏览器会自动打开预览，同时你所做的修改会实时生效，如下图：</p>
+
+<p><img src="/images/gulp-best-practice1.png" alt="preview" /></p>
+
+<h2>编译部署</h2>
+
+<h3>生成上线版</h3>
+
+<p>在命令行下执行：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>gulp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>等待命令完成，项目目录下会新增一个 <strong>dist</strong> 目录，这就是您用来部署上线的所有内容了。打开 <code>index.html</code> 可以看到，内容是经过压缩的了。</p>
+
+<h3>推送到 <a href="http://coding.net">Coding</a></h3>
+
+<p>在推送 <a href="http://coding.net">Coding</a> 上部署之前，添加如下 <code>.gitignore</code> 文件：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>dist/
+</span><span class='line'>node_modules/
+</span><span class='line'>bower_components/
+</span><span class='line'>.tmp/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后使用 <code>Git</code> 推送到您在 <a href="http://coding.net">Coding</a> 上建立的项目。</p>
+
+<h3>新建 dist 分支</h3>
+
+<ul>
+<li>首先进入 <strong>dist</strong> 目录</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd </span>dist
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>初始化 <code>git</code></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git init
+</span><span class='line'>git remote add origin YOUR_PROJECT_ADDR
+</span><span class='line'>git checkout --orphan dist
+</span><span class='line'>git add --all
+</span><span class='line'>git commit -m <span class="s1">&#39;init dist&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>推送到 dist</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git push origin dist
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>部署</h3>
+
+<p>打开你在 <a href="http://coding.net">Coding</a> 上的项目，找到 <strong>演示</strong> 标签，先点击 “自动检测”，通过之后出现如下面板：</p>
+
+<p><img src="/images/gulp-best-practice2.png" alt="control panel" /></p>
+
+<p>点击 “显示高级选项”，勾选 <strong>HTML</strong> 环境，部署版本中填入 <strong>dist</strong>，加上自定义的二级域名，然后<strong>一键部署</strong>，完成！现在你可以通过访问：<a href="http://todolist.coding.io">http://todolist.coding.io</a> 查看最终运行效果了。</p>
+
+<h2>后记</h2>
+
+<p>以后开发时，所有代码放在 <strong>app</strong> 目录下，同时运行 <code>gulp serve</code> 可以实时预览效果。上线前运行 <code>gulp</code> ，生成压缩合并过的资源文件，然后进入 <strong>dist</strong> 目录，运行如下命令将内容推送到 <a href="http://coding.net">Coding</a>，并再点一次<strong>一键部署</strong>即可！</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add --all <span class="o">&amp;&amp;</span> git commit -m <span class="s1">&#39;update&#39;</span> <span class="o">&amp;&amp;</span> git push origin dist
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>gulp</code> 工作流包括如下步骤：</p>
+
+<ol>
+<li>去掉 <strong>HTML</strong> 中一切多余的空格、回车、引号等，使页面体积最小；</li>
+<li>将多个 <strong>js</strong> 文件合并为一个，并用 <a href="https://developers.google.com/closure/compiler/">Closure Compiler</a> 压缩；</li>
+<li>去除图片中的多余信息，如曝光时间、地理位置等，并使用类似于 <a href="https://imageoptim.com/">ImageOptim</a> 的算法将图片压缩到最小；</li>
+<li>编译 <strong>LESS</strong> 文件为 <strong>CSS</strong>，并将多个 <strong>CSS</strong> 合并、压缩为一个</li>
+</ol>
+
+
+<p>总之，使线上的版本所用的流量最小化，同时运行速度最快！</p>
+
+<p>本文中的所有源代码均可在：<a href="https://coding.net/u/rickytan/p/GulpCodingBestPractice/git">https://coding.net/u/rickytan/p/GulpCodingBestPractice/git</a> 上找到，运行如下命令即可看到本文中的效果了：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone https://git.coding.net/rickytan/GulpCodingBestPractice.git
+</span><span class='line'><span class="nb">cd </span>GulpCodingBestPractice
+</span><span class='line'>npm install
+</span><span class='line'>bower install
+</span><span class='line'>gulp serve
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ricky</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-20T20:59:00+08:00" pubdate data-updated="true">Apr 20<span>th</span>, 2015</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/04/11/how-to-generate-a-category-list/" title="Previous Post: 如何生成分级的类别列表？">&laquo; 如何生成分级的类别列表？</a>
+      
+      
+    </p>
+  </footer>
+	
+	<!-- UY BEGIN -->
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1792754" async=""></script>
+	<!-- UY END -->
+
+	<!-- UJian Button BEGIN -->
+	<div class="ujian-hook"></div>
+	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=1792754"></script>
+	<!-- UJian Button END -->
+
+	
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice/">Gulp + Bower + AngularJS 进行 Web 开发并使用 Coding.net 搭建在线演示最佳实践</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/11/how-to-generate-a-category-list/">如何生成分级的类别列表？</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/17/rtimageassets/">自动生成低清图的 Xcode 插件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/16/xcode-6-drops-armv7s/">Xcode 6 默认不再构建 Armv7s 指令集的代码</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/28/xcode-build-number/">XCode 中如何自动增长 Build 号</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rickytan">@rickytan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rickytan',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>友情链接</h1>
+	<ul class="friendlink">
+		<li><a href="http://biaobiaoqi.me" target="_blank">biaobiaoqi.me</a></li>
+	</ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Ricky -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
