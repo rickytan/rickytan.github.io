@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: iphone | I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.github.io/blog/categories/iphone/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2015-07-06T20:47:30+08:00</updated>
+  <id>http://rickytan.github.io/</id>
+  <author>
+    <name><![CDATA[Ricky]]></name>
+    <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[UIButton 状态的新理解]]></title>
+    <link href="http://rickytan.github.io/blog/2015/07/06/uibutton-state/"/>
+    <updated>2015-07-06T19:45:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2015/07/06/uibutton-state</id>
+    <content type="html"><![CDATA[<p><code>UIButton</code> 可能是 <strong>iOS</strong> 开发中使用的最多的控件之一了，它拥有极高的可定制性，通过合理的设置可以满足大部分点击响应的需求。一般认为，一个 <code>UIButton</code> 有四种状态，即：</p>
+
+<ul>
+<li>正常（Normal）</li>
+<li>高亮（Highlighted）</li>
+<li>选中（Selected）</li>
+<li>禁止（Disabled）</li>
+</ul>
+
+
+<p>但在实际项目中发现，当用户点在一个选中态的按钮上时，按钮显示的是正常状的样式，这是为什么呢？</p>
+
+<p>事实上，<code>UIControlState</code> 是个 BitMask：</p>
+
+<p>```objective-c
+typedef NS_OPTIONS(NSUInteger, UIControlState) {</p>
+
+<pre><code>UIControlStateNormal       = 0,
+UIControlStateHighlighted  = 1 &lt;&lt; 0,                  // used when UIControl isHighlighted is set
+UIControlStateDisabled     = 1 &lt;&lt; 1,
+UIControlStateSelected     = 1 &lt;&lt; 2,                  // flag usable by app (see below)
+UIControlStateApplication  = 0x00FF0000,              // additional flags available for application use
+UIControlStateReserved     = 0xFF000000               // flags reserved for internal framework use
+</code></pre>
+
+<p>};
+```</p>
+
+<p>3 个有效的 Bit 组合其实可以拥有 8 种状态！</p>
+
+<p>我们可以用代码实际测试一下：</p>
+
+<p>```objective-c
+&ndash; (void)viewDidLoad {</p>
+
+<pre><code>[super viewDidLoad];
+// Do any additional setup after loading the view, typically from a nib.
+self.view.backgroundColor = [UIColor whiteColor];
+
+CGPoint center = CGPointMake(CGRectGetWidth(self.view.frame) / 2, 60.f);
+UIButton *btn0 = [self getButton];
+btn0.center = center;
+
+center.y += 60.f;
+UIButton *btn1 = [self getButton];
+btn1.center = center;
+btn1.highlighted = YES;
+btn1.enabled = YES;
+
+center.y += 60.f;
+UIButton *btn2 = [self getButton];
+btn2.center = center;
+btn2.selected = YES;
+
+center.y += 60.f;
+UIButton *btn3 = [self getButton];
+btn3.center = center;
+btn3.enabled = NO;
+
+center.y += 60.f;
+UIButton *btn4 = [self getButton];
+btn4.center = center;
+btn4.selected = YES;
+btn4.enabled = NO;
+
+center.y += 60.f;
+UIButton *btn5 = [self getButton];
+btn5.center = center;
+btn5.highlighted = YES;
+btn5.enabled = NO;
+
+center.y += 60.f;
+UIButton *btn6 = [self getButton];
+btn6.center = center;
+btn6.highlighted = YES;
+btn6.selected = YES;
+btn6.enabled = NO;
+
+center.y += 60.f;
+UIButton *btn7 = [self getButton];
+btn7.center = center;
+btn7.highlighted = YES;
+btn7.selected = YES;
+btn7.enabled = YES;
+
+[self.view addSubview:btn0];
+[self.view addSubview:btn1];
+[self.view addSubview:btn2];
+[self.view addSubview:btn3];
+[self.view addSubview:btn4];
+[self.view addSubview:btn5];
+[self.view addSubview:btn6];
+[self.view addSubview:btn7];
+</code></pre>
+
+<p>}</p>
+
+<ul>
+<li><p>(UIButton <em>)getButton
+{
+  UIButton </em>btn = [UIButton buttonWithType:UIButtonTypeCustom];
+  [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];</p>
+
+<p>  [btn setTitle:@&ldquo;Normal&rdquo; forState:UIControlStateNormal];
+  [btn setTitle:@&ldquo;Selected&rdquo; forState:UIControlStateSelected];
+  [btn setTitle:@&ldquo;Highlighted&rdquo; forState:UIControlStateHighlighted];
+  [btn setTitle:@&ldquo;Highlighted &amp; Disabled&rdquo; forState:UIControlStateHighlighted | UIControlStateDisabled];
+  [btn setTitle:@&ldquo;Disabled&rdquo; forState:UIControlStateDisabled];
+  [btn setTitle:@&ldquo;Selected &amp; Disabled&rdquo; forState:UIControlStateSelected | UIControlStateDisabled];
+  [btn setTitle:@&ldquo;Selected &amp; Highlighted &amp; Disabled&rdquo; forState:UIControlStateSelected | UIControlStateHighlighted | UIControlStateDisabled];
+  [btn setTitle:@&ldquo;Selected &amp; Highlighted&rdquo; forState:UIControlStateSelected | UIControlStateHighlighted];</p>
+
+<p>  btn.bounds = CGRectMake(0, 0, 240, 30);</p>
+
+<p>  return btn;
+}
+```</p></li>
+</ul>
+
+
+<p>实验证明，</p>
+
+<ul>
+<li><code>UIControlStateHighlighted</code> 跟 <code>UIControlStateHighlighted | UIControlStateDisabled</code></li>
+<li><code>UIControlStateSelected | UIControlStateHighlighted</code> 跟 <code>UIControlStateSelected | UIControlStateHighlighted | UIControlStateDisabled</code></li>
+</ul>
+
+
+<p>的效果是一样的，会相互覆盖（苹果的 Bug？），剩下还有 6 种可能的状态。同时我们还能发现，当一种状态（或组合状态）没有设置时，它会使用正常态的设置。</p>
+
+<p><img src="/images/uibutton-state.png" alt="UIButton State" /></p>
+
+<p>所以，如果你的按钮正常是白色的，选中时是<span style="color: red">红色</span>的，而你想让用户在点击一个选中按钮时让它保持<span style="color: red">红色</span>，应该这么做：</p>
+
+<p><code>objective-c
+UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+[btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+[btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+[btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected | UIControlStateHighlighted];
+</code></p>
+
+<p>因为点击选中的按钮其实就是选中态与高亮态的叠加，如果没有设置它就用正常态的白色了。</p>
+]]></content>
+  </entry>
+  
+</feed>

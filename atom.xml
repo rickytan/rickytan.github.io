@@ -4,7 +4,7 @@
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-04-25T13:27:28+08:00</updated>
+  <updated>2015-07-06T20:47:30+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -12,6 +12,238 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UIButton 状态的新理解]]></title>
+    <link href="http://rickytan.github.io/blog/2015/07/06/uibutton-state/"/>
+    <updated>2015-07-06T19:45:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2015/07/06/uibutton-state</id>
+    <content type="html"><![CDATA[<p><code>UIButton</code> 可能是 <strong>iOS</strong> 开发中使用的最多的控件之一了，它拥有极高的可定制性，通过合理的设置可以满足大部分点击响应的需求。一般认为，一个 <code>UIButton</code> 有四种状态，即：</p>
+
+<ul>
+<li>正常（Normal）</li>
+<li>高亮（Highlighted）</li>
+<li>选中（Selected）</li>
+<li>禁止（Disabled）</li>
+</ul>
+
+
+<p>但在实际项目中发现，当用户点在一个选中态的按钮上时，按钮显示的是正常状的样式，这是为什么呢？</p>
+
+<p>事实上，<code>UIControlState</code> 是个 BitMask：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">typedef</span> <span class="nf">NS_OPTIONS</span><span class="p">(</span><span class="n">NSUInteger</span><span class="p">,</span> <span class="n">UIControlState</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIControlStateNormal</span>       <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIControlStateHighlighted</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">,</span>                  <span class="c1">// used when UIControl isHighlighted is set</span>
+</span><span class='line'>    <span class="n">UIControlStateDisabled</span>     <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIControlStateSelected</span>     <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">,</span>                  <span class="c1">// flag usable by app (see below)</span>
+</span><span class='line'>    <span class="n">UIControlStateApplication</span>  <span class="o">=</span> <span class="mh">0x00FF0000</span><span class="p">,</span>              <span class="c1">// additional flags available for application use</span>
+</span><span class='line'>    <span class="n">UIControlStateReserved</span>     <span class="o">=</span> <span class="mh">0xFF000000</span>               <span class="c1">// flags reserved for internal framework use</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3 个有效的 Bit 组合其实可以拥有 8 种状态！</p>
+
+<p>我们可以用代码实际测试一下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">// Do any additional setup after loading the view, typically from a nib.</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGPoint</span> <span class="n">center</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="n">CGRectGetWidth</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">60.f</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn0</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn0</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">60.f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn1</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn1</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn1</span><span class="p">.</span><span class="n">highlighted</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn1</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">60.f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn2</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn2</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn2</span><span class="p">.</span><span class="n">selected</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">60.f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn3</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn3</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn3</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">60.f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn4</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn4</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn4</span><span class="p">.</span><span class="n">selected</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn4</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">60.f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn5</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn5</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn5</span><span class="p">.</span><span class="n">highlighted</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn5</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">60.f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn6</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn6</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn6</span><span class="p">.</span><span class="n">highlighted</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn6</span><span class="p">.</span><span class="n">selected</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn6</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">center</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">60.f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn7</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getButton</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">btn7</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn7</span><span class="p">.</span><span class="n">highlighted</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn7</span><span class="p">.</span><span class="n">selected</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">btn7</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn0</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn1</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn2</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn3</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn4</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn5</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn6</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">btn7</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UIButton</span> <span class="o">*</span><span class="p">)</span><span class="nf">getButton</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">UIButton</span> <span class="o">*</span><span class="n">btn</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitleColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="n">blackColor</span><span class="p">]</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Normal&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Selected&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateSelected</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Highlighted&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateHighlighted</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Highlighted &amp; Disabled&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateHighlighted</span> <span class="o">|</span> <span class="n">UIControlStateDisabled</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Disabled&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateDisabled</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Selected &amp; Disabled&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateSelected</span> <span class="o">|</span> <span class="n">UIControlStateDisabled</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Selected &amp; Highlighted &amp; Disabled&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateSelected</span> <span class="o">|</span> <span class="n">UIControlStateHighlighted</span> <span class="o">|</span> <span class="n">UIControlStateDisabled</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">btn</span> <span class="nl">setTitle:</span><span class="s">@&quot;Selected &amp; Highlighted&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateSelected</span> <span class="o">|</span> <span class="n">UIControlStateHighlighted</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">btn</span><span class="p">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">btn</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>实验证明，</p>
+
+<ul>
+<li><code>UIControlStateHighlighted</code> 跟 <code>UIControlStateHighlighted | UIControlStateDisabled</code></li>
+<li><code>UIControlStateSelected | UIControlStateHighlighted</code> 跟 <code>UIControlStateSelected | UIControlStateHighlighted | UIControlStateDisabled</code></li>
+</ul>
+
+
+<p>的效果是一样的，会相互覆盖（苹果的 Bug？），剩下还有 6 种可能的状态。同时我们还能发现，当一种状态（或组合状态）没有设置时，它会使用正常态的设置。</p>
+
+<p><img src="http://rickytan.github.io/images/uibutton-state.png" alt="UIButton State" /></p>
+
+<p>所以，如果你的按钮正常是白色的，选中时是<span style="color: red">红色</span>的，而你想让用户在点击一个选中按钮时让它保持<span style="color: red">红色</span>，应该这么做：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">UIButton</span> <span class="o">*</span><span class="n">btn</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">btn</span> <span class="nl">setTitleColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">]</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">btn</span> <span class="nl">setTitleColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="n">redColor</span><span class="p">]</span> <span class="nl">forState:</span><span class="n">UIControlStateSelected</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">btn</span> <span class="nl">setTitleColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="n">redColor</span><span class="p">]</span> <span class="nl">forState:</span><span class="n">UIControlStateSelected</span> <span class="o">|</span> <span class="n">UIControlStateHighlighted</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因为点击选中的按钮其实就是选中态与高亮态的叠加，如果没有设置它就用正常态的白色了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gulp + Bower + AngularJS 进行 Web 开发并使用 Coding.net 搭建在线演示最佳实践]]></title>
@@ -916,7 +1148,7 @@
 
 <ul>
 <li>只会填补空位，如果你已经设置好了自己的 @2x 图，则不会生成；</li>
-<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#78;&#x40;&#x32;&#x78;&#x2e;&#112;&#x6e;&#103;">&#78;&#64;&#50;&#120;&#46;&#x70;&#110;&#x67;</a> <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#78;&#x40;&#x33;&#x78;&#46;&#x70;&#x6e;&#x67;">&#x4e;&#64;&#51;&#120;&#x2e;&#112;&#110;&#103;</a> 等）；</li>
+<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x4e;&#x40;&#x32;&#120;&#46;&#x70;&#x6e;&#103;">&#78;&#x40;&#50;&#120;&#46;&#112;&#110;&#x67;</a> <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#78;&#64;&#51;&#x78;&#x2e;&#112;&#x6e;&#x67;">&#78;&#x40;&#51;&#120;&#x2e;&#x70;&#110;&#x67;</a> 等）；</li>
 <li>使用简单，不用再麻烦美术同学缩放了；</li>
 </ul>
 
