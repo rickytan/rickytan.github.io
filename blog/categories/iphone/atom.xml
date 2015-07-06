@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iphone | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/iphone/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-07-06T20:47:30+08:00</updated>
+  <updated>2015-07-06T20:50:12+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -29,6 +29,9 @@
 
 
 <p>但在实际项目中发现，当用户点在一个选中态的按钮上时，按钮显示的是正常状的样式，这是为什么呢？</p>
+
+<!--more-->
+
 
 <p>事实上，<code>UIControlState</code> 是个 BitMask：</p>
 
