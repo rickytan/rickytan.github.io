@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Development | I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.github.io/blog/categories/development/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2015-11-06T18:32:55+08:00</updated>
+  <id>http://rickytan.github.io/</id>
+  <author>
+    <name><![CDATA[Ricky]]></name>
+    <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[是时候使用 PDF 资源了]]></title>
+    <link href="http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets/"/>
+    <updated>2015-11-06T17:56:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets</id>
+    <content type="html"><![CDATA[<p>一年前我做了这个插件 <a href="https://github.com/rickytan/RTImageAssets">RTImageAssets</a>，为了解决自己在开发过
+程中的一个痛点，这个痛点貌似也恰好是许多其他 iOS 开发者的痛点，那就是要不断地向美术解释如何正确切图。</p>
+
+<p>于是一时间也获得了不少反馈，但这始终只是个临时解决办法。事实上从 <strong>Xcode 6</strong> 开始就已经支持使用 PDF
+矢量图了。现在 iOS 设备越来越多，谁知道以后需要支持什么样的屏幕，而矢量图正是解决这一问题的良策。<!--more-->另外，很多同行反应从 @3x 的图生成的 @2x 的图点用的磁盘空间还大些，这其实是色彩空间和 PNG
+压缩算法决定的，我也没有时间深入研究这个，开发这个插件的目的只是让它有 @2x 的图以保证运行时图片大小跟
+期望的一致，事实上 <strong>Xcode</strong> 在打包时会自动优化 PNG 图片。所以终极解决方案，还是从现在开始，全部使用矢量图吧！</p>
+
+<p>如果对 PNG 图片压缩有兴趣，相关信息可以在 <a href="https://tinypng.com/">https://tinypng.com/</a> 和 <a href="https://imageoptim.com/">https://imageoptim.com/</a> 上找到。</p>
+
+<p>使用矢量图的方法跟普通 PNG 一样，按下图设置好后，原来的三个槽会变成一个，重新把图片拖进去就好：</p>
+
+<p><img src="/images/pdf-asset/1.png" alt="image0" /></p>
+
+<p>一定要选为 <em>Vector</em> ，之前碰到过将 <strong>PDF</strong> 图当 <strong>PNG</strong> 用的人……</p>
+
+<p>这样一来，无需再担心屏幕的分辨率问题，随着 <strong>Xcode</strong> 的更新，它会自动加入所需的分辨率。</p>
+
+<p>你不需要担心移动设置上使用矢量图的性能问题，因为事实上在打包的时候 <strong>Xcode</strong> 将它们变成 PNG 了：</p>
+
+<p><img src="/images/pdf-asset/2.png" alt="image1" /></p>
+
+<blockquote><p><em>最低支持到 <strong>iOS 6</strong> 时，会使用原始 PNG 图，可以看到以上的命名方式，<strong>iOS 7</strong> 以上已经将所有图片打包为 <code>Assets.car</code> 了</em></p></blockquote>
+
+<p>关于矢量图的生成问题，如果美术会使用 <a href="http://www.sketchcn.com/">Sketch</a> ，那么它对生成  PDF 等十分友好，如果 TA 不会用 Sketch，你是时候招个新的了。</p>
+]]></content>
+  </entry>
+  
+</feed>

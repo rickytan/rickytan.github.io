@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: UIKit - I'm Ricky -- 个人主页</title>
+  <title>是时候使用 PDF 资源了 - I'm Ricky -- 个人主页</title>
   <meta name="author" content="Ricky">
 
   
-  <meta name="description" content="Category: UIKit">
+  <meta name="description" content="一年前我做了这个插件 RTImageAssets，为了解决自己在开发过
+程中的一个痛点，这个痛点貌似也恰好是许多其他 iOS 开发者的痛点，那就是要不断地向美术解释如何正确切图。 于是一时间也获得了不少反馈，但这始终只是个临时解决办法。事实上从 Xcode 6 开始就已经支持使用 PDF
+矢量图了 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://rickytan.github.ioblog/categories/uikit">
+  <link rel="canonical" href="http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="I'm Ricky -- 个人主页" type="application/atom+xml">
@@ -74,36 +76,120 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: UIKit</h1>
+    
+      <h1 class="entry-title">是时候使用 PDF 资源了</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-06T17:56:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2015</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>一年前我做了这个插件 <a href="https://github.com/rickytan/RTImageAssets">RTImageAssets</a>，为了解决自己在开发过
+程中的一个痛点，这个痛点貌似也恰好是许多其他 iOS 开发者的痛点，那就是要不断地向美术解释如何正确切图。</p>
 
-  
-  <h2>2014</h2>
+<p>于是一时间也获得了不少反馈，但这始终只是个临时解决办法。事实上从 <strong>Xcode 6</strong> 开始就已经支持使用 PDF
+矢量图了。现在 iOS 设备越来越多，谁知道以后需要支持什么样的屏幕，而矢量图正是解决这一问题的良策。<!--more-->另外，很多同行反应从 @3x 的图生成的 @2x 的图点用的磁盘空间还大些，这其实是色彩空间和 PNG
+压缩算法决定的，我也没有时间深入研究这个，开发这个插件的目的只是让它有 @2x 的图以保证运行时图片大小跟
+期望的一致，事实上 <strong>Xcode</strong> 在打包时会自动优化 PNG 图片。所以终极解决方案，还是从现在开始，全部使用矢量图吧！</p>
 
-<article>
-  
-<h1><a href="/blog/2014/05/26/uicolor-and-colorpicker-in-ib/">代码生成的 UIColor 与在 IB 中填写的颜色 RGB 最终颜色不一致的问题</a></h1>
-<time datetime="2014-05-26T14:58:00+08:00" pubdate><span class='month'>May</span> <span class='day'>26</span> <span class='year'>2014</span></time>
+<p>如果对 PNG 图片压缩有兴趣，相关信息可以在 <a href="https://tinypng.com/">https://tinypng.com/</a> 和 <a href="https://imageoptim.com/">https://imageoptim.com/</a> 上找到。</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ib/'>IB</a>, <a class='category' href='/blog/categories/interface-builder/'>Interface Builder</a>, <a class='category' href='/blog/categories/uicolor/'>UIColor</a>, <a class='category' href='/blog/categories/uikit/'>UIKit</a>, <a class='category' href='/blog/categories/xcode/'>Xcode</a>, <a class='category' href='/blog/categories/ios/'>ios</a></span>
-</footer>
+<p>使用矢量图的方法跟普通 PNG 一样，按下图设置好后，原来的三个槽会变成一个，重新把图片拖进去就好：</p>
 
+<p><img src="/images/pdf-asset/1.png" alt="image0" /></p>
 
-</article>
+<p>一定要选为 <em>Vector</em> ，之前碰到过将 <strong>PDF</strong> 图当 <strong>PNG</strong> 用的人……</p>
 
+<p>这样一来，无需再担心屏幕的分辨率问题，随着 <strong>Xcode</strong> 的更新，它会自动加入所需的分辨率。</p>
+
+<p>你不需要担心移动设置上使用矢量图的性能问题，因为事实上在打包的时候 <strong>Xcode</strong> 将它们变成 PNG 了：</p>
+
+<p><img src="/images/pdf-asset/2.png" alt="image1" /></p>
+
+<blockquote><p><em>最低支持到 <strong>iOS 6</strong> 时，会使用原始 PNG 图，可以看到以上的命名方式，<strong>iOS 7</strong> 以上已经将所有图片打包为 <code>Assets.car</code> 了</em></p></blockquote>
+
+<p>关于矢量图的生成问题，如果美术会使用 <a href="http://www.sketchcn.com/">Sketch</a> ，那么它对生成  PDF 等十分友好，如果 TA 不会用 Sketch，你是时候招个新的了。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Ricky</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-06T17:56:00+08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/development/'>Development</a>, <a class='category' href='/blog/categories/xcode/'>Xcode</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/07/06/uibutton-state/" title="Previous Post: UIButton 状态的新理解">&laquo; UIButton 状态的新理解</a>
+      
+      
+    </p>
+  </footer>
+	
+	<!-- UY BEGIN -->
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" id="UYScript" src="http://v1.uyan.cc/js/iframe.js?UYUserId=1792754" async=""></script>
+	<!-- UY END -->
+
+	<!-- UJian Button BEGIN -->
+	<div class="ujian-hook"></div>
+	<script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?uid=1792754"></script>
+	<!-- UJian Button END -->
+
+	
 </article>
+
 
 </div>
 
