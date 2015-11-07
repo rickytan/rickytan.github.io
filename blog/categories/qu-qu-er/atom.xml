@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 蛐蛐儿 | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/qu-qu-er/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-11-06T18:32:55+08:00</updated>
+  <updated>2015-11-07T09:53:41+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -25,66 +25,37 @@
 <!--more-->
 
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>viewcontroller.m </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
-</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">XQuquerService</span> <span class="n">defaultService</span><span class="p">]</span> <span class="nl">setDelegate:</span><span class="n">self</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">XQuquerService</span> <span class="n">defaultService</span><span class="p">]</span> <span class="n">start</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="p">...;</span>
-</span><span class='line'><span class="p">[[</span><span class="n">XQuquerService</span> <span class="n">defaultService</span><span class="p">]</span> <span class="nl">uploadData:</span><span class="n">str</span><span class="p">];</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">prama</span> <span class="n">mark</span> <span class="n">XQuquer</span> <span class="n">Delegate</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">didSendDataToken</span>
-</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">didReceiveDataToken:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">dataToken</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></li>
+<p>{% codeblock viewcontroller.m lang:objc %}
+&ndash; (void)viewDidLoad
+{</p>
+
+<pre><code>[super viewDidLoad];
+[[XQuquerService defaultService] setDelegate:self];
+[[XQuquerService defaultService] start];
+
+NSString *str = ...;
+[[XQuquerService defaultService] uploadData:str];
+...
+</code></pre>
+
+<p>}</p>
+
+<h1>prama mark XQuquer Delegate</h1>
+
+<ul>
+<li>(void)didSendDataToken
+{</li>
+</ul>
+
+
+<p>}</p>
+
+<ul>
+<li>(void)didReceiveDataToken:(NSString *)dataToken
+{
+  &hellip;
+}
+{% endcodeblock %}</li>
 </ul>
 
 
@@ -106,27 +77,18 @@ B = 0003242ddd4082a4
 <p>它们等长，同时 <em>A</em> 中出现过的字符 <em>B</em> 中也同样出现，并且词频是一样的！
 在然后的几次单指令跟踪时，发现变量名中出过过 <code>dkey</code> 和 <code>ekey</code>，应该是 <code>decode</code> 和 <code>encode</code> ，检查内存，发现它们是 <code>int[16]</code> 的数组，这才发现 <em>A</em> 到 <em>B</em> 就是一个简单映射：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">dkey</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">char</span> <span class="n">A</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="mo">020240</span><span class="n">d3d0d42a48</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
-</span><span class='line'><span class="kt">char</span> <span class="n">B</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="mi">16</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">dkey</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:c %}
+const int dkey[] = {};</p>
+
+<p>char A[16] = &ldquo;020240d3d0d42a48&rdquo;;
+char B[17] = {0};
+for (int i=0; i&lt;16; ++i) {</p>
+
+<pre><code>B[i] = A[dkey[i]];
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 
 <p>这个问题解决了，那作者自己的名字拼音是怎么回事呢？还有那段被替换的后6位？在后来的跟踪中，发现代码有调用 <code>MD5</code> ，参数是替换成名字拼音的字符！</p>
 

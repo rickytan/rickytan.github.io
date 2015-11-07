@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 翻墙 | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/fan-qiang/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-11-06T18:32:55+08:00</updated>
+  <updated>2015-11-07T09:53:41+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -133,11 +133,10 @@
 
 <p>但是，这个是在前台运行的，退出就没了，可以安装 <code>forever</code> 模块来让它在后台运行：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>npm install -g forever
-</span><span class='line'>forever start &lt;code&gt;which spdyproxy&lt;/code&gt; -k path/to/key.pem -c path/to/cert.pem -p &amp;hellip;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:bash%}
+npm install -g forever
+forever start <code>which spdyproxy</code> -k path/to/key.pem -c path/to/cert.pem -p &hellip;
+{% endcodeblock %}</p>
 
 <p>当然也可以直接用 <code>nohup</code> 命令让它后台运行，<code>forever</code> 的好处是，当它挂了会自动重启！</p>
 
@@ -155,18 +154,13 @@
 
 <p><code>whitelist.json</code> 中是一个 <code>JSON</code> 数组，每个元素是不需要密码的 IP 地址：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>whitelist.json</span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">[</span>
-</span><span class='line'><span class="err">&amp;lsquo;</span><span class="mf">1.2</span><span class="err">.</span><span class="mf">3.4</span><span class="err">&amp;rsquo;</span><span class="p">,</span>
-</span><span class='line'><span class="err">&amp;lsquo;</span><span class="mf">3.3</span><span class="err">.</span><span class="mf">3.3</span><span class="err">&amp;rsquo;</span><span class="p">,</span>
-</span><span class='line'><span class="err">&amp;lsquo;</span><span class="mf">60.180</span><span class="err">.</span><span class="mf">180.180</span><span class="err">&amp;rsquo;</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:json whitelist.json%}
+[
+&lsquo;1.2.3.4&rsquo;,
+&lsquo;3.3.3.3&rsquo;,
+&lsquo;60.180.180.180&rsquo;
+]
+{% endcodeblock%}</p>
 
 <p>这样，添加自己常用的 IP 为白名单，自己访问不用密码，其他人访问需要密码，一定程度上防止别人盗用！</p>
 
@@ -180,212 +174,110 @@ npm install -g node-spdyproxy/package.json
 
 <p>以上工作并没有完，让 <strong>Chrome</strong> 访问所有网站都通过代理不是明智的选择，于是在 <code>VPS</code> 上安装 <code>nginx</code> 或 <code>apache</code> 做为文件服务器，编写一个 <code>PAC</code> 文件，选择性使用代理：</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>proxy.pac </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// 翻墙</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">proxy_list</span> <span class="o">=</span> <span class="p">[</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="s1">&#39;google.com&#39;</span><span class="p">,</span>
-</span><span class='line'><span class="s1">&#39;facebook.com&#39;</span><span class="p">,</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">];</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// 广告</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">black_list</span> <span class="o">=</span> <span class="p">[</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="s2">&quot;pubstat.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;mcfg.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;biz5.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;float.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;cl.kankan.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;211.94.190.80&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;mtips.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;211.94.190.80&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;mtips.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;adsresult.joywell.com.cn&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;advstat.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;wy.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;kkpgv.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;statis.kankan.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;server1.adpolestar.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;mpv.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;vid.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;valo.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;valf.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;walp.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;static.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;vid.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;valo.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;valf.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;walp.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;static.atm.youku.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;*.p2v.tudou.com*&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;at-img1.tdimg.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;at-img2.tdimg.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;at-img3.tdimg.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;adplay.tudou.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;adcontrol.tudou.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;stat.tudou.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;v2.stat.ku6.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;v3.stat.ku6.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;v0.stat.ku6.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;v1.stat.ku6.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;st.vq.ku6.cn&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;stat2.888.ku6.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;pq.stat.ku6.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;mcfg.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;biz5.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;server1.adpolestar.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;advstat.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;mpv.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;images.sohu.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;dcads.sina.com.cn&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;pubstat.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;float.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;recommend.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;cl.kankan.xunlei.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;googlesyndication.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;pagead2.googlesyndication.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;doubleclick.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;union.baidu.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;googleads.g.doubleclick.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;cpro.baidu.com&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;biz5.sandai.net&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="s2">&quot;*ad*.00000000*&quot;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">];</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">https</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">HTTPS</span> <span class="nx">xxx</span><span class="p">.</span><span class="nx">xxx</span><span class="p">.</span><span class="nx">xxx</span><span class="p">.</span><span class="nx">xxx</span><span class="o">:</span><span class="nx">xxx</span><span class="p">;</span> <span class="nx">DIRECT</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">direct</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">DIRECT</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">deny</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">PROXY</span> <span class="mf">127.0</span><span class="p">.</span><span class="mf">0.1</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">FindProxyForURL</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">host</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">black_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">domain</span> <span class="o">=</span> <span class="nx">black_list</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">shExpMatch</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">domain</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">deny</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">proxy_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">domain</span> <span class="o">=</span> <span class="nx">proxy_list</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">domain</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>        <span class="nx">domain</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nx">domain</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">host</span> <span class="o">===</span> <span class="nx">proxy_list</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">||</span>
-</span><span class='line'>        <span class="nx">dnsDomainIs</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">domain</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">https</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="k">return</span> <span class="nx">direct</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:javascript proxy.pac %}
+// 翻墙
+var proxy_list = [</p>
+
+<pre><code>'google.com',
+'facebook.com',
+...
+</code></pre>
+
+<p>];</p>
+
+<p>// 广告
+var black_list = [</p>
+
+<pre><code>"pubstat.sandai.net",
+"mcfg.sandai.net",
+"biz5.sandai.net",
+"float.sandai.net",
+"cl.kankan.xunlei.com",
+"211.94.190.80",
+"mtips.xunlei.com",
+"211.94.190.80",
+"mtips.xunlei.com",
+"adsresult.joywell.com.cn",
+"advstat.xunlei.com",
+"wy.xunlei.com",
+"kkpgv.xunlei.com",
+"statis.kankan.xunlei.com",
+"server1.adpolestar.net",
+"mpv.sandai.net",
+"vid.atm.youku.com",
+"valo.atm.youku.com",
+"valf.atm.youku.com",
+"walp.atm.youku.com",
+"static.atm.youku.com",
+"vid.atm.youku.com",
+"valo.atm.youku.com",
+"valf.atm.youku.com",
+"walp.atm.youku.com",
+"static.atm.youku.com",
+"*.p2v.tudou.com*",
+"at-img1.tdimg.com",
+"at-img2.tdimg.com",
+"at-img3.tdimg.com",
+"adplay.tudou.com",
+"adcontrol.tudou.com",
+"stat.tudou.com",
+"v2.stat.ku6.com",
+"v3.stat.ku6.com",
+"v0.stat.ku6.com",
+"v1.stat.ku6.com",
+"st.vq.ku6.cn",
+"stat2.888.ku6.com",
+"pq.stat.ku6.com",
+"mcfg.sandai.net",
+"biz5.sandai.net",
+"server1.adpolestar.net",
+"advstat.xunlei.com",
+"mpv.sandai.net",
+"images.sohu.com",
+"dcads.sina.com.cn",
+"pubstat.sandai.net",
+"float.sandai.net",
+"recommend.xunlei.com",
+"cl.kankan.xunlei.com",
+"googlesyndication.com",
+"pagead2.googlesyndication.com",
+"doubleclick.net",
+"union.baidu.com",
+"googleads.g.doubleclick.net",
+"cpro.baidu.com",
+"biz5.sandai.net",
+"*ad*.00000000*"
+</code></pre>
+
+<p>];</p>
+
+<p>var https = &ldquo;HTTPS xxx.xxx.xxx.xxx:xxx; DIRECT&rdquo;;
+var direct = &ldquo;DIRECT&rdquo;;
+var deny = &ldquo;PROXY 127.0.0.1;&rdquo;;</p>
+
+<p>function FindProxyForURL(url, host) {</p>
+
+<pre><code>for (var i=0;i&lt;black_list.length;++i) {
+    var domain = black_list[i];
+    if (shExpMatch(host, domain)) {
+        return deny;
+    }
+};
+
+for (var i=0;i&lt;proxy_list.length;++i) {
+    var domain = proxy_list[i];
+    if (domain.indexOf('.') &gt; 0)
+        domain = '.' + domain;
+    if (host === proxy_list[i] ||
+        dnsDomainIs(host, domain)) {
+        return https;
+    }
+};
+return direct;
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 
 <p><em>更详细的配置，请见：<a href="https://github.com/igrigorik/node-spdyproxy">https://github.com/igrigorik/node-spdyproxy</a></em></p>
 
