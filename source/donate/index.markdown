@@ -7,23 +7,18 @@ sharing: true
 footer: true
 ---
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="6UA38QRQQKJUU">
-<table>
-<tr>
-  <td><input type="hidden" name="on0" value="Donation type">Donation type</td>
-</tr>
-<tr>
-  <td><select name="os0">
-<option value="1 Humberger">1 Humberger $ 0.99 USD</option>
-<option value="1 cup of Coffee">1 cup of Coffee $ 1.99 USD</option>
-</select>
-</td></tr>
-</table>
+## Paypal
+
+<form name="_xclick" action="https://www.paypal.com/cn/cgi-bin/webscr" method="post">
+<input type="hidden" name="business" value="ricky_tan@live.cn">
+<input type="hidden" name="item_name" value="RTImageAssets">
+<input type="hidden" name="item_number" value="Support the awesome!" /> 
+<input type="hidden" name="cmd" value="_donations" /> 
 <input type="hidden" name="currency_code" value="USD">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online.">
-<img alt="" border="0" src="https://www.paypalobjects.com/zh_XC/i/scr/pixel.gif" width="1" height="1">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" alt="PayPal - The safer, easier way to pay online!">
 </form>
 
+## 支付宝
+
+![ricky_tan@live.cn](/images/alipay-donate.jpg)
 
