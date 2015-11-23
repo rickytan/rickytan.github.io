@@ -9,7 +9,7 @@
   <meta name="author" content="Ricky">
 
   
-  <meta name="description" content="iOS 应用界面的编写，按程序员的习惯可以分为两派：代码党和 IB 党。本人是倾向于 Interface Builder 的，毕竟能少写点就少写点，能用 IB 实现坚决不用代码。 但是在实际使用中，却发现一些问题，这个问题早有发现，我以为只是色差的原因，但是最近发现不那么简单了。 如下图，美术在 &hellip;">
+  <meta name="description" content="背景 很多时候我们需要设备的唯一标识符，但自从 iOS 5.0 之后，苹果公司开始限制 [UIDevice currentDevice].uniqueIdentifier 的访问，而现在，这个接口已经被移除，多了一个新的 identifierForVendor 接口。对每个单独的应用， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +75,116 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/06/rtid/">RTID</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-06T01:44:00+08:00" pubdate data-updated="true">Jun 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>背景</h2>
+
+<p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
+
+<h3>网卡地址</h3>
+
+<p>读 <code>MAC</code> 地址是个不错的想法</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/06/rtid/">More &#8230;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/05/the-php-xml-issue/">PHP 中读 XML 的一个坑</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-05T01:47:00+08:00" pubdate data-updated="true">Jun 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>问题</h2>
+
+<p>在做一个微信的 <code>PHP</code> 后台时需要读微信服务器 <code>POST</code> 过来的 <code>XML</code>，然后保存到 <code>Memcache</code> 中。</p>
+
+<figure class='code'><figcaption><span>index.php </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'><span class="k">public</span> <span class="nx">index</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$postData</span> <span class="o">=</span> <span class="nv">$GLOBALS</span><span class="p">[</span><span class="s2">&quot;HTTP_RAW_POST_DATA&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="nv">$postObj</span> <span class="o">=</span> <span class="nb">simplexml_load_string</span><span class="p">(</span><span class="nv">$postStr</span><span class="p">,</span> <span class="s1">&#39;SimpleXMLElement&#39;</span><span class="p">,</span> <span class="nx">LIBXML_NOCDATA</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">cache</span><span class="o">-&gt;</span><span class="na">memcached</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="s2">&quot;openid_&quot;</span><span class="o">.</span><span class="nv">$something</span><span class="p">,</span> <span class="nv">$postObj</span><span class="o">-&gt;</span><span class="na">FromUserName</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>怎么也出不来结果，然后发现运行到 <code>save</code> 时有异常</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/05/the-php-xml-issue/">More &#8230;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -441,6 +551,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/11/23/why-shouldnt-you-use-ib/">为什么你不应该使用 Interface Builder</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/23/why-should-you-start-to-use-ib/">为什么你应该开始使用 Interface Builder</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/06/time-to-use-pdf-assets/">是时候使用 PDF 资源了</a>
       </li>
     
@@ -450,14 +568,6 @@
     
       <li class="post">
         <a href="/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice/">Gulp + Bower + AngularJS 进行 Web 开发并使用 Coding.net 搭建在线演示最佳实践</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/11/how-to-generate-a-category-list/">如何生成分级的类别列表？</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/01/17/rtimageassets/">自动生成低清图的 Xcode 插件</a>
       </li>
     
   </ul>

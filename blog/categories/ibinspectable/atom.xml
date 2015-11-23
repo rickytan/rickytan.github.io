@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: IBInspectable | I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.github.io/blog/categories/ibinspectable/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2015-11-23T13:58:15+08:00</updated>
+  <id>http://rickytan.github.io/</id>
+  <author>
+    <name><![CDATA[Ricky]]></name>
+    <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[为什么你应该开始使用 Interface Builder]]></title>
+    <link href="http://rickytan.github.io/blog/2015/11/23/why-should-you-start-to-use-ib/"/>
+    <updated>2015-11-23T11:26:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2015/11/23/why-should-you-start-to-use-ib</id>
+    <content type="html"><![CDATA[<p>众所周知，用 <strong>Xcode</strong> 开发 <strong>App Watch</strong> 应用只能使用 <code>Interface Builder</code> （以下简称 <strong>IB</strong>），甚至于它的 <strong>API</strong> 中都没有 <code>-(void)init</code> 接口，如下：</p>
+
+<p>``` objective-c
+@interface WKInterfaceButton : WKInterfaceObject</p>
+
+<ul>
+<li>(void)setTitle:(nullable NSString *)title;</li>
+<li><p>(void)setAttributedTitle:(nullable NSAttributedString *)attributedTitle;</p></li>
+<li><p>(void)setBackgroundColor:(nullable UIColor *)color;</p></li>
+<li>(void)setBackgroundImage:(nullable UIImage *)image;</li>
+<li>(void)setBackgroundImageData:(nullable NSData *)imageData;</li>
+<li><p>(void)setBackgroundImageNamed:(nullable NSString *)imageName;</p></li>
+<li><p>(void)setEnabled:(BOOL)enabled;</p></li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>另外，在 <strong>Xcode 6</strong> 之后，新增了一个很强的特性 <strong>IBInspectable</strong>，它允许开发者自定义的控件使用 <strong>IB</strong> 来设置参数。</p>
+
+<p>回顾计算机的发展历程，人类一直在为 <strong>WYSIWYG</strong> （所见即所得）做着不懈的努力（当然，程序员有时候会逆其道而行之，比如写文档像码代码的 <a href="https://www.latex-project.org/"><strong>LaTeX</strong></a>），毕竟人是视觉动物。我个人而言是十分崇尚在生产环境中使用 <strong>Xib</strong> 和 <strong>StoryBoard</strong> 的，而 <strong>IBInspectable</strong> 的出现更加坚定了继续使用它们的信心，同时也表明的苹果官方的态度，苹果希望开发者们使用 <strong>IB</strong>。</p>
+
+<p>接下来就说明一下 <strong>IBInspectable</strong> 可以为封装控件带来什么新的启发。<!--more--></p>
+
+<h2><strong>IBInspectable</strong></h2>
+
+<p><strong>IBInspectable</strong> 的使用非常简单，首先定义自己的类，然后在定义的上一行添加 <strong>IB_DESIGNABLE</strong> 宏即可（如果是 <strong>Swift</strong>，使用 <code>@IBDesignable</code>）。这里以本人的开源项目 <a href="https://github.com/rickytan/RTIconButton"><strong>RTIconButton</strong>（https://github.com/rickytan/RTIconButton）</a> 为例：</p>
+
+<p>``` objective-c
+typedef NS_ENUM(NSInteger, GSIconPosition) {</p>
+
+<pre><code>GSIconPositionTop       = 0,
+GSIconPositionLeft,
+GSIconPositionBottom,
+GSIconPositionRight
+</code></pre>
+
+<p>};</p>
+
+<p>IB_DESIGNABLE
+@interface RTIconButton : UIButton
+@property (nonatomic, assign) IBInspectable CGFloat iconMargin;
+@property (nonatomic, assign) IBInspectable NSInteger iconPosition;
+@property (nonatomic, assign) IBInspectable CGSize iconSize;    // default is image size;
+@end
+```</p>
+
+<p>然后在需要使用 <strong>IB</strong> 来设置值的属性上添加 <strong>IBInspectable</strong> 宏。这个并不是什么新的黑科技，事实上它只是告诉了 <strong>Xcode</strong> 使用 <strong>Runtime Attribute</strong> 来设置它的值。</p>
+
+<p><img src="/images/use-ib/0.png" alt="" /></p>
+
+<p>所以它支持的属性类型也是有限的，只有以下几种（不支持 <strong>UIFont</strong> 和 <strong>ENUM</strong>，所以本项目中的 <code>iconPosition</code> 使用了 <code>NSInteger</code>），但也基本够用：</p>
+
+<ul>
+<li>Boolean</li>
+<li>Number</li>
+<li>String</li>
+<li>Localized String</li>
+<li>Point</li>
+<li>Size</li>
+<li>Rect</li>
+<li>Range</li>
+<li>Color</li>
+<li>Image</li>
+<li>Nil</li>
+</ul>
+
+
+<p>上面的代码中，三个属性都定义为可以使用 <strong>IB</strong>，那么当你拖拽一个 <strong>UIButton</strong> 到界面上，设置它的 <strong>Class</strong> 为 <strong>RTIconButton</strong> 后，<strong>Xcode</strong> 的 <strong>Attributes Inspector</strong> 面板会多出如下几个可设置的项目：</p>
+
+<p><img src="/images/use-ib/1.png" alt="" /></p>
+
+<p>如果不设置，它将使用默认值，即代码在 <code>-(void)init</code> 时自己设置的值。这里需要注意的是，从 <strong>IB</strong> 生成的界面调用的是 <code>- (instancetype)initWithCoder:(NSCoder *)aDecoder</code>，所以通常的做法写一个 <code>-(void)commonInit</code> 之类的。</p>
+
+<p>``` objective-c
+&ndash; (void)commonInit
+{</p>
+
+<pre><code>self.iconSize = CGSizeZero;
+</code></pre>
+
+<p>}</p>
+
+<ul>
+<li><p>(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+  self = [super initWithCoder:aDecoder];
+  if (self) {
+      [self commonInit];
+  }
+  return self;
+}</p></li>
+<li><p>(instancetype)initWithFrame:(CGRect)frame
+{
+  self = [super initWithFrame:frame];
+  if (self) {
+      [self commonInit];
+  }
+  return self;
+}
+```</p></li>
+</ul>
+
+
+<h2><code>intrinsicContentSize</code></h2>
+
+<p>其次，为了支持 <strong>NSLayoutConstraint</strong>，一定要实现 <code>- (CGSize)intrinsicContentSize</code> 方法，否则在运行时，控件的 <strong>size</strong> 会发生改变：</p>
+
+<p>``` objective-c
+&ndash; (CGSize)intrinsicContentSize
+{</p>
+
+<pre><code>CGRect contentRect = [self contentRectForBounds:self.bounds];
+</code></pre>
+
+<h1>pragma clang diagnostic push</h1>
+
+<h1>pragma clang diagnostic ignored &ldquo;-Wdeprecated&rdquo;</h1>
+
+<pre><code>CGSize titleSize = [[self titleForState:self.state] sizeWithFont:self.font];
+</code></pre>
+
+<h1>pragma clang diagnostic pop</h1>
+
+<pre><code>CGSize imageSize = CGSizeEqualToSize(self.iconSize, CGSizeZero) ? [super imageRectForContentRect:contentRect].size : self.iconSize;
+
+switch (_iconPosition) {
+    case GSIconPositionTop:
+    case GSIconPositionBottom:
+        return CGSizeMake(MAX(titleSize.width, imageSize.width), titleSize.height + imageSize.height + self.iconMargin);
+
+        break;
+    default:
+        return CGSizeMake(titleSize.width + imageSize.width + self.iconMargin, MAX(titleSize.height, imageSize.height));
+        break;
+}
+</code></pre>
+
+<p>}</p>
+
+<ul>
+<li>(CGSize)sizeThatFits:(CGSize)size
+{
+  return [self intrinsicContentSize];
+}
+```</li>
+</ul>
+
+
+<p>本项目解决了 <strong>Icon</strong> 与 <strong>Title</strong> 混排的一些常见需求，支持设置间距、调整 <strong>Icon</strong> 大小、<strong>Icon</strong> 位置，及水平和竖直方向对齐，并且所有的设置所见即所得！</p>
+
+<p><img src="/images/use-ib/2.png" alt="" /></p>
+
+<p>所有源代码可以在 <a href="https://github.com/rickytan/RTIconButton">https://github.com/rickytan/RTIconButton</a> 上找到。</p>
+
+<p>目前已知问题：</p>
+
+<ol>
+<li>如果设置了 <strong>Shows Touch On Highlight</strong>（即点上去发白光的那个属性），白光可能不在正中间</li>
+</ol>
+
+
+<hr />
+
+<p>这就完了吗？并没有！有些控件需要 <strong>Delegate</strong> 提供数据源，在真正运行前是看不到样子的怎么办？其实也可以让它们可见，至少来说部分可见。同时，这里以本人的另一个项目 <a href="https://github.com/rickytan/RSlideView"><strong>RSlideView</strong></a> 为例：</p>
+
+<p>``` objective-c
+IB_DESIGNABLE
+@interface RSlideView : UIView
+// 这里省略了不支持 IB 的属性
+@property (nonatomic, assign, getter = isLoopSlide) IBInspectable BOOL loopSlide;
+@property (nonatomic, assign, getter = isContinuousScroll) IBInspectable BOOL continuousScroll;
+@property (nonatomic, assign, getter = isPageControlHidden) IBInspectable BOOL pageControlHidden;   // Default YES
+@property (nonatomic, assign) IBInspectable UIColor *pageControlBackgroundColor;
+@property (nonatomic, assign) IBInspectable CGSize pageSize;  // Default to be the RSlideView&rsquo;s size</p>
+
+<pre><code>// The Gap between two pages, default to be 0
+</code></pre>
+
+<p>@property (nonatomic, assign) IBInspectable CGFloat pageMargin;
+@end
+```</p>
+
+<p>本项目提供一个可以循环滚动的 <strong>Banner</strong> 控件，但是在运行前没有任何数据可以生成 <strong>Banner</strong>，我们可以覆盖 <code>- (void)drawRect:(CGRect)rect</code> 方法将 <strong>Banner</strong> 的布局样子绘制出来：</p>
+
+<p>``` objective-c</p>
+
+<h1>if TARGET_INTERFACE_BUILDER</h1>
+
+<ul>
+<li><p>(void)drawRect:(CGRect)rect
+{
+  // Drawing code
+  if (CGSizeEqualToSize(<em>pageSize, CGSizeZero)) {
+      </em>pageSize = self.bounds.size;
+  }
+  [self updateVisibalePages];</p>
+
+<p>  CGSize size = CGSizeMake(<em>pageSize.width + </em>pageMargin, _pageSize.height);</p>
+
+<p>  CGRect scrollRect = CGRectMake((CGRectGetWidth(self.bounds) &ndash; <em>pageSize.width &ndash; </em>pageMargin) / 2,
+                                 (CGRectGetHeight(self.bounds) &ndash; <em>pageSize.height) / 2,
+                                 self.pageSize.width + </em>pageMargin, _pageSize.height);</p>
+
+<p>  NSDictionary *attri = @{NSFontAttributeName: [UIFont systemFontOfSize:13],
+                          NSForegroundColorAttributeName: [UIColor darkTextColor]};</p>
+
+<p>  NSInteger start = self.loopSlide ? &ndash;<em>extraPagesForLoopShow : 0;
+  for (NSInteger i = start; i &lt;= </em>extraPagesForLoopShow; ++i) {
+      [[UIColor grayColor] setStroke];
+      [[UIColor colorWithWhite:0.9 alpha:1.0] setFill];</p>
+
+<pre><code>  CGRect rect = CGRectMake(_pageMargin / 2 + size.width * i,
+                           (size.height - _pageSize.height) / 2,
+                           _pageSize.width, _pageSize.height);
+  rect = CGRectOffset(rect, scrollRect.origin.x, scrollRect.origin.y);
+  UIBezierPath *path = [UIBezierPath bezierPathWithRect:rect];
+  [path stroke];
+  [path fill];
+  NSString *page = [NSString stringWithFormat:@"Page %s%ld", self.loopSlide &amp;&amp; i &lt; 0 ? "N" : "", i];
+  CGSize textSize = [page sizeWithAttributes:attri];
+  CGPoint textPoint = CGPointMake(CGRectGetMidX(rect) - textSize.width / 2, CGRectGetMidY(rect) - textSize.height / 2);
+  [page drawAtPoint:textPoint
+     withAttributes:attri];
+</code></pre>
+
+<p>  }</p>
+
+<p>  self.pageControl.numberOfPages = MIN(10, _extraPagesForLoopShow * 2 + 1);
+  self.pageControl.title = @&ldquo;Page 0&rdquo;;
+}</p>
+
+<h1>endif</h1>
+
+<p>```</p></li>
+</ul>
+
+
+<p>于是得到以下结果，我们没有数据也可以看到有数据后它们应该有的布局了！</p>
+
+<p><img src="/images/use-ib/3.png" alt="" /></p>
+
+<p>你可以调整 <strong>pageSize</strong>，<strong>pageMargin</strong> 等属性，同样所见即所得！</p>
+
+<blockquote><p>这里需要注意的是，我们并不需要在真正使用这个控件的时候出现绘制的边框，所以代码需要用 <strong>TARGET_INTERFACE_BUILDER</strong> 宏包起来，告诉编译器，只在使用 <strong>IB</strong> 时编译这段代码。</p></blockquote>
+
+<h2>结语</h2>
+
+<p>所以为什么还不使用 <strong>IB</strong> 呢？所见即所得不应该成为程序员的终极目标么？赶紧拿出你之前写的代码做一次最佳实践吧！</p>
+]]></content>
+  </entry>
+  
+</feed>

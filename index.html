@@ -9,9 +9,8 @@
   <meta name="author" content="Ricky">
 
   
-  <meta name="description" content="一年前我做了这个插件 RTImageAssets，为了解决自己在开发过
-程中的一个痛点，这个痛点貌似也恰好是许多其他 iOS 开发者的痛点，那就是要不断地向美术解释如何正确切图。 于是一时间也获得了不少反馈，但这始终只是个临时解决办法。事实上从 Xcode 6 开始就已经支持使用 PDF
-矢量图了 &hellip;">
+  <meta name="description" content="Xcode 太卡了！！！！
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +76,116 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/23/why-shouldnt-you-use-ib/">为什么你不应该使用 Interface Builder</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-23T13:55:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Xcode</strong> 太卡了！！！！</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/23/why-should-you-start-to-use-ib/">为什么你应该开始使用 Interface Builder</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-23T11:26:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>众所周知，用 <strong>Xcode</strong> 开发 <strong>App Watch</strong> 应用只能使用 <code>Interface Builder</code> （以下简称 <strong>IB</strong>），甚至于它的 <strong>API</strong> 中都没有 <code>-(void)init</code> 接口，如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">WKInterfaceButton</span> : <span class="nc">WKInterfaceObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setTitle:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">title</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setAttributedTitle:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSAttributedString</span> <span class="o">*</span><span class="p">)</span><span class="nv">attributedTitle</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundColor:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="nv">color</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundImage:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundImageData:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">imageData</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundImageNamed:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">imageName</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setEnabled:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">enabled</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另外，在 <strong>Xcode 6</strong> 之后，新增了一个很强的特性 <strong>IBInspectable</strong>，它允许开发者自定义的控件使用 <strong>IB</strong> 来设置参数。</p>
+
+<p>回顾计算机的发展历程，人类一直在为 <strong>WYSIWYG</strong> （所见即所得）做着不懈的努力（当然，程序员有时候会逆其道而行之，比如写文档像码代码的 <a href="https://www.latex-project.org/"><strong>LaTeX</strong></a>），毕竟人是视觉动物。我个人而言是十分崇尚在生产环境中使用 <strong>Xib</strong> 和 <strong>StoryBoard</strong> 的，而 <strong>IBInspectable</strong> 的出现更加坚定了继续使用它们的信心，同时也表明的苹果官方的态度，苹果希望开发者们使用 <strong>IB</strong>。</p>
+
+<p>接下来就说明一下 <strong>IBInspectable</strong> 可以为封装控件带来什么新的启发。</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/11/23/why-should-you-start-to-use-ib/">More &#8230;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -484,116 +593,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/06/rtid/">RTID</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-06T01:44:00+08:00" pubdate data-updated="true">Jun 6<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>背景</h2>
-
-<p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
-
-<h3>网卡地址</h3>
-
-<p>读 <code>MAC</code> 地址是个不错的想法</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/06/06/rtid/">More &#8230;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/05/the-php-xml-issue/">PHP 中读 XML 的一个坑</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-05T01:47:00+08:00" pubdate data-updated="true">Jun 5<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>问题</h2>
-
-<p>在做一个微信的 <code>PHP</code> 后台时需要读微信服务器 <code>POST</code> 过来的 <code>XML</code>，然后保存到 <code>Memcache</code> 中。</p>
-
-<figure class='code'><figcaption><span>index.php </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cp">&lt;?php</span>
-</span><span class='line'><span class="k">public</span> <span class="nx">index</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$postData</span> <span class="o">=</span> <span class="nv">$GLOBALS</span><span class="p">[</span><span class="s2">&quot;HTTP_RAW_POST_DATA&quot;</span><span class="p">];</span>
-</span><span class='line'>  <span class="nv">$postObj</span> <span class="o">=</span> <span class="nb">simplexml_load_string</span><span class="p">(</span><span class="nv">$postStr</span><span class="p">,</span> <span class="s1">&#39;SimpleXMLElement&#39;</span><span class="p">,</span> <span class="nx">LIBXML_NOCDATA</span><span class="p">);</span>
-</span><span class='line'>  <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">cache</span><span class="o">-&gt;</span><span class="na">memcached</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">(</span><span class="s2">&quot;openid_&quot;</span><span class="o">.</span><span class="nv">$something</span><span class="p">,</span> <span class="nv">$postObj</span><span class="o">-&gt;</span><span class="na">FromUserName</span><span class="p">);</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="o">...</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>怎么也出不来结果，然后发现运行到 <code>save</code> 时有异常</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/06/05/the-php-xml-issue/">More &#8230;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -609,6 +608,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/11/23/why-shouldnt-you-use-ib/">为什么你不应该使用 Interface Builder</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/23/why-should-you-start-to-use-ib/">为什么你应该开始使用 Interface Builder</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/06/time-to-use-pdf-assets/">是时候使用 PDF 资源了</a>
       </li>
     
@@ -618,14 +625,6 @@
     
       <li class="post">
         <a href="/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice/">Gulp + Bower + AngularJS 进行 Web 开发并使用 Coding.net 搭建在线演示最佳实践</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/11/how-to-generate-a-category-list/">如何生成分级的类别列表？</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/01/17/rtimageassets/">自动生成低清图的 Xcode 插件</a>
       </li>
     
   </ul>

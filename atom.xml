@@ -4,7 +4,7 @@
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-11-07T09:49:44+08:00</updated>
+  <updated>2015-11-23T13:58:15+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -12,6 +12,364 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[为什么你不应该使用 Interface Builder]]></title>
+    <link href="http://rickytan.github.io/blog/2015/11/23/why-shouldnt-you-use-ib/"/>
+    <updated>2015-11-23T13:55:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2015/11/23/why-shouldnt-you-use-ib</id>
+    <content type="html"><![CDATA[<p><strong>Xcode</strong> 太卡了！！！！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[为什么你应该开始使用 Interface Builder]]></title>
+    <link href="http://rickytan.github.io/blog/2015/11/23/why-should-you-start-to-use-ib/"/>
+    <updated>2015-11-23T11:26:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2015/11/23/why-should-you-start-to-use-ib</id>
+    <content type="html"><![CDATA[<p>众所周知，用 <strong>Xcode</strong> 开发 <strong>App Watch</strong> 应用只能使用 <code>Interface Builder</code> （以下简称 <strong>IB</strong>），甚至于它的 <strong>API</strong> 中都没有 <code>-(void)init</code> 接口，如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">WKInterfaceButton</span> : <span class="nc">WKInterfaceObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setTitle:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">title</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setAttributedTitle:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSAttributedString</span> <span class="o">*</span><span class="p">)</span><span class="nv">attributedTitle</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundColor:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="nv">color</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundImage:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundImageData:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSData</span> <span class="o">*</span><span class="p">)</span><span class="nv">imageData</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setBackgroundImageNamed:</span><span class="p">(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">imageName</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setEnabled:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">enabled</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另外，在 <strong>Xcode 6</strong> 之后，新增了一个很强的特性 <strong>IBInspectable</strong>，它允许开发者自定义的控件使用 <strong>IB</strong> 来设置参数。</p>
+
+<p>回顾计算机的发展历程，人类一直在为 <strong>WYSIWYG</strong> （所见即所得）做着不懈的努力（当然，程序员有时候会逆其道而行之，比如写文档像码代码的 <a href="https://www.latex-project.org/"><strong>LaTeX</strong></a>），毕竟人是视觉动物。我个人而言是十分崇尚在生产环境中使用 <strong>Xib</strong> 和 <strong>StoryBoard</strong> 的，而 <strong>IBInspectable</strong> 的出现更加坚定了继续使用它们的信心，同时也表明的苹果官方的态度，苹果希望开发者们使用 <strong>IB</strong>。</p>
+
+<p>接下来就说明一下 <strong>IBInspectable</strong> 可以为封装控件带来什么新的启发。<!--more--></p>
+
+<h2><strong>IBInspectable</strong></h2>
+
+<p><strong>IBInspectable</strong> 的使用非常简单，首先定义自己的类，然后在定义的上一行添加 <strong>IB_DESIGNABLE</strong> 宏即可（如果是 <strong>Swift</strong>，使用 <code>@IBDesignable</code>）。这里以本人的开源项目 <a href="https://github.com/rickytan/RTIconButton"><strong>RTIconButton</strong>（https://github.com/rickytan/RTIconButton）</a> 为例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">typedef</span> <span class="nf">NS_ENUM</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">,</span> <span class="n">GSIconPosition</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">GSIconPositionTop</span>       <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">GSIconPositionLeft</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">GSIconPositionBottom</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">GSIconPositionRight</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">IB_DESIGNABLE</span>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">RTIconButton</span> : <span class="nc">UIButton</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="n">CGFloat</span> <span class="n">iconMargin</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="n">NSInteger</span> <span class="n">iconPosition</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="n">CGSize</span> <span class="n">iconSize</span><span class="p">;</span>    <span class="c1">// default is image size;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在需要使用 <strong>IB</strong> 来设置值的属性上添加 <strong>IBInspectable</strong> 宏。这个并不是什么新的黑科技，事实上它只是告诉了 <strong>Xcode</strong> 使用 <strong>Runtime Attribute</strong> 来设置它的值。</p>
+
+<p><img src="http://rickytan.github.io/images/use-ib/0.png" alt="" /></p>
+
+<p>所以它支持的属性类型也是有限的，只有以下几种（不支持 <strong>UIFont</strong> 和 <strong>ENUM</strong>，所以本项目中的 <code>iconPosition</code> 使用了 <code>NSInteger</code>），但也基本够用：</p>
+
+<ul>
+<li>Boolean</li>
+<li>Number</li>
+<li>String</li>
+<li>Localized String</li>
+<li>Point</li>
+<li>Size</li>
+<li>Rect</li>
+<li>Range</li>
+<li>Color</li>
+<li>Image</li>
+<li>Nil</li>
+</ul>
+
+
+<p>上面的代码中，三个属性都定义为可以使用 <strong>IB</strong>，那么当你拖拽一个 <strong>UIButton</strong> 到界面上，设置它的 <strong>Class</strong> 为 <strong>RTIconButton</strong> 后，<strong>Xcode</strong> 的 <strong>Attributes Inspector</strong> 面板会多出如下几个可设置的项目：</p>
+
+<p><img src="http://rickytan.github.io/images/use-ib/1.png" alt="" /></p>
+
+<p>如果不设置，它将使用默认值，即代码在 <code>-(void)init</code> 时自己设置的值。这里需要注意的是，从 <strong>IB</strong> 生成的界面调用的是 <code>- (instancetype)initWithCoder:(NSCoder *)aDecoder</code>，所以通常的做法写一个 <code>-(void)commonInit</code> 之类的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">commonInit</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">iconSize</span> <span class="o">=</span> <span class="n">CGSizeZero</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithCoder:</span><span class="p">(</span><span class="n">NSCoder</span> <span class="o">*</span><span class="p">)</span><span class="nv">aDecoder</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nl">initWithCoder:</span><span class="n">aDecoder</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="n">commonInit</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithFrame:</span><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span><span class="nv">frame</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nl">initWithFrame:</span><span class="n">frame</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="n">commonInit</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2><code>intrinsicContentSize</code></h2>
+
+<p>其次，为了支持 <strong>NSLayoutConstraint</strong>，一定要实现 <code>- (CGSize)intrinsicContentSize</code> 方法，否则在运行时，控件的 <strong>size</strong> 会发生改变：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">CGSize</span><span class="p">)</span><span class="nf">intrinsicContentSize</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CGRect</span> <span class="n">contentRect</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nl">contentRectForBounds:</span><span class="n">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic push</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic ignored &quot;-Wdeprecated&quot;</span>
+</span><span class='line'>    <span class="n">CGSize</span> <span class="n">titleSize</span> <span class="o">=</span> <span class="p">[[</span><span class="n">self</span> <span class="nl">titleForState:</span><span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">]</span> <span class="nl">sizeWithFont:</span><span class="n">self</span><span class="p">.</span><span class="n">font</span><span class="p">];</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic pop</span>
+</span><span class='line'>    <span class="n">CGSize</span> <span class="n">imageSize</span> <span class="o">=</span> <span class="n">CGSizeEqualToSize</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">iconSize</span><span class="p">,</span> <span class="n">CGSizeZero</span><span class="p">)</span> <span class="o">?</span> <span class="p">[</span><span class="n">super</span> <span class="nl">imageRectForContentRect:</span><span class="n">contentRect</span><span class="p">].</span><span class="n">size</span> <span class="o">:</span> <span class="n">self</span><span class="p">.</span><span class="n">iconSize</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">switch</span> <span class="p">(</span><span class="n">_iconPosition</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nl">GSIconPositionTop:</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nl">GSIconPositionBottom:</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">MAX</span><span class="p">(</span><span class="n">titleSize</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">imageSize</span><span class="p">.</span><span class="n">width</span><span class="p">),</span> <span class="n">titleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">imageSize</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">iconMargin</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">default</span><span class="o">:</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">titleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">imageSize</span><span class="p">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">iconMargin</span><span class="p">,</span> <span class="n">MAX</span><span class="p">(</span><span class="n">titleSize</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">imageSize</span><span class="p">.</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">CGSize</span><span class="p">)</span><span class="nf">sizeThatFits:</span><span class="p">(</span><span class="n">CGSize</span><span class="p">)</span><span class="nv">size</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="n">intrinsicContentSize</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本项目解决了 <strong>Icon</strong> 与 <strong>Title</strong> 混排的一些常见需求，支持设置间距、调整 <strong>Icon</strong> 大小、<strong>Icon</strong> 位置，及水平和竖直方向对齐，并且所有的设置所见即所得！</p>
+
+<p><img src="http://rickytan.github.io/images/use-ib/2.png" alt="" /></p>
+
+<p>所有源代码可以在 <a href="https://github.com/rickytan/RTIconButton">https://github.com/rickytan/RTIconButton</a> 上找到。</p>
+
+<p>目前已知问题：</p>
+
+<ol>
+<li>如果设置了 <strong>Shows Touch On Highlight</strong>（即点上去发白光的那个属性），白光可能不在正中间</li>
+</ol>
+
+
+<hr />
+
+<p>这就完了吗？并没有！有些控件需要 <strong>Delegate</strong> 提供数据源，在真正运行前是看不到样子的怎么办？其实也可以让它们可见，至少来说部分可见。同时，这里以本人的另一个项目 <a href="https://github.com/rickytan/RSlideView"><strong>RSlideView</strong></a> 为例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">IB_DESIGNABLE</span>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">RSlideView</span> : <span class="nc">UIView</span>
+</span><span class='line'><span class="c1">// 这里省略了不支持 IB 的属性</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">,</span> <span class="n">getter</span> <span class="o">=</span> <span class="n">isLoopSlide</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="kt">BOOL</span> <span class="n">loopSlide</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">,</span> <span class="n">getter</span> <span class="o">=</span> <span class="n">isContinuousScroll</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="kt">BOOL</span> <span class="n">continuousScroll</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">,</span> <span class="n">getter</span> <span class="o">=</span> <span class="n">isPageControlHidden</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="kt">BOOL</span> <span class="n">pageControlHidden</span><span class="p">;</span>   <span class="c1">// Default YES</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="n">UIColor</span> <span class="o">*</span><span class="n">pageControlBackgroundColor</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="n">CGSize</span> <span class="n">pageSize</span><span class="p">;</span>  <span class="c1">// Default to be the RSlideView&#39;s size</span>
+</span><span class='line'>    <span class="c1">// The Gap between two pages, default to be 0</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">IBInspectable</span> <span class="n">CGFloat</span> <span class="n">pageMargin</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本项目提供一个可以循环滚动的 <strong>Banner</strong> 控件，但是在运行前没有任何数据可以生成 <strong>Banner</strong>，我们可以覆盖 <code>- (void)drawRect:(CGRect)rect</code> 方法将 <strong>Banner</strong> 的布局样子绘制出来：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="cp">#if TARGET_INTERFACE_BUILDER</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">drawRect:</span><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span><span class="nv">rect</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Drawing code</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">CGSizeEqualToSize</span><span class="p">(</span><span class="n">_pageSize</span><span class="p">,</span> <span class="n">CGSizeZero</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">_pageSize</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">updateVisibalePages</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGSize</span> <span class="n">size</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">_pageSize</span><span class="p">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">_pageMargin</span><span class="p">,</span> <span class="n">_pageSize</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CGRect</span> <span class="n">scrollRect</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">((</span><span class="n">CGRectGetWidth</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">)</span> <span class="o">-</span> <span class="n">_pageSize</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">_pageMargin</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>                                   <span class="p">(</span><span class="n">CGRectGetHeight</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">)</span> <span class="o">-</span> <span class="n">_pageSize</span><span class="p">.</span><span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>                                   <span class="n">self</span><span class="p">.</span><span class="n">pageSize</span><span class="p">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">_pageMargin</span><span class="p">,</span> <span class="n">_pageSize</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">attri</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span><span class="nl">NSFontAttributeName:</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">systemFontOfSize:</span><span class="mi">13</span><span class="p">],</span>
+</span><span class='line'>                            <span class="nl">NSForegroundColorAttributeName:</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">darkTextColor</span><span class="p">]};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSInteger</span> <span class="n">start</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">loopSlide</span> <span class="o">?</span> <span class="o">-</span><span class="n">_extraPagesForLoopShow</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">NSInteger</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">_extraPagesForLoopShow</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[[</span><span class="n">UIColor</span> <span class="n">grayColor</span><span class="p">]</span> <span class="n">setStroke</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithWhite:</span><span class="mf">0.9</span> <span class="nl">alpha:</span><span class="mf">1.0</span><span class="p">]</span> <span class="n">setFill</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">CGRect</span> <span class="n">rect</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">_pageMargin</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">i</span><span class="p">,</span>
+</span><span class='line'>                                 <span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">_pageSize</span><span class="p">.</span><span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>                                 <span class="n">_pageSize</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">_pageSize</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">rect</span> <span class="o">=</span> <span class="n">CGRectOffset</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">scrollRect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">scrollRect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">UIBezierPath</span> <span class="o">*</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIBezierPath</span> <span class="nl">bezierPathWithRect:</span><span class="n">rect</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">path</span> <span class="n">stroke</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">path</span> <span class="n">fill</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">NSString</span> <span class="o">*</span><span class="n">page</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;Page %s%ld&quot;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">loopSlide</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="s">&quot;N&quot;</span> <span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">CGSize</span> <span class="n">textSize</span> <span class="o">=</span> <span class="p">[</span><span class="n">page</span> <span class="nl">sizeWithAttributes:</span><span class="n">attri</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">CGPoint</span> <span class="n">textPoint</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="n">CGRectGetMidX</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span> <span class="o">-</span> <span class="n">textSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CGRectGetMidY</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span> <span class="o">-</span> <span class="n">textSize</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">page</span> <span class="nl">drawAtPoint:</span><span class="n">textPoint</span>
+</span><span class='line'>           <span class="nl">withAttributes:</span><span class="n">attri</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">pageControl</span><span class="p">.</span><span class="n">numberOfPages</span> <span class="o">=</span> <span class="n">MIN</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">_extraPagesForLoopShow</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">pageControl</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">@&quot;Page 0&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>于是得到以下结果，我们没有数据也可以看到有数据后它们应该有的布局了！</p>
+
+<p><img src="http://rickytan.github.io/images/use-ib/3.png" alt="" /></p>
+
+<p>你可以调整 <strong>pageSize</strong>，<strong>pageMargin</strong> 等属性，同样所见即所得！</p>
+
+<blockquote><p>这里需要注意的是，我们并不需要在真正使用这个控件的时候出现绘制的边框，所以代码需要用 <strong>TARGET_INTERFACE_BUILDER</strong> 宏包起来，告诉编译器，只在使用 <strong>IB</strong> 时编译这段代码。</p></blockquote>
+
+<h2>结语</h2>
+
+<p>所以为什么还不使用 <strong>IB</strong> 呢？所见即所得不应该成为程序员的终极目标么？赶紧拿出你之前写的代码做一次最佳实践吧！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[是时候使用 PDF 资源了]]></title>
@@ -1184,7 +1542,7 @@
 
 <ul>
 <li>只会填补空位，如果你已经设置好了自己的 @2x 图，则不会生成；</li>
-<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x4e;&#x40;&#x32;&#x78;&#46;&#112;&#x6e;&#x67;">&#78;&#x40;&#50;&#x78;&#x2e;&#112;&#110;&#103;</a> <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#78;&#64;&#51;&#120;&#x2e;&#x70;&#110;&#103;">&#78;&#x40;&#x33;&#120;&#x2e;&#112;&#x6e;&#103;</a> 等）；</li>
+<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x4e;&#64;&#x32;&#x78;&#46;&#112;&#x6e;&#x67;">&#78;&#x40;&#50;&#x78;&#46;&#x70;&#110;&#103;</a> <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x4e;&#64;&#51;&#120;&#x2e;&#112;&#x6e;&#103;">&#78;&#x40;&#x33;&#x78;&#x2e;&#x70;&#110;&#103;</a> 等）；</li>
 <li>使用简单，不用再麻烦美术同学缩放了；</li>
 </ul>
 

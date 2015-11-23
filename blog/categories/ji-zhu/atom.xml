@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术 | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/blog/categories/ji-zhu/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-11-07T09:53:41+08:00</updated>
+  <updated>2015-11-23T13:58:15+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -61,14 +61,23 @@
 <p> <img src="/images/run-script.png" alt="RunScript" /></p></li>
 <li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p>
 
-<p> {% codeblock lang:bash %}</p>
-
-<h1>!/bin/bash</h1>
-
-<p>buildNumber=$(/usr/libexec/PlistBuddy -c &ldquo;Print CFBundleVersion&rdquo; &ldquo;$INFOPLIST_FILE&rdquo;)
-buildNumber=$(($buildNumber + 1))
-/usr/libexec/PlistBuddy -c &ldquo;Set :CFBundleVersion $buildNumber&rdquo; &ldquo;$INFOPLIST_FILE&rdquo;
- {% endcodeblock %}</p></li>
+<p> <div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;buildNumber<span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c &amp;ldquo;Print CFBundleVersion&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;<span class="k">)</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span><span class='line'>/usr/libexec/PlistBuddy -c &amp;ldquo;Set :CFBundleVersion <span class="nv">$buildNumber</span>&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 </ol>
 
 ]]></content>
@@ -90,11 +99,15 @@ buildNumber=$(($buildNumber + 1))
 
 <p>所以创建一个视图的副本可以这样：</p>
 
-<p>{% codeblock lang:objc %}
-UIView <em>view = &hellip;;
-UIView </em>copy_view = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:view]];</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">UIView</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">view</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;;</span>
+</span><span class='line'><span class="n">UIView</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">copy_view</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSKeyedUnarchiver</span> <span class="nl">unarchiveObjectWithData:</span><span class="p">[</span><span class="n">NSKeyedArchiver</span> <span class="nl">archivedDataWithRootObject:</span><span class="n">view</span><span class="p">]];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>这样，视图中所有能通过<code>Xib</code>设置的属性（底色、字体、Frame等）全部复制到新的视图上了。</p>
 ]]></content>
@@ -109,12 +122,17 @@ UIView </em>copy_view = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchi
 
 <p><code>iOS 6</code>跟 <code>iOS 7</code>的字体还是有点不一样的，有时候为了两者的统一，或者，应设计师的要求，界面中所有的 Label，Button 等都用自定义字体，一般来说，我们在初始化的时候就需要不断地添加冗余的代码来设置自己的字体。</p>
 
-<p>{% codeblock lang:objc %}
-UILabel *label = [[UILabel alloc] init];
-label.font = [UIFont fontWithName:@&ldquo;myFont&rdquo;];
-&hellip;</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">UILabel</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="n">label</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="err">@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">myFont</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;];</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>如果你的界面全部是代码实现的，而且项目初期就已经定下统一用什么字体了，这就不是什么难事。但是，试想，如果你的界面是由大量<code>IB</code>实现的，而且用的是自定义的字体，在<code>IB</code>中选都没法选；或是项目已经完成差不多了，上面要求统一改字体，那该如何是好？</p>
 
@@ -129,62 +147,119 @@ label.font = [UIFont fontWithName:@&ldquo;myFont&rdquo;];
 
 <p><strong>注意：</strong> <em>以下方法只用于全局修改由 <code>Xib</code> 加载的界面的 UIButton, UILabel的字体，其他的如UITextField等类似，新建Catogery就好，想修改代码生成的界面，修改 initWithCoder 为 init就好</em></p>
 
-<p>{% codeblock lang:objc %}</p>
-
-<h1>import &lt;UIKit/UIKit.h></h1>
-
-<h1>import &lt;objc/runtime.h></h1>
-
-<p>@interface UIButton (myFont) @end
-@interface UILabel (myFont) @end</p>
-
-<p>@implementation UIButton (myFont)</p>
-
-<ul>
-<li><p>(void)load
-{
-  Method imp = class_getInstanceMethod([self class], @selector(initWithCoder:));
-  Method myImp = class_getInstanceMethod([self class], @selector(myInitWithCoder:));
-  method_exchangeImplementations(imp, myImp);
-}</p></li>
-<li><p>(id)myInitWithCoder:(NSCoder*)aDecode
-{
-  [self myInitWithCoder:aDecode];
-  if (self) {
-      CGFloat fontSize = self.titleLabel.font.pointSize;
-      self.titleLabel.font = &lt;# Your Font Here #>;
-  }
-  return self;
-}</p></li>
-</ul>
-
-
-<p>@end</p>
-
-<p>@implementation UILabel (myFont)</p>
-
-<ul>
-<li><p>(void)load
-{
-  Method imp = class_getInstanceMethod([self class], @selector(initWithCoder:));
-  Method myImp = class_getInstanceMethod([self class], @selector(myInitWithCoder:));
-  method_exchangeImplementations(imp, myImp);
-}</p></li>
-<li><p>(id)myInitWithCoder:(NSCoder*)aDecode
-{
-  [self myInitWithCoder:aDecode];
-  if (self) {
-      CGFloat fontSize = self.font.pointSize;
-      self.font = &lt;# Your Font Here #>;
-  }
-  return self;
-}</p></li>
-</ul>
-
-
-<p>@end</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">UIKit</span><span class="o">/</span><span class="n">UIKit</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">objc</span><span class="o">/</span><span class="n">runtime</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@interface</span> <span class="nc">UIButton</span> <span class="nl">(myFont)</span> <span class="k">@end</span>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">UILabel</span> <span class="nl">(myFont)</span> <span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@implementation</span> <span class="nc">UIButton</span> <span class="nl">(myFont)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">load</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">imp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">initWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">myImp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">myInitWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">myImp</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nl">myInitWithCoder:</span><span class="p">(</span><span class="n">NSCoder</span><span class="o">*</span><span class="p">)</span><span class="n">aDecode</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span> <span class="nl">myInitWithCoder:</span><span class="n">aDecode</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">CGFloat</span> <span class="n">fontSize</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">pointSize</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="err">#</span> <span class="n">Your</span> <span class="n">Font</span> <span class="n">Here</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@implementation</span> <span class="nc">UILabel</span> <span class="nl">(myFont)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">load</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">imp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">initWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">myImp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">myInitWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">myImp</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nl">myInitWithCoder:</span><span class="p">(</span><span class="n">NSCoder</span><span class="o">*</span><span class="p">)</span><span class="n">aDecode</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span> <span class="nl">myInitWithCoder:</span><span class="n">aDecode</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">CGFloat</span> <span class="n">fontSize</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">pointSize</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="err">#</span> <span class="n">Your</span> <span class="n">Font</span> <span class="n">Here</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
@@ -200,37 +275,66 @@ label.font = [UIFont fontWithName:@&ldquo;myFont&rdquo;];
 <!--more-->
 
 
-<p>{% codeblock viewcontroller.m lang:objc %}
-&ndash; (void)viewDidLoad
-{</p>
-
-<pre><code>[super viewDidLoad];
-[[XQuquerService defaultService] setDelegate:self];
-[[XQuquerService defaultService] start];
-
-NSString *str = ...;
-[[XQuquerService defaultService] uploadData:str];
-...
-</code></pre>
-
-<p>}</p>
-
-<h1>prama mark XQuquer Delegate</h1>
-
-<ul>
-<li>(void)didSendDataToken
-{</li>
-</ul>
-
-
-<p>}</p>
-
-<ul>
-<li>(void)didReceiveDataToken:(NSString *)dataToken
-{
-  &hellip;
-}
-{% endcodeblock %}</li>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>viewcontroller.m </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="n">XQuquerService</span> <span class="n">defaultService</span><span class="p">]</span> <span class="nl">setDelegate:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="n">XQuquerService</span> <span class="n">defaultService</span><span class="p">]</span> <span class="n">start</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="p">...;</span>
+</span><span class='line'><span class="p">[[</span><span class="n">XQuquerService</span> <span class="n">defaultService</span><span class="p">]</span> <span class="nl">uploadData:</span><span class="n">str</span><span class="p">];</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">prama</span> <span class="n">mark</span> <span class="n">XQuquer</span> <span class="n">Delegate</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">didSendDataToken</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">didReceiveDataToken:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">dataToken</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></li>
 </ul>
 
 
@@ -252,18 +356,27 @@ B = 0003242ddd4082a4
 <p>它们等长，同时 <em>A</em> 中出现过的字符 <em>B</em> 中也同样出现，并且词频是一样的！
 在然后的几次单指令跟踪时，发现变量名中出过过 <code>dkey</code> 和 <code>ekey</code>，应该是 <code>decode</code> 和 <code>encode</code> ，检查内存，发现它们是 <code>int[16]</code> 的数组，这才发现 <em>A</em> 到 <em>B</em> 就是一个简单映射：</p>
 
-<p>{% codeblock lang:c %}
-const int dkey[] = {};</p>
-
-<p>char A[16] = &ldquo;020240d3d0d42a48&rdquo;;
-char B[17] = {0};
-for (int i=0; i&lt;16; ++i) {</p>
-
-<pre><code>B[i] = A[dkey[i]];
-</code></pre>
-
-<p>}
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">dkey</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">char</span> <span class="n">A</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="mo">020240</span><span class="n">d3d0d42a48</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+</span><span class='line'><span class="kt">char</span> <span class="n">B</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="mi">16</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">dkey</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>这个问题解决了，那作者自己的名字拼音是怎么回事呢？还有那段被替换的后6位？在后来的跟踪中，发现代码有调用 <code>MD5</code> ，参数是替换成名字拼音的字符！</p>
 
@@ -324,50 +437,83 @@ return Token;
 <!--more-->
 
 
-<p>{% codeblock index.user.js lang:js %}
-function open() {</p>
-
-<pre><code>var img = $("font").find("img");
-img.each(function(k,v){
-    if (v.src.indexOf("w.gif") != -1) {
-        var p1 = $(this).parents("tr").children("td").length;
-        var p2 = $(this).parents("tr").next().children("td").length;
-        if (p1 &gt;= p2) {
-            var c = this.parentNode.attributes[0];
-            var urlS = c.childNodes[0].textContent;
-            var idx = urlS.indexOf("?", 0)
-            var url = urlS.substr(idx, urlS.length - idx - 2);
-            var a = document.createElement("a");
-            a.href = url;
-            document.body.appendChild(a);
-            a.click();
-            return false;
-        }
-    }
-});
-</code></pre>
-
-<p>}
-window.setTimeout(open, 300);
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>index.user.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">open</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">img</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span><span class="nx">v</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">v</span><span class="p">.</span><span class="nx">src</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;w.gif&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">p1</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parents</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">p2</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parents</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">).</span><span class="nx">next</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">p1</span> <span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">=</span> <span class="nx">p2</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">urlS</span> <span class="o">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">textContent</span><span class="p">;</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">urlS</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">urlS</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">idx</span><span class="p">,</span> <span class="nx">urlS</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">idx</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">a</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span><span class="p">;</span>
+</span><span class='line'>            <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">a</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">open</span><span class="p">,</span> <span class="mi">300</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>打包为.crx 后<strong><a href="/download/zjutel.crx">安装</a></strong>，在Chrome访问<a href="http://zjutel.zju.edu.cn/tree.php">http://zjutel.zju.edu.cn/tree.php</a>，插件就开始工作了，这时你可以坐下来喝喝咖啡，等它停止。</p>
 
 <p>停止之后，将整个网页下载下来，可以用<code>Vim</code>等文本编辑器用搜索替换的方式去除HTML标签等不必要的信息，最终整理成如下所示文本文件（tree.txt）：</p>
 
-<p>{% codeblock %}
-!+ 浙江大学
-!!+ 党委正 副书记(秘书)
-!!! 党委书记秘书 : 88981739
-!!! 邹晓东副书记联系秘书 : 88981457
-!!! 郑强副书记联系秘书 : 88981175
-!!! 任少波副书记联系秘书 : 88981062
-!!! 周谷平 :
-!!+ 校长 副校长(秘书)
-!!! 杨卫校长秘书 : 88981109
-!!! 来茂德副校长联系秘书 : 88981217
-&hellip;&hellip;
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>!+ 浙江大学
+</span><span class='line'>!!+ 党委正 副书记(秘书)
+</span><span class='line'>!!! 党委书记秘书 : 88981739
+</span><span class='line'>!!! 邹晓东副书记联系秘书 : 88981457
+</span><span class='line'>!!! 郑强副书记联系秘书 : 88981175
+</span><span class='line'>!!! 任少波副书记联系秘书 : 88981062
+</span><span class='line'>!!! 周谷平 :
+</span><span class='line'>!!+ 校长 副校长(秘书)
+</span><span class='line'>!!! 杨卫校长秘书 : 88981109
+</span><span class='line'>!!! 来茂德副校长联系秘书 : 88981217
+</span><span class='line'>&hellip;&hellip;</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>以上文本，既包含了节点信息，又有节点间的层次关系。下面将说明如何处理它让它成为结构化的数据。</p>
 
@@ -379,39 +525,73 @@ window.setTimeout(open, 300);
 
 <p>建立数据表如下：</p>
 
-<p>{% codeblock lang:sql %}</p>
-
-<p>USE zjutel;</p>
-
-<p>CREATE TABLE IF NOT EXISTS <code>Node</code> (</p>
-
-<pre><code>`id`          INT auto_increment NOT NULL COMMENT '',
-`pid`         INT NOT NULL DEFAULT 0 COMMENT '父节点id',
-`title`       varchar(128) NOT NULL COMMENT '节点标题',
-`has_child`   bool NOT NULL DEFAULT FALSE COMMENT '是否有子节点',
-`is_leaf`     bool NOT NULL DEFAULT FALSE COMMENT '是否为叶节点，叶节点一定有电话号码',
-`create_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-`update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-PRIMARY KEY(`id`),
-KEY (`title`)
-</code></pre>
-
-<p>)default charset=UTF8 engine=InnoDB,AUTO_INCREMENT=1;</p>
-
-<p>CREATE TABLE IF NOT EXISTS <code>Number</code> (</p>
-
-<pre><code>`id`          INT auto_increment NOT NULL,
-`nid`         INT NOT NULL,
-`number`      VARCHAR(20) NOT NULL DEFAULT '',
-PRIMARY KEY(`id`),
-FOREIGN KEY(`nid`) REFERENCES `Node`(`id`) ON DELETE CASCADE,
-KEY (`nid`),
-KEY (`number`)
-</code></pre>
-
-<p>)default charset=UTF8 engine=InnoDB AUTO_INCREMENT=1;</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">USE</span> <span class="n">zjutel</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Node</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span> <span class="p">(</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;`</span><span class="n">id</span><span class="o">`</span>          <span class="nb">INT</span> <span class="n">auto_increment</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">COMMENT</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="n">pid</span><span class="o">`</span>         <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="mi">0</span> <span class="k">COMMENT</span> <span class="s1">&#39;父节点id&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="n">title</span><span class="o">`</span>       <span class="nb">varchar</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">COMMENT</span> <span class="s1">&#39;节点标题&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="n">has_child</span><span class="o">`</span>   <span class="n">bool</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="k">FALSE</span> <span class="k">COMMENT</span> <span class="s1">&#39;是否有子节点&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="n">is_leaf</span><span class="o">`</span>     <span class="n">bool</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="k">FALSE</span> <span class="k">COMMENT</span> <span class="s1">&#39;是否为叶节点，叶节点一定有电话号码&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="n">create_date</span><span class="o">`</span> <span class="k">timestamp</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">&#39;0000-00-00 00:00:00&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="n">update_date</span><span class="o">`</span> <span class="k">timestamp</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="k">CURRENT_TIMESTAMP</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+</span><span class='line'><span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span>
+</span><span class='line'><span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">title</span><span class="o">`</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">)</span><span class="k">default</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF8</span> <span class="n">engine</span><span class="o">=</span><span class="n">InnoDB</span><span class="p">,</span><span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">Number</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span> <span class="p">(</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;`</span><span class="n">id</span><span class="o">`</span>          <span class="nb">INT</span> <span class="n">auto_increment</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="n">nid</span><span class="o">`</span>         <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'><span class="o">`</span><span class="nb">number</span><span class="o">`</span>      <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span>
+</span><span class='line'><span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="o">`</span><span class="n">nid</span><span class="o">`</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="o">`</span><span class="n">Node</span><span class="o">`</span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">CASCADE</span><span class="p">,</span>
+</span><span class='line'><span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">nid</span><span class="o">`</span><span class="p">),</span>
+</span><span class='line'><span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="nb">number</span><span class="o">`</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">)</span><span class="k">default</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF8</span> <span class="n">engine</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>然后简单地写了个PHP脚本来处理，并存入数据库。更具体的信息，请访问Github Repo: <a href="https://github.com/rickytan/YellowPage">https://github.com/rickytan/YellowPage</a>，所有源代码都是开放的！zjutel.db 是处理好之后的 <code>Sqlite</code> 数据库，可以直接在手机等中使用。</p>
 
