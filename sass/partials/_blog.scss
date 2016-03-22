@@ -80,21 +80,6 @@ article {
       @extend .separator;
     }
   }
-  .entry-content > table {
-    border-collapse: separate;
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 2px solid #ccc;
-    td, th {
-      padding: 0.5em 0;
-      text-align: center;
-    }
-    th {
-      border-bottom: 1px solid #ccc;
-      font-weight: bold;
-    }
-  }
 
 }
 article + article {
