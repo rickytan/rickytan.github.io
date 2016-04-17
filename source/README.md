@@ -1,1 +1,1 @@
-My Blog, see [http://rickytan.me]
+My Blog, see [http://rickytan.cn]
