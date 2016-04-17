@@ -2,114 +2,120 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://rickytan.github.io/blog/2013/06/06/kai-shi-%21hello-markdown/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://rickytan.github.io/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/
         </loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2014/01/18/crack-xququer/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2014/02/20/global-font-of-ios/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://rickytan.github.io/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios/
         </loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://rickytan.github.io/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/
         </loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2014/06/05/the-php-xml-issue/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2014/06/06/rtid/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2014/07/14/my-gfw-proxy/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2014/09/28/xcode-build-number/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2015/01/16/xcode-6-drops-armv7s/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2015/01/17/rtimageassets/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2015/04/11/how-to-generate-a-category-list/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://rickytan.github.io/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice/
         </loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2015/07/06/uibutton-state/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2015/11/23/why-should-you-start-to-use-ib/</loc>
-        <lastmod>2015-11-23T13:54:28+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/2015/11/23/why-shouldnt-you-use-ib/</loc>
-        <lastmod>2015-11-23T13:57:38+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/
+        </loc>
+        <lastmod>2016-04-18T00:22:42+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/404.html</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/archives/</loc>
-        <lastmod>2015-11-23T13:57:38+08:00</lastmod>
+        <lastmod>2016-04-18T00:22:42+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/blog/categories/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/donate/</loc>
-        <lastmod>2015-11-23T11:26:33+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/</loc>
-        <lastmod>2015-11-23T13:57:38+08:00</lastmod>
+        <lastmod>2016-04-18T00:22:42+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/robots.txt</loc>
-        <lastmod>2015-11-23T11:26:34+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
     <url>
         <loc>http://rickytan.github.io/search.html</loc>
-        <lastmod>2015-11-23T11:26:34+08:00</lastmod>
+        <lastmod>2015-11-24T14:14:31+08:00</lastmod>
     </url>
 </urlset>

@@ -4,7 +4,7 @@
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.github.io/atom.xml" rel="self"/>
   <link href="http://rickytan.github.io/"/>
-  <updated>2015-11-23T14:02:00+08:00</updated>
+  <updated>2016-04-18T00:23:11+08:00</updated>
   <id>http://rickytan.github.io/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -12,6 +12,507 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[如何优雅地编写 iOS 第三方库]]></title>
+    <link href="http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/"/>
+    <updated>2016-04-17T10:00:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library</id>
+    <content type="html"><![CDATA[<p><strong>iOS</strong> 经过八年多的发展，已经涌现出诸多优秀的第三方库，但怎样才算是优雅？总体来说，<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> 就十分优雅，而 <a href="https://github.com/BradLarson/GPUImage">GPUImage</a> 就只是可用，而不算优雅。编写优雅的第三方库，就像制作一件精美的艺术品一样，过程让人沉醉，结果令人赏心悦目。否则就是单纯的代码堆积与功能实现，过程像搬砖，完成后也没有成就感。下面就本人的一点经验，分享下如何优雅地封装第三方库。</p>
+
+<!--more-->
+
+
+<h2>命名</h2>
+
+<p>好的命名规则是一个成功的第三库的开始，然而现实中很许多人随性命名，导致沟通成本上升。事实上命名问题上，苹果有其官方统一的标准，即首字母小写的驼峰式，如：<code>setName:</code>，<code>reloadDataWithName:andEmail:</code> 等，且一般约定在 <strong>getter</strong> 不使用 <code>getName</code>，而直接使用 <code>name</code>。</p>
+
+<h3>属性</h3>
+
+<p>属性的命名最好是能直接表达其意义的英文名词，当然合适的时候添加形容词，如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">@interface</span> <span class="nc">XTUser</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">fullName</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="p">,</span> <span class="o">*</span><span class="n">lastName</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">phoneNumber</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">email</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果是数组或集合等，用名词的复数形式：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">@interface</span> <span class="nc">XTDownloadManager</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">NSURL</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="n">downloadURLs</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>表达数量的属性，可以加 <code>numberOfXXX</code>，或 <code>XXXCount</code> 如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">@interface</span> <span class="nc">XTBook</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">numberOfPages</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">pageCount</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>表示对象状态的属性，使用英文的<strong>正在进行时</strong>，或<strong>完成时</strong>等可以表示状态的词，如：</p>
+
+<ul>
+<li><code>@property (nonatomic, assign) BOOL isClosed;</code> ，已经关闭</li>
+<li><code>@property (nonatomic, assing) BOOL isClosing;</code> ，正在关闭</li>
+<li><code>@property (nonatomic, assing) BOOL isAvaliable;</code>，目前可用</li>
+<li><code>@property (nonatomic, assign) BOOL hasChanged;</code>，已经被改变</li>
+</ul>
+
+
+<p>而以下写法表意是不明确的：</p>
+
+<ul>
+<li><del><code>@property (nonatomic, assing) BOOL isClose;</code></del></li>
+</ul>
+
+
+<p>当然，前面的代码还能有更优雅的写法：</p>
+
+<ul>
+<li><code>@property (nonatomic, assign, getter=isClosed) BOOL closed;</code></li>
+<li><code>@property (nonatomic, assing, getter=isClosing) BOOL closing;</code></li>
+<li><code>@property (nonatomic, assing, getter=isAvaliable) BOOL avaliable;</code></li>
+<li><code>@property (nonatomic, assign, getter=hasChanged) BOOL changed;</code></li>
+</ul>
+
+
+<h3>枚举</h3>
+
+<p><strong>iOS</strong> 基础类库有着比其它任何官方库都好用的枚举类型，因为在使用过程中没有任何痛苦，也无需查文档，照着它的类型打完然后就有表意明确的自动补全，如 <code>UIKit</code> 中很常用的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">typedef</span> <span class="nf">NS_ENUM</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">,</span> <span class="n">UIControlContentHorizontalAlignment</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIControlContentHorizontalAlignmentCenter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIControlContentHorizontalAlignmentLeft</span>   <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIControlContentHorizontalAlignmentRight</span>  <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIControlContentHorizontalAlignmentFill</span>   <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">typedef</span> <span class="nf">NS_OPTIONS</span><span class="p">(</span><span class="n">NSUInteger</span><span class="p">,</span> <span class="n">UIControlState</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIControlStateNormal</span>       <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIControlStateHighlighted</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">,</span>                  <span class="c1">// used when UIControl isHighlighted is set</span>
+</span><span class='line'>    <span class="n">UIControlStateDisabled</span>     <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">UIControlStateSelected</span>     <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">,</span>                  <span class="c1">// flag usable by app (see below)</span>
+</span><span class='line'>    <span class="n">UIControlStateFocused</span> <span class="n">NS_ENUM_AVAILABLE_IOS</span><span class="p">(</span><span class="mi">9</span><span class="n">_0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">,</span> <span class="c1">// Applicable only when the screen supports focus</span>
+</span><span class='line'>    <span class="n">UIControlStateApplication</span>  <span class="o">=</span> <span class="mh">0x00FF0000</span><span class="p">,</span>              <span class="c1">// additional flags available for application use</span>
+</span><span class='line'>    <span class="n">UIControlStateReserved</span>     <span class="o">=</span> <span class="mh">0xFF000000</span>               <span class="c1">// flags reserved for internal framework use</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>等等。它的特点也很明显，就是</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">enum</span> <span class="err">类型名</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">类型名</span><span class="o">+</span><span class="err">枚举名</span><span class="mi">0</span> <span class="o">=</span> <span class="err">枚举值</span><span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="err">类型名</span><span class="o">+</span><span class="err">枚举名</span><span class="mi">1</span> <span class="o">=</span> <span class="err">枚举值</span><span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="err">类型名</span><span class="o">+</span><span class="err">枚举名</span><span class="mi">2</span> <span class="o">=</span> <span class="err">枚举值</span><span class="mi">2</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>于是有一段时间，本人都想把 <strong>OpenGL</strong> 里那些恶心的宏重写成这样形式（<a href="https://github.com/rickytan/Cocoa-Style-OpenGL">https://github.com/rickytan/Cocoa-Style-OpenGL</a>），如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">CC_ENUM</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">GLUnsignedType</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">GLUnsignedTypeByte</span>  <span class="o">=</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLUnsignedTypeShort</span> <span class="o">=</span> <span class="n">GL_UNSIGNED_SHORT</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLUnsignedTypeInt</span>   <span class="o">=</span> <span class="n">GL_UNSIGNED_INT</span><span class="p">,</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CC_ENUM</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">GLDrawMode</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">GLDrawModePoints</span>        <span class="o">=</span> <span class="n">GL_POINTS</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeLines</span>         <span class="o">=</span> <span class="n">GL_LINES</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeLineLoop</span>      <span class="o">=</span> <span class="n">GL_LINE_LOOP</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeLineStrip</span>     <span class="o">=</span> <span class="n">GL_LINE_STRIP</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeTriangles</span>     <span class="o">=</span> <span class="n">GL_TRIANGLES</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeTriangleStrip</span> <span class="o">=</span> <span class="n">GL_TRIANGLE_STRIP</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeTriangleFan</span>   <span class="o">=</span> <span class="n">GL_TRIANGLE_FAN</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeQuads</span>         <span class="o">=</span> <span class="n">GL_QUADS</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModeQuadStrip</span>     <span class="o">=</span> <span class="n">GL_QUAD_STRIP</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">GLDrawModePolygon</span>       <span class="o">=</span> <span class="n">GL_POLYGON</span><span class="p">,</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然而苦于功底有限，同时对 <strong>OpenGL</strong> 底层了解也不够，作罢。</p>
+
+<p>而当前市面上已有的部分厂商并没有按照这个约定来发布 SDK，以致于要不断查看文档才知道如何操作。如一直倍受诟病的鹅厂：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">enum</span> <span class="n">QQApiInterfaceReqType</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">EGETMESSAGEFROMQQREQTYPE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>   <span class="c1">///&lt; 手Q -&gt; 第三方应用，请求第三方应用向手Q发送消息</span>
+</span><span class='line'>    <span class="n">ESENDMESSAGETOQQREQTYPE</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>    <span class="c1">///&lt; 第三方应用 -&gt; 手Q，第三方应用向手Q分享消息</span>
+</span><span class='line'>    <span class="n">ESHOWMESSAGEFROMQQREQTYPE</span> <span class="o">=</span> <span class="mi">2</span>   <span class="c1">///&lt; 手Q -&gt; 第三方应用，请求第三方应用展现消息中的数据</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> QQApi请求消息基类</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">QQBaseReq</span> : <span class="nc">NSObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/** 请求消息类型，参见\ref QQApiInterfaceReqType */</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="kt">int</span> <span class="n">type</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上 <strong>SDK</strong> 有三个问题：</p>
+
+<ol>
+<li><code>QQBaseRequest</code> 不需要缩写为 <code>QQBaseReq</code>，在 <strong>Objective-C</strong> 的世界，名字再长都不过份，而要能将类、方法等功能表述清楚；</li>
+<li><code>type</code> 应当明确指定类型，就一个 <code>int</code> 让使用者不知所措；</li>
+<li><code>QQApiInterfaceReqType</code> 的枚举名应当以 QQApiInterfaceReqType 开头，且以驼峰式命名，方便自动补全。全大写一般是宏定义。</li>
+</ol>
+
+
+<h2>接口及实现</h2>
+
+<p>在编写第三方库时，尽量面向接口编程，并给一个默认的实现，方便使用者扩展。</p>
+
+<p>例如，你实现了一个照片显示的 <strong>View</strong>，你的类定义如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">@interface</span> <span class="nc">MyPhoto</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIImage</span> <span class="o">*</span><span class="n">thumbnailImage</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSURL</span> <span class="o">*</span><span class="n">originURL</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">MyPhotoGalleryView</span> : <span class="nc">UIView</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">MyPhoto</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="n">photos</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然而在实际项目中，使用者一般会有自定义的照片对象（如：<code>@class XTPhoto</code>），为了使用你的实现，他不得不将他的对象转成你的，再设置到 <code>photos</code> 属性，造成不必要的内存浪费。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">@interface</span> <span class="nc">XTPhoto</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">photoPath</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">photos</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableArray</span> <span class="nl">arrayWithCapacity:</span><span class="n">self</span><span class="p">.</span><span class="n">photoGallery</span><span class="p">.</span><span class="n">count</span><span class="p">];</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="n">XTPhoto</span> <span class="o">*</span><span class="n">photo</span> <span class="k">in</span> <span class="n">self</span><span class="p">.</span><span class="n">photoGallery</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">MyPhoto</span> <span class="o">*</span><span class="n">my</span> <span class="o">=</span> <span class="p">...;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">photos</span> <span class="nl">addObject:</span><span class="n">my</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">photoGalleryView</span><span class="p">.</span><span class="n">photos</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithArray:</span><span class="n">photos</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>而如果换一种实现，定义一个接口，就可以一定程度上避免这种问题：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">@protocol</span> <span class="nc">MyPhoto</span> <span class="o">&lt;</span><span class="n">NSObject</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">@</span><span class="n">required</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">UIImage</span> <span class="o">*</span><span class="n">thumbnailImage</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@optional</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">NSURL</span> <span class="o">*</span><span class="n">originURL</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">MyPhoto</span> : <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">MyPhoto</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIImage</span> <span class="o">*</span><span class="n">thumbnailImage</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSURL</span> <span class="o">*</span><span class="n">originURL</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">MyPhotoGalleryView</span> : <span class="nc">UIView</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSArray</span><span class="o">&lt;</span><span class="kt">id</span><span class="o">&lt;</span><span class="n">MyPhoto</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">*</span><span class="n">photos</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">XTPhoto</span> : <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">MyPhoto</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">photoPath</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">XTPhoto</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nf">thumbnailImage</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">image</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">name</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">photoPath</span><span class="p">.</span><span class="n">lastPathComponent</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nf">originURL</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="n">self</span><span class="p">.</span><span class="n">photoPath</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样可以直接将 <code>self.photoGallery</code> 直接赋值到 <code>photoGalleryView.photos</code>。</p>
+
+<p>除了面向接口编程，在类的实现上也应遵循以下原则：</p>
+
+<ul>
+<li><p>保持简单。只向外暴露能实现功能的最少的接口。假如你有一个视图，里面有一个 Label 显示了剩余的金币数，大于 0 时为红色，小于 0 时为绿色，那么应当只暴露一个 <strong>NSInteger</strong> 接口。</p>
+
+<pre><code>  @interface XTStatsView : UIView
+  @property (nonatomic, assign) NSInteger numberOfGold;
+  @end
+</code></pre>
+
+<p>  然后在具体的实现中设置 Label 的值：</p>
+
+<pre><code>  @interface XTStatsView ()
+  @property (nonatomic, strong) UILabel *goldLabel;
+  @end
+
+  @implementation XTStatsView
+  - (void)setNumberOfGold:(NSInteger)numberOfGold
+  {
+      _numberOfGold = numberOfGold;
+      self.goldLabel.text = [NSString stringWithFormat:@"%d 金币", _numberOfGold];
+      if (_numberOfGold &gt;= 0) {
+          self.goldLabel.textColor = [UIColor redColor];
+      }
+      else {
+          self.goldLabel.textColor = [UIColor greenColor];
+      }
+  }
+  @end
+</code></pre>
+
+<p>  一种比较懒的办法是直接暴露 <code>goldLabel</code>，给了使用者较多的灵活性，但也容易造成一些不可预料的结果。</p>
+
+<p>  另外有一些情况属于暴露多余接口，如你自定义了一个 Cell，用来展示某个 Entity 的内容，于是定义如下：</p>
+
+<pre><code>  @interface MyCell: UITableViewCell
+  @property (nonatomic, strong) MyEntity *entity;
+  - (void)renderData;
+  @end
+</code></pre>
+
+<p>  使用者设置了 Entity 后还要调用 <code>- (void)renderData</code> 才能显示出来，这其实是多余的，可以去掉 <code>- (void)renderData</code> 而在 Entity 的 <strong>setter</strong> 中内部调用 <code>- (void)renderData</code> 或其他类似的方法。使用者所设置的，即是所看到（所得到）的，不需要再调用其他方法。</p></li>
+<li><p>调用顺序无关。如果你实现的类有较多的状态无关的属性，它应该是调用顺序无关的。例如，一个 <strong>VC</strong> 暴露了一个 <code>titleColor</code> 属性，可以设置视图中 Label 的颜色，一个比较常见的错误是如下实现：</p>
+
+<pre><code>  @interface MyViewController: UIViewController
+  @property (nonatomic, strong) UIColor *titleColor;
+  @end
+
+  @implementation MyViewController
+  - (void)viewDidLoad
+  {
+      [super viewDidLoad];
+      self.titleLabel.textColor = self.titleColor;
+  }
+  @end
+</code></pre>
+
+<p>  以上实现的问题在于，如果 <strong>VC</strong> 的视图已经加载，那么设置 <code>titleColor</code> 将无效。正确的实现应该如下：</p>
+
+<pre><code>  @implementation MyViewController
+  - (void)viewDidLoad
+  {
+      [super viewDidLoad];
+      self.titleLabel.textColor = self.titleColor;
+  }
+
+  - (void)setTitleColor:(UIColor *)titleColor
+  {
+      if (_titleColor != titleColor) {
+          _titleColor = titleColor;
+          if (self.isViewLoaded) {
+              self.titleLabel.textColor = self.titleColor;
+          }
+      }
+  }
+  @end
+</code></pre>
+
+<p>  这样保证使用者无论何时设置都是有效的。</p></li>
+</ul>
+
+
+<h2>宏</h2>
+
+<p>合理地使用 <strong>NS</strong> 自带的编译器预处理宏定义可以马上提高整个代码的逼格，如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">UIKIT_EXTERN</span> <span class="n">NSString</span> <span class="o">*</span><span class="k">const</span> <span class="n">MyUserDidLoginNotification</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">MyUser</span>: <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span> <span class="n">DEPRECATED_MSG_ATTRIBUTE</span><span class="p">(</span><span class="s">&quot;Use userName instead!&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">userName</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithName:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">name</span> <span class="nf">email:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">email</span> <span class="n">NS_DESIGNATED_INITIALIZER</span><span class="p">;</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">reloadData</span> <span class="n">NS_REQUIRES_SUPER</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">MyUserManager</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">sharedManager</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">init</span> <span class="n">NS_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>更多宏请参见 <code>&lt;Foundation/NSObjCRuntime.h&gt;</code>。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[为什么你不应该使用 Interface Builder]]></title>
@@ -1542,7 +2043,7 @@
 
 <ul>
 <li>只会填补空位，如果你已经设置好了自己的 @2x 图，则不会生成；</li>
-<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x4e;&#64;&#50;&#120;&#x2e;&#112;&#110;&#103;">&#x4e;&#64;&#50;&#120;&#46;&#112;&#110;&#x67;</a> <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#78;&#64;&#51;&#120;&#x2e;&#112;&#x6e;&#103;">&#x4e;&#x40;&#51;&#120;&#46;&#112;&#110;&#x67;</a> 等）；</li>
+<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#78;&#64;&#x32;&#120;&#x2e;&#112;&#110;&#x67;">&#x4e;&#64;&#x32;&#120;&#46;&#x70;&#110;&#x67;</a> <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#78;&#64;&#51;&#x78;&#x2e;&#112;&#110;&#x67;">&#x4e;&#64;&#x33;&#x78;&#x2e;&#x70;&#x6e;&#x67;</a> 等）；</li>
 <li>使用简单，不用再麻烦美术同学缩放了；</li>
 </ul>
 

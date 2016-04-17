@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 接口 | I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.github.io/blog/categories/jie-kou/atom.xml" rel="self"/>
+  <link href="http://rickytan.github.io/"/>
+  <updated>2016-04-18T00:23:11+08:00</updated>
+  <id>http://rickytan.github.io/</id>
+  <author>
+    <name><![CDATA[Ricky]]></name>
+    <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何优雅地编写 iOS 第三方库]]></title>
+    <link href="http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/"/>
+    <updated>2016-04-17T10:00:00+08:00</updated>
+    <id>http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library</id>
+    <content type="html"><![CDATA[<p><strong>iOS</strong> 经过八年多的发展，已经涌现出诸多优秀的第三方库，但怎样才算是优雅？总体来说，<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> 就十分优雅，而 <a href="https://github.com/BradLarson/GPUImage">GPUImage</a> 就只是可用，而不算优雅。编写优雅的第三方库，就像制作一件精美的艺术品一样，过程让人沉醉，结果令人赏心悦目。否则就是单纯的代码堆积与功能实现，过程像搬砖，完成后也没有成就感。下面就本人的一点经验，分享下如何优雅地封装第三方库。</p>
+
+<!--more-->
+
+
+<h2>命名</h2>
+
+<p>好的命名规则是一个成功的第三库的开始，然而现实中很许多人随性命名，导致沟通成本上升。事实上命名问题上，苹果有其官方统一的标准，即首字母小写的驼峰式，如：<code>setName:</code>，<code>reloadDataWithName:andEmail:</code> 等，且一般约定在 <strong>getter</strong> 不使用 <code>getName</code>，而直接使用 <code>name</code>。</p>
+
+<h3>属性</h3>
+
+<p>属性的命名最好是能直接表达其意义的英文名词，当然合适的时候添加形容词，如：</p>
+
+<p><code>obj-c
+@interface XTUser : NSObject
+@property (nonatomic, strong) NSString *fullName;
+@property (nonatomic, strong) NSString *firstName, *lastName;
+@property (nonatomic, strong) NSString *phoneNumber;
+@property (nonatomic, strong) NSString *email;
+@end
+</code></p>
+
+<p>如果是数组或集合等，用名词的复数形式：</p>
+
+<p><code>obj-c
+@interface XTDownloadManager : NSObject
+@property (nonatomic, strong) NSArray&lt;NSURL *&gt; *downloadURLs;
+@end
+</code></p>
+
+<p>表达数量的属性，可以加 <code>numberOfXXX</code>，或 <code>XXXCount</code> 如：</p>
+
+<p><code>obj-c
+@interface XTBook : NSObject
+@property (nonatomic, assign) NSInteger numberOfPages;
+@property (nonatomic, assign) NSInteger pageCount;
+@end
+</code></p>
+
+<p>表示对象状态的属性，使用英文的<strong>正在进行时</strong>，或<strong>完成时</strong>等可以表示状态的词，如：</p>
+
+<ul>
+<li><code>@property (nonatomic, assign) BOOL isClosed;</code> ，已经关闭</li>
+<li><code>@property (nonatomic, assing) BOOL isClosing;</code> ，正在关闭</li>
+<li><code>@property (nonatomic, assing) BOOL isAvaliable;</code>，目前可用</li>
+<li><code>@property (nonatomic, assign) BOOL hasChanged;</code>，已经被改变</li>
+</ul>
+
+
+<p>而以下写法表意是不明确的：</p>
+
+<ul>
+<li><del><code>@property (nonatomic, assing) BOOL isClose;</code></del></li>
+</ul>
+
+
+<p>当然，前面的代码还能有更优雅的写法：</p>
+
+<ul>
+<li><code>@property (nonatomic, assign, getter=isClosed) BOOL closed;</code></li>
+<li><code>@property (nonatomic, assing, getter=isClosing) BOOL closing;</code></li>
+<li><code>@property (nonatomic, assing, getter=isAvaliable) BOOL avaliable;</code></li>
+<li><code>@property (nonatomic, assign, getter=hasChanged) BOOL changed;</code></li>
+</ul>
+
+
+<h3>枚举</h3>
+
+<p><strong>iOS</strong> 基础类库有着比其它任何官方库都好用的枚举类型，因为在使用过程中没有任何痛苦，也无需查文档，照着它的类型打完然后就有表意明确的自动补全，如 <code>UIKit</code> 中很常用的：</p>
+
+<p>```obj-c
+typedef NS_ENUM(NSInteger, UIControlContentHorizontalAlignment) {</p>
+
+<pre><code>UIControlContentHorizontalAlignmentCenter = 0,
+UIControlContentHorizontalAlignmentLeft   = 1,
+UIControlContentHorizontalAlignmentRight  = 2,
+UIControlContentHorizontalAlignmentFill   = 3,
+</code></pre>
+
+<p>};</p>
+
+<p>typedef NS_OPTIONS(NSUInteger, UIControlState) {</p>
+
+<pre><code>UIControlStateNormal       = 0,
+UIControlStateHighlighted  = 1 &lt;&lt; 0,                  // used when UIControl isHighlighted is set
+UIControlStateDisabled     = 1 &lt;&lt; 1,
+UIControlStateSelected     = 1 &lt;&lt; 2,                  // flag usable by app (see below)
+UIControlStateFocused NS_ENUM_AVAILABLE_IOS(9_0) = 1 &lt;&lt; 3, // Applicable only when the screen supports focus
+UIControlStateApplication  = 0x00FF0000,              // additional flags available for application use
+UIControlStateReserved     = 0xFF000000               // flags reserved for internal framework use
+</code></pre>
+
+<p>};
+```</p>
+
+<p>等等。它的特点也很明显，就是</p>
+
+<p><code>c
+enum 类型名 {
+  类型名+枚举名0 = 枚举值0,
+  类型名+枚举名1 = 枚举值1,
+  类型名+枚举名2 = 枚举值2,
+}
+</code></p>
+
+<p>于是有一段时间，本人都想把 <strong>OpenGL</strong> 里那些恶心的宏重写成这样形式（<a href="https://github.com/rickytan/Cocoa-Style-OpenGL">https://github.com/rickytan/Cocoa-Style-OpenGL</a>），如：</p>
+
+<p>```c
+CC_ENUM(int, GLUnsignedType) {</p>
+
+<pre><code>GLUnsignedTypeByte  = GL_UNSIGNED_BYTE,
+GLUnsignedTypeShort = GL_UNSIGNED_SHORT,
+GLUnsignedTypeInt   = GL_UNSIGNED_INT,
+</code></pre>
+
+<p>};</p>
+
+<p>CC_ENUM(int, GLDrawMode) {</p>
+
+<pre><code>GLDrawModePoints        = GL_POINTS,
+GLDrawModeLines         = GL_LINES,
+GLDrawModeLineLoop      = GL_LINE_LOOP,
+GLDrawModeLineStrip     = GL_LINE_STRIP,
+GLDrawModeTriangles     = GL_TRIANGLES,
+GLDrawModeTriangleStrip = GL_TRIANGLE_STRIP,
+GLDrawModeTriangleFan   = GL_TRIANGLE_FAN,
+GLDrawModeQuads         = GL_QUADS,
+GLDrawModeQuadStrip     = GL_QUAD_STRIP,
+GLDrawModePolygon       = GL_POLYGON,
+</code></pre>
+
+<p>};
+```</p>
+
+<p>然而苦于功底有限，同时对 <strong>OpenGL</strong> 底层了解也不够，作罢。</p>
+
+<p>而当前市面上已有的部分厂商并没有按照这个约定来发布 SDK，以致于要不断查看文档才知道如何操作。如一直倍受诟病的鹅厂：</p>
+
+<p>```obj-c
+enum QQApiInterfaceReqType
+{</p>
+
+<pre><code>EGETMESSAGEFROMQQREQTYPE = 0,   ///&lt; 手Q -&gt; 第三方应用，请求第三方应用向手Q发送消息
+ESENDMESSAGETOQQREQTYPE = 1,    ///&lt; 第三方应用 -&gt; 手Q，第三方应用向手Q分享消息
+ESHOWMESSAGEFROMQQREQTYPE = 2   ///&lt; 手Q -&gt; 第三方应用，请求第三方应用展现消息中的数据
+</code></pre>
+
+<p>};</p>
+
+<p>/<em>*
+ QQApi请求消息基类
+ </em>/
+@interface QQBaseReq : NSObject</p>
+
+<p>/<em>* 请求消息类型，参见\ref QQApiInterfaceReqType </em>/
+@property (nonatomic, assign) int type;</p>
+
+<p>@end
+```</p>
+
+<p>以上 <strong>SDK</strong> 有三个问题：</p>
+
+<ol>
+<li><code>QQBaseRequest</code> 不需要缩写为 <code>QQBaseReq</code>，在 <strong>Objective-C</strong> 的世界，名字再长都不过份，而要能将类、方法等功能表述清楚；</li>
+<li><code>type</code> 应当明确指定类型，就一个 <code>int</code> 让使用者不知所措；</li>
+<li><code>QQApiInterfaceReqType</code> 的枚举名应当以 QQApiInterfaceReqType 开头，且以驼峰式命名，方便自动补全。全大写一般是宏定义。</li>
+</ol>
+
+
+<h2>接口及实现</h2>
+
+<p>在编写第三方库时，尽量面向接口编程，并给一个默认的实现，方便使用者扩展。</p>
+
+<p>例如，你实现了一个照片显示的 <strong>View</strong>，你的类定义如下：</p>
+
+<p>```obj-c
+@interface MyPhoto : NSObject
+@property (nonatomic, strong) UIImage <em>thumbnailImage;
+@property (nonatomic, strong) NSString </em>name;
+@property (nonatomic, strong) NSURL *originURL;
+@end</p>
+
+<p>@interface MyPhotoGalleryView : UIView
+@property (nonatomic, strong) NSArray<MyPhoto *> *photos;
+@end
+```</p>
+
+<p>然而在实际项目中，使用者一般会有自定义的照片对象（如：<code>@class XTPhoto</code>），为了使用你的实现，他不得不将他的对象转成你的，再设置到 <code>photos</code> 属性，造成不必要的内存浪费。</p>
+
+<p>```obj-c
+@interface XTPhoto : NSObject
+@property (nonatomic, strong) UIImage <em>image;
+@property (nonatomic, strong) NSString </em>photoPath;
+@end</p>
+
+<p>&hellip;</p>
+
+<p>NSMutableArray <em>photos = [NSMutableArray arrayWithCapacity:self.photoGallery.count];
+for (XTPhoto </em>photo in self.photoGallery) {</p>
+
+<pre><code>MyPhoto *my = ...;
+[photos addObject:my];
+</code></pre>
+
+<p>}
+photoGalleryView.photos = [NSArray arrayWithArray:photos];
+```</p>
+
+<p>而如果换一种实现，定义一个接口，就可以一定程度上避免这种问题：</p>
+
+<p>```obj-c
+@protocol MyPhoto <NSObject>
+@required
+@property (nonatomic, readonly) UIImage <em>thumbnailImage;
+@property (nonatomic, readonly) NSString </em>name;</p>
+
+<p>@optional
+@property (nonatomic, readonly) NSURL *originURL;</p>
+
+<p>@end</p>
+
+<p>@interface MyPhoto : NSObject <MyPhoto>
+@property (nonatomic, strong) UIImage <em>thumbnailImage;
+@property (nonatomic, strong) NSString </em>name;
+@property (nonatomic, strong) NSURL *originURL;
+@end</p>
+
+<p>@interface MyPhotoGalleryView : UIView
+@property (nonatomic, strong) NSArray&lt;id<MyPhoto> > *photos;
+@end</p>
+
+<p>@interface XTPhoto : NSObject <MyPhoto>
+@property (nonatomic, strong) UIImage <em>image;
+@property (nonatomic, strong) NSString </em>photoPath;
+@end</p>
+
+<p>@implementation XTPhoto</p>
+
+<ul>
+<li><p>(UIImage *)thumbnailImage
+{
+  return self.image;
+}</p></li>
+<li><p>(NSString *)name
+{
+  return self.photoPath.lastPathComponent;
+}</p></li>
+<li><p>(NSURL *)originURL
+{
+  return [NSURL URLWithString:self.photoPath];
+}
+@end
+```</p></li>
+</ul>
+
+
+<p>这样可以直接将 <code>self.photoGallery</code> 直接赋值到 <code>photoGalleryView.photos</code>。</p>
+
+<p>除了面向接口编程，在类的实现上也应遵循以下原则：</p>
+
+<ul>
+<li><p>保持简单。只向外暴露能实现功能的最少的接口。假如你有一个视图，里面有一个 Label 显示了剩余的金币数，大于 0 时为红色，小于 0 时为绿色，那么应当只暴露一个 <strong>NSInteger</strong> 接口。</p>
+
+<pre><code>  @interface XTStatsView : UIView
+  @property (nonatomic, assign) NSInteger numberOfGold;
+  @end
+</code></pre>
+
+<p>  然后在具体的实现中设置 Label 的值：</p>
+
+<pre><code>  @interface XTStatsView ()
+  @property (nonatomic, strong) UILabel *goldLabel;
+  @end
+
+  @implementation XTStatsView
+  - (void)setNumberOfGold:(NSInteger)numberOfGold
+  {
+      _numberOfGold = numberOfGold;
+      self.goldLabel.text = [NSString stringWithFormat:@"%d 金币", _numberOfGold];
+      if (_numberOfGold &gt;= 0) {
+          self.goldLabel.textColor = [UIColor redColor];
+      }
+      else {
+          self.goldLabel.textColor = [UIColor greenColor];
+      }
+  }
+  @end
+</code></pre>
+
+<p>  一种比较懒的办法是直接暴露 <code>goldLabel</code>，给了使用者较多的灵活性，但也容易造成一些不可预料的结果。</p>
+
+<p>  另外有一些情况属于暴露多余接口，如你自定义了一个 Cell，用来展示某个 Entity 的内容，于是定义如下：</p>
+
+<pre><code>  @interface MyCell: UITableViewCell
+  @property (nonatomic, strong) MyEntity *entity;
+  - (void)renderData;
+  @end
+</code></pre>
+
+<p>  使用者设置了 Entity 后还要调用 <code>- (void)renderData</code> 才能显示出来，这其实是多余的，可以去掉 <code>- (void)renderData</code> 而在 Entity 的 <strong>setter</strong> 中内部调用 <code>- (void)renderData</code> 或其他类似的方法。使用者所设置的，即是所看到（所得到）的，不需要再调用其他方法。</p></li>
+<li><p>调用顺序无关。如果你实现的类有较多的状态无关的属性，它应该是调用顺序无关的。例如，一个 <strong>VC</strong> 暴露了一个 <code>titleColor</code> 属性，可以设置视图中 Label 的颜色，一个比较常见的错误是如下实现：</p>
+
+<pre><code>  @interface MyViewController: UIViewController
+  @property (nonatomic, strong) UIColor *titleColor;
+  @end
+
+  @implementation MyViewController
+  - (void)viewDidLoad
+  {
+      [super viewDidLoad];
+      self.titleLabel.textColor = self.titleColor;
+  }
+  @end
+</code></pre>
+
+<p>  以上实现的问题在于，如果 <strong>VC</strong> 的视图已经加载，那么设置 <code>titleColor</code> 将无效。正确的实现应该如下：</p>
+
+<pre><code>  @implementation MyViewController
+  - (void)viewDidLoad
+  {
+      [super viewDidLoad];
+      self.titleLabel.textColor = self.titleColor;
+  }
+
+  - (void)setTitleColor:(UIColor *)titleColor
+  {
+      if (_titleColor != titleColor) {
+          _titleColor = titleColor;
+          if (self.isViewLoaded) {
+              self.titleLabel.textColor = self.titleColor;
+          }
+      }
+  }
+  @end
+</code></pre>
+
+<p>  这样保证使用者无论何时设置都是有效的。</p></li>
+</ul>
+
+
+<h2>宏</h2>
+
+<p>合理地使用 <strong>NS</strong> 自带的编译器预处理宏定义可以马上提高整个代码的逼格，如：</p>
+
+<p>```obj-c
+UIKIT_EXTERN NSString *const MyUserDidLoginNotification;</p>
+
+<p>@interface MyUser: NSObject
+@property (nonatomic, strong) NSString <em>name DEPRECATED_MSG_ATTRIBUTE(&ldquo;Use userName instead!&rdquo;);
+@property (nonatomic, strong) NSString </em>userName;</p>
+
+<ul>
+<li>(instancetype)initWithName:(NSString <em>)name email:(NSString </em>)email NS_DESIGNATED_INITIALIZER;</li>
+<li>(void)reloadData NS_REQUIRES_SUPER;
+@end</li>
+</ul>
+
+
+<p>@interface MyUserManager : NSObject
++ (instancetype)sharedManager;</p>
+
+<ul>
+<li>(instancetype)init NS_UNAVAILABLE;</li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>更多宏请参见 <code>&lt;Foundation/NSObjCRuntime.h&gt;</code>。</p>
+]]></content>
+  </entry>
+  
+</feed>
