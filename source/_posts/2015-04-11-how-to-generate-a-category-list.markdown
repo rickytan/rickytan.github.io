@@ -87,15 +87,15 @@ ID|PID|Name|
 对于从数据库中取出来的分类数组，要正确构建成一棵树还是有点工作量的，应该可以有更好的方法。于是有了下面的递归的思路：
 
 ```javascript
-var categorys = [{id: 'xxx', pid: 'xxx', name: 'xxx'}, {}, {}];
+var categories = [{id: 'xxx', pid: 'xxx', name: 'xxx'}, {}, {}];
 
 function insert(pid, level) {
 	var arr = [];
-	categorys.forEach(function(o) {
+	categories.forEach(function(o) {
 		if (o.pid == pid) {
 			o.level = level;
 			arr.push(o);
-			arr = arr.concat(insert(o.pid, level + 1));
+			arr = arr.concat(insert(o.id, level + 1));
 		}
 	});
 	return arr;
