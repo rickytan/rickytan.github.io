@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.github.io/atom.xml" rel="self"/>
-  <link href="http://rickytan.github.io/"/>
-  <updated>2016-04-18T00:23:11+08:00</updated>
-  <id>http://rickytan.github.io/</id>
+  <link href="http://rickytan.cn/atom.xml" rel="self"/>
+  <link href="http://rickytan.cn/"/>
+  <updated>2016-10-28T21:21:08+08:00</updated>
+  <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何优雅地编写 iOS 第三方库]]></title>
-    <link href="http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/"/>
+    <link href="http://rickytan.cn/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/"/>
     <updated>2016-04-17T10:00:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library</id>
+    <id>http://rickytan.cn/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library</id>
     <content type="html"><![CDATA[<p><strong>iOS</strong> 经过八年多的发展，已经涌现出诸多优秀的第三方库，但怎样才算是优雅？总体来说，<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> 就十分优雅，而 <a href="https://github.com/BradLarson/GPUImage">GPUImage</a> 就只是可用，而不算优雅。编写优雅的第三方库，就像制作一件精美的艺术品一样，过程让人沉醉，结果令人赏心悦目。否则就是单纯的代码堆积与功能实现，过程像搬砖，完成后也没有成就感。下面就本人的一点经验，分享下如何优雅地封装第三方库。</p>
 
 <!--more-->
@@ -516,18 +516,18 @@
   
   <entry>
     <title type="html"><![CDATA[为什么你不应该使用 Interface Builder]]></title>
-    <link href="http://rickytan.github.io/blog/2015/11/23/why-shouldnt-you-use-ib/"/>
+    <link href="http://rickytan.cn/blog/2015/11/23/why-shouldnt-you-use-ib/"/>
     <updated>2015-11-23T13:55:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/11/23/why-shouldnt-you-use-ib</id>
+    <id>http://rickytan.cn/blog/2015/11/23/why-shouldnt-you-use-ib</id>
     <content type="html"><![CDATA[<p><strong>Xcode</strong> 太卡了！！！！</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[为什么你应该开始使用 Interface Builder]]></title>
-    <link href="http://rickytan.github.io/blog/2015/11/23/why-should-you-start-to-use-ib/"/>
+    <link href="http://rickytan.cn/blog/2015/11/23/why-should-you-start-to-use-ib/"/>
     <updated>2015-11-23T11:26:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/11/23/why-should-you-start-to-use-ib</id>
+    <id>http://rickytan.cn/blog/2015/11/23/why-should-you-start-to-use-ib</id>
     <content type="html"><![CDATA[<p>众所周知，用 <strong>Xcode</strong> 开发 <strong>App Watch</strong> 应用只能使用 <code>Interface Builder</code> （以下简称 <strong>IB</strong>），甚至于它的 <strong>API</strong> 中都没有 <code>-(void)init</code> 接口，如下：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -600,7 +600,7 @@
 
 <p>然后在需要使用 <strong>IB</strong> 来设置值的属性上添加 <strong>IBInspectable</strong> 宏。这个并不是什么新的黑科技，事实上它只是告诉了 <strong>Xcode</strong> 使用 <strong>Runtime Attribute</strong> 来设置它的值。</p>
 
-<p><img src="http://rickytan.github.io/images/use-ib/0.png" alt="" /></p>
+<p><img src="http://rickytan.cn/images/use-ib/0.png" alt="" /></p>
 
 <p>所以它支持的属性类型也是有限的，只有以下几种（不支持 <strong>UIFont</strong> 和 <strong>ENUM</strong>，所以本项目中的 <code>iconPosition</code> 使用了 <code>NSInteger</code>），但也基本够用：</p>
 
@@ -621,7 +621,7 @@
 
 <p>上面的代码中，三个属性都定义为可以使用 <strong>IB</strong>，那么当你拖拽一个 <strong>UIButton</strong> 到界面上，设置它的 <strong>Class</strong> 为 <strong>RTIconButton</strong> 后，<strong>Xcode</strong> 的 <strong>Attributes Inspector</strong> 面板会多出如下几个可设置的项目：</p>
 
-<p><img src="http://rickytan.github.io/images/use-ib/1.png" alt="" /></p>
+<p><img src="http://rickytan.cn/images/use-ib/1.png" alt="" /></p>
 
 <p>如果不设置，它将使用默认值，即代码在 <code>-(void)init</code> 时自己设置的值。这里需要注意的是，从 <strong>IB</strong> 生成的界面调用的是 <code>- (instancetype)initWithCoder:(NSCoder *)aDecoder</code>，所以通常的做法写一个 <code>-(void)commonInit</code> 之类的。</p>
 
@@ -731,7 +731,7 @@
 
 <p>本项目解决了 <strong>Icon</strong> 与 <strong>Title</strong> 混排的一些常见需求，支持设置间距、调整 <strong>Icon</strong> 大小、<strong>Icon</strong> 位置，及水平和竖直方向对齐，并且所有的设置所见即所得！</p>
 
-<p><img src="http://rickytan.github.io/images/use-ib/2.png" alt="" /></p>
+<p><img src="http://rickytan.cn/images/use-ib/2.png" alt="" /></p>
 
 <p>所有源代码可以在 <a href="https://github.com/rickytan/RTIconButton">https://github.com/rickytan/RTIconButton</a> 上找到。</p>
 
@@ -860,7 +860,7 @@
 
 <p>于是得到以下结果，我们没有数据也可以看到有数据后它们应该有的布局了！</p>
 
-<p><img src="http://rickytan.github.io/images/use-ib/3.png" alt="" /></p>
+<p><img src="http://rickytan.cn/images/use-ib/3.png" alt="" /></p>
 
 <p>你可以调整 <strong>pageSize</strong>，<strong>pageMargin</strong> 等属性，同样所见即所得！</p>
 
@@ -874,9 +874,9 @@
   
   <entry>
     <title type="html"><![CDATA[是时候使用 PDF 资源了]]></title>
-    <link href="http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets/"/>
+    <link href="http://rickytan.cn/blog/2015/11/06/time-to-use-pdf-assets/"/>
     <updated>2015-11-06T17:56:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets</id>
+    <id>http://rickytan.cn/blog/2015/11/06/time-to-use-pdf-assets</id>
     <content type="html"><![CDATA[<p>一年前我做了这个插件 <a href="https://github.com/rickytan/RTImageAssets">RTImageAssets</a>，为了解决自己在开发过
 程中的一个痛点，这个痛点貌似也恰好是许多其他 iOS 开发者的痛点，那就是要不断地向美术解释如何正确切图。</p>
 
@@ -889,7 +889,7 @@
 
 <p>使用矢量图的方法跟普通 PNG 一样，按下图设置好后，原来的三个槽会变成一个，重新把图片拖进去就好：</p>
 
-<p><img src="http://rickytan.github.io/images/pdf-asset/1.png" alt="image0" /></p>
+<p><img src="http://rickytan.cn/images/pdf-asset/1.png" alt="image0" /></p>
 
 <p>一定要选为 <em>Vector</em> ，之前碰到过将 <strong>PDF</strong> 图当 <strong>PNG</strong> 用的人……</p>
 
@@ -897,7 +897,7 @@
 
 <p>你不需要担心移动设置上使用矢量图的性能问题，因为事实上在打包的时候 <strong>Xcode</strong> 将它们变成 PNG 了：</p>
 
-<p><img src="http://rickytan.github.io/images/pdf-asset/2.png" alt="image1" /></p>
+<p><img src="http://rickytan.cn/images/pdf-asset/2.png" alt="image1" /></p>
 
 <blockquote><p><em>最低支持到 <strong>iOS 6</strong> 时，会使用原始 PNG 图，可以看到以上的命名方式，<strong>iOS 7</strong> 以上已经将所有图片打包为 <code>Assets.car</code> 了</em></p></blockquote>
 
@@ -907,9 +907,9 @@
   
   <entry>
     <title type="html"><![CDATA[UIButton 状态的新理解]]></title>
-    <link href="http://rickytan.github.io/blog/2015/07/06/uibutton-state/"/>
+    <link href="http://rickytan.cn/blog/2015/07/06/uibutton-state/"/>
     <updated>2015-07-06T19:45:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/07/06/uibutton-state</id>
+    <id>http://rickytan.cn/blog/2015/07/06/uibutton-state</id>
     <content type="html"><![CDATA[<p><code>UIButton</code> 可能是 <strong>iOS</strong> 开发中使用的最多的控件之一了，它拥有极高的可定制性，通过合理的设置可以满足大部分点击响应的需求。一般认为，一个 <code>UIButton</code> 有四种状态，即：</p>
 
 <ul>
@@ -1121,7 +1121,7 @@
 
 <p>的效果是一样的，会相互覆盖（苹果的 Bug？），剩下还有 6 种可能的状态。同时我们还能发现，当一种状态（或组合状态）没有设置时，它会使用正常态的设置。</p>
 
-<p><img src="http://rickytan.github.io/images/uibutton-state.png" alt="UIButton State" /></p>
+<p><img src="http://rickytan.cn/images/uibutton-state.png" alt="UIButton State" /></p>
 
 <p>所以，如果你的按钮正常是白色的，选中时是<span style="color: red">红色</span>的，而你想让用户在点击一个选中按钮时让它保持<span style="color: red">红色</span>，应该这么做：</p>
 
@@ -1142,9 +1142,9 @@
   
   <entry>
     <title type="html"><![CDATA[Gulp + Bower + AngularJS 进行 Web 开发并使用 Coding.net 搭建在线演示最佳实践]]></title>
-    <link href="http://rickytan.github.io/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice/"/>
+    <link href="http://rickytan.cn/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice/"/>
     <updated>2015-04-20T20:59:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice</id>
+    <id>http://rickytan.cn/blog/2015/04/20/gulp-plus-bower-plus-angularjs-plus-coding-dot-net-best-practice</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>随着 <a href="http://coding.net">Coding</a> 的迅速发展，它为国内开放者提供了越来越多的便利，其中之一便是免费、一键搭建在线演示站点。它能够自动检测项目所用的语言及运行环境，大多数情况下无需过多配置即可启动演示。本文就如何利用 <a href="http://coding.net">Coding</a> 提高 Web 开发者效率给出一个最佳实践。</p>
@@ -1455,7 +1455,7 @@
 
 <p>以上步骤完成后，您的目录看起来应该是如下的样子：</p>
 
-<p><img src="http://rickytan.github.io/images/gulp-best-practice0.png" alt="project directory" /></p>
+<p><img src="http://rickytan.cn/images/gulp-best-practice0.png" alt="project directory" /></p>
 
 <h2>开始编码</h2>
 
@@ -1698,7 +1698,7 @@
 
 <p>你的浏览器会自动打开预览，同时你所做的修改会实时生效，如下图：</p>
 
-<p><img src="http://rickytan.github.io/images/gulp-best-practice1.png" alt="preview" /></p>
+<p><img src="http://rickytan.cn/images/gulp-best-practice1.png" alt="preview" /></p>
 
 <h2>编译部署</h2>
 
@@ -1774,7 +1774,7 @@
 
 <p>打开你在 <a href="http://coding.net">Coding</a> 上的项目，找到 <strong>演示</strong> 标签，先点击 “自动检测”，通过之后出现如下面板：</p>
 
-<p><img src="http://rickytan.github.io/images/gulp-best-practice2.png" alt="control panel" /></p>
+<p><img src="http://rickytan.cn/images/gulp-best-practice2.png" alt="control panel" /></p>
 
 <p>点击 “显示高级选项”，勾选 <strong>HTML</strong> 环境，部署版本中填入 <strong>dist</strong>，加上自定义的二级域名，然后<strong>一键部署</strong>，完成！现在你可以通过访问：<a href="http://todolist.coding.io">http://todolist.coding.io</a> 查看最终运行效果了。</p>
 
@@ -1820,9 +1820,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何生成分级的类别列表？]]></title>
-    <link href="http://rickytan.github.io/blog/2015/04/11/how-to-generate-a-category-list/"/>
+    <link href="http://rickytan.cn/blog/2015/04/11/how-to-generate-a-category-list/"/>
     <updated>2015-04-11T21:21:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/04/11/how-to-generate-a-category-list</id>
+    <id>http://rickytan.cn/blog/2015/04/11/how-to-generate-a-category-list</id>
     <content type="html"><![CDATA[<h2>分类问题</h2>
 
 <p>最近在做一个网页时，有这样一个需求，事实上很多电商之类的网站都有这样的需求：分类。然而这种分类又可以有无穷多子类，如：</p>
@@ -1953,7 +1953,7 @@
 
 <p>事实上，如何分类的层级关系可以写成一个棵树的话，如下图，那么生成列表这个问题就是一个<strong>前序遍历</strong>问题了。</p>
 
-<p><img src="http://rickytan.github.io/images/post/category-tree.png" title="分类树" alt="分类树" /></p>
+<p><img src="http://rickytan.cn/images/post/category-tree.png" title="分类树" alt="分类树" /></p>
 
 <p>假设存在一个虚拟的 <code>Root</code> 节点，从 <code>Root</code> 开始，前序遍历，则遍历顺序依次是：</p>
 
@@ -1996,15 +1996,15 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">categorys</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="nx">pid</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">},</span> <span class="p">{},</span> <span class="p">{}];</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">categories</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="nx">pid</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">},</span> <span class="p">{},</span> <span class="p">{}];</span>
 </span><span class='line'>
 </span><span class='line'><span class="kd">function</span> <span class="nx">insert</span><span class="p">(</span><span class="nx">pid</span><span class="p">,</span> <span class="nx">level</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'>  <span class="nx">categorys</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">categories</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">pid</span> <span class="o">==</span> <span class="nx">pid</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>          <span class="nx">o</span><span class="p">.</span><span class="nx">level</span> <span class="o">=</span> <span class="nx">level</span><span class="p">;</span>
 </span><span class='line'>          <span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span>
-</span><span class='line'>          <span class="nx">arr</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">insert</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">pid</span><span class="p">,</span> <span class="nx">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>          <span class="nx">arr</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">insert</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
 </span><span class='line'>      <span class="p">}</span>
 </span><span class='line'>  <span class="p">});</span>
 </span><span class='line'>  <span class="k">return</span> <span class="nx">arr</span><span class="p">;</span>
@@ -2023,9 +2023,9 @@
   
   <entry>
     <title type="html"><![CDATA[自动生成低清图的 Xcode 插件]]></title>
-    <link href="http://rickytan.github.io/blog/2015/01/17/rtimageassets/"/>
+    <link href="http://rickytan.cn/blog/2015/01/17/rtimageassets/"/>
     <updated>2015-01-17T00:02:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/01/17/rtimageassets</id>
+    <id>http://rickytan.cn/blog/2015/01/17/rtimageassets</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>随着 iPhone 6 Plus 等的发布，在普通消费者眼中，又要少两个肾，在 <strong>iOS</strong> 开发者眼中，又有两款新屏幕需要支持了。新的 iPhone 6 Plus 拥有一块 5.5 英寸的视网膜屏，分辨率为 <code>1080x1920</code>，<strong>PPI</strong> 为 401，在程序中表现为 <strong>3x</strong>，即，对于一张代码中指定的 <code>100x100</code> 的图片，实际需要 <code>300*300</code> 的图片填充才不会产生模糊。为此开发者们及美术们又要伤不少脑筋了，开发者需要一遍又一遍地向美术解释，每张图需要切三份，每份应该怎么样。有时候少切了，或者不满足要求，程序员还得自己动手缩放。</p>
@@ -2043,7 +2043,7 @@
 
 <ul>
 <li>只会填补空位，如果你已经设置好了自己的 @2x 图，则不会生成；</li>
-<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#78;&#64;&#x32;&#120;&#x2e;&#112;&#110;&#x67;">&#x4e;&#64;&#x32;&#120;&#46;&#x70;&#110;&#x67;</a> <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#78;&#64;&#51;&#x78;&#x2e;&#112;&#110;&#x67;">&#x4e;&#64;&#x33;&#x78;&#x2e;&#x70;&#x6e;&#x67;</a> 等）；</li>
+<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x4e;&#x40;&#x32;&#x78;&#46;&#112;&#x6e;&#103;">&#78;&#64;&#50;&#x78;&#46;&#112;&#110;&#103;</a> <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x4e;&#x40;&#51;&#x78;&#46;&#112;&#110;&#103;">&#x4e;&#64;&#x33;&#120;&#46;&#x70;&#x6e;&#103;</a> 等）；</li>
 <li>使用简单，不用再麻烦美术同学缩放了；</li>
 </ul>
 
@@ -2071,10 +2071,10 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Xcode 6 默认不再构建 armv7s 指令集的代码]]></title>
-    <link href="http://rickytan.github.io/blog/2015/01/16/xcode-6-drops-armv7s/"/>
+    <title type="html"><![CDATA[Xcode 6 默认不再构建 Armv7s 指令集的代码]]></title>
+    <link href="http://rickytan.cn/blog/2015/01/16/xcode-6-drops-armv7s/"/>
     <updated>2015-01-16T11:21:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/01/16/xcode-6-drops-armv7s</id>
+    <id>http://rickytan.cn/blog/2015/01/16/xcode-6-drops-armv7s</id>
     <content type="html"><![CDATA[<blockquote><p>原文 <a href="http://www.cocoanetics.com/2014/10/xcode-6-drops-armv7s/">Xcode 6 drops armv7s</a></p></blockquote>
 
 <p>最新的 <code>Xcode</code> 默认已经不再为 <code>armv7s</code> 构建可执行代码了，这到底是计划之中还是一时疏忽？</p>
@@ -2090,19 +2090,19 @@
 
 <p>这并不是一个真的问题，因为尽管少了一些优化，但 A6 芯片还是可以很好地运行 <code>armv7</code> 的代码。只是你升级了 <code>Xcode</code> 之后，原来好好的代码突然出现链接错误会让你很不爽而已。</p>
 
-<p><img src="http://rickytan.github.io/images/Screen-Shot-2014-10-10-at-10.42.32.png" alt="Image0" /></p>
+<p><img src="http://rickytan.cn/images/Screen-Shot-2014-10-10-at-10.42.32.png" alt="Image0" /></p>
 
 <p>修复方法也很简单。作为一个应用开发者，你可以简单地按照 <code>Xcode</code> 的建议删掉你自己覆写的编译架构设置。如果设置是以<strong>粗体</strong>显示的，你可以按下 <code>CMD + delete</code> 让它回到项目推荐设置。</p>
 
 <p>作为一个组件的开发商，你需要采用其他途径。你想要开发者自行决定是否支持 <code>armv7s</code>，那么你应该在你所有的静态库及 <strong>Framework</strong> 中加入 <code>armv7s</code> 的支持。</p>
 
-<p><img src="http://rickytan.github.io/images/Screen-Shot-2014-10-10-at-10.49.50.png" alt="Image1" /></p>
+<p><img src="http://rickytan.cn/images/Screen-Shot-2014-10-10-at-10.49.50.png" alt="Image1" /></p>
 
 <p>开发者的链接器会自动选择所需的架构片断，用以生成应用。如果你设置了 <strong>Build Active Architecture Only</strong> 你会发现只有特定的架构包含进去了。<strong>Debug</strong> 编译时，这个设置默认为 <strong>YES</strong>，它只会生成当前活动的设备或模拟器的架构代码以加快编译速度。<strong>Release</strong> 编译时默认为 <strong>NO</strong>，所有指定的架构都会生成。</p>
 
 <p>在静态库的生成日志中，每一行是一个架构的编译命令，最后是一行将所有架构代码合并，生成一个大的二进制文件。</p>
 
-<p><img src="http://rickytan.github.io/images/Screen-Shot-2014-10-10-at-10.53.48.png" alt="Image2" /></p>
+<p><img src="http://rickytan.cn/images/Screen-Shot-2014-10-10-at-10.53.48.png" alt="Image2" /></p>
 
 <p>另一种检验库文件中包含的架构片断的方法是使用 <code>file</code> 命令：</p>
 
@@ -2142,9 +2142,9 @@
   
   <entry>
     <title type="html"><![CDATA[XCode 中如何自动增长 Build 号]]></title>
-    <link href="http://rickytan.github.io/blog/2014/09/28/xcode-build-number/"/>
+    <link href="http://rickytan.cn/blog/2014/09/28/xcode-build-number/"/>
     <updated>2014-09-28T19:46:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/09/28/xcode-build-number</id>
+    <id>http://rickytan.cn/blog/2014/09/28/xcode-build-number</id>
     <content type="html"><![CDATA[<h2>iTunes Connect 新步骤</h2>
 
 <p>随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。</p>
@@ -2185,7 +2185,7 @@
 <ol>
 <li><p>在 <code>XCode</code> 中选中项目，打开 <code>Build Phases</code>，如下图：</p>
 
-<p> <img src="http://rickytan.github.io/images/run-script.png" alt="RunScript" /></p></li>
+<p> <img src="http://rickytan.cn/images/run-script.png" alt="RunScript" /></p></li>
 <li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p></li>
 </ol>
 
@@ -2209,9 +2209,9 @@
   
   <entry>
     <title type="html"><![CDATA[我的翻墙代理]]></title>
-    <link href="http://rickytan.github.io/blog/2014/07/14/my-gfw-proxy/"/>
+    <link href="http://rickytan.cn/blog/2014/07/14/my-gfw-proxy/"/>
     <updated>2014-07-14T22:14:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/07/14/my-gfw-proxy</id>
+    <id>http://rickytan.cn/blog/2014/07/14/my-gfw-proxy</id>
     <content type="html"><![CDATA[<p>不知道确切的日期，反正现在中国大陆访问 <strong><a href="https://www.google.com">Google</a></strong> 的所有站点都直接返回 <a href="http://zh.wikipedia.org/zh/HTTP_404">404</a> 了。这背后多少百度阴谋论又成为人们口中的谈资，但谈资归谈资，笑笑也就过去了，对于一个码农和伪科研者来说，没有 <strong>Google</strong> 是非常影响工作效率的。无论是学术 Paper 还是技术文档，从百度返回的屎一样的结果都会让人崩溃！</p>
 
 <p>互联网是人类的互联网，人活着就不能放弃追求自由的权利！</p>
@@ -2286,7 +2286,7 @@
 
 <p>安装好客户端后，将之前获取的网友分享的服务器配置填入就可以了</p>
 
-<p><img src="http://rickytan.github.io/images/shadowsocks-config.png" alt="Shadowsocks" /></p>
+<p><img src="http://rickytan.cn/images/shadowsocks-config.png" alt="Shadowsocks" /></p>
 
 <p>代理服务器填 <code>sock5 127.0.0.1:1080</code>，取决于您的客户端配置。</p>
 
@@ -2341,7 +2341,7 @@
 
 <p>然后，就可以在你的“网络偏好”中设置“Web安全代理”了。</p>
 
-<p><img src="http://rickytan.github.io/images/https-proxy.png" alt="image" /></p>
+<p><img src="http://rickytan.cn/images/https-proxy.png" alt="image" /></p>
 
 <p>另外，一个值得权衡的问题是：不加密码（-U -P 参数），那么你的服务器容易被别人扫描发现；加密码，每次输入又很麻烦（有些系统下，每次网页请求都要输入密码，而不是第一次请求）。于是本人 <strong>Fork</strong> 了 <code>spdyproxy</code> 的 <strong>Github</strong> 源代码（<a href="https://github.com/igrigorik/node-spdyproxy">https://github.com/igrigorik/node-spdyproxy</a>），并添加了白名单支持：</p>
 
@@ -2594,9 +2594,9 @@ npm install -g node-spdyproxy/package.json
   
   <entry>
     <title type="html"><![CDATA[RTID]]></title>
-    <link href="http://rickytan.github.io/blog/2014/06/06/rtid/"/>
+    <link href="http://rickytan.cn/blog/2014/06/06/rtid/"/>
     <updated>2014-06-06T01:44:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/06/06/rtid</id>
+    <id>http://rickytan.cn/blog/2014/06/06/rtid</id>
     <content type="html"><![CDATA[<h2>背景</h2>
 
 <p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
@@ -2674,9 +2674,9 @@ npm install -g node-spdyproxy/package.json
   
   <entry>
     <title type="html"><![CDATA[PHP 中读 XML 的一个坑]]></title>
-    <link href="http://rickytan.github.io/blog/2014/06/05/the-php-xml-issue/"/>
+    <link href="http://rickytan.cn/blog/2014/06/05/the-php-xml-issue/"/>
     <updated>2014-06-05T01:47:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/06/05/the-php-xml-issue</id>
+    <id>http://rickytan.cn/blog/2014/06/05/the-php-xml-issue</id>
     <content type="html"><![CDATA[<h2>问题</h2>
 
 <p>在做一个微信的 <code>PHP</code> 后台时需要读微信服务器 <code>POST</code> 过来的 <code>XML</code>，然后保存到 <code>Memcache</code> 中。</p>
@@ -2763,41 +2763,41 @@ npm install -g node-spdyproxy/package.json
   
   <entry>
     <title type="html"><![CDATA[代码生成的 UIColor 与在 IB 中填写的颜色 RGB 最终颜色不一致的问题]]></title>
-    <link href="http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
+    <link href="http://rickytan.cn/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
     <updated>2014-05-26T14:58:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
+    <id>http://rickytan.cn/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
     <content type="html"><![CDATA[<p>iOS 应用界面的编写，按程序员的习惯可以分为两派：代码党和 <code>IB</code> 党。本人是倾向于 <code>Interface Builder</code> 的，毕竟能少写点就少写点，能用 <code>IB</code> 实现坚决不用代码。</p>
 
 <p>但是在实际使用中，却发现一些问题，这个问题早有发现，我以为只是色差的原因，但是最近发现不那么简单了。</p>
 
 <p>如下图，美术在 <code>PhotoShop</code> 中标了蓝色为 <code>#3689e5</code>，换成 <code>RGB</code> 为 54，137，229，于是在 <code>IB</code> 的颜色中填入此值，但是看到的颜色有差异。</p>
 
-<p><img src="http://rickytan.github.io/images/IB/QQ20140510-1.png" alt="image0" /></p>
+<p><img src="http://rickytan.cn/images/IB/QQ20140510-1.png" alt="image0" /></p>
 
 <!--more-->
 
 
-<p><img src="http://rickytan.github.io/images/IB/QQ20140510-2.png" alt="image1" /></p>
+<p><img src="http://rickytan.cn/images/IB/QQ20140510-2.png" alt="image1" /></p>
 
 <p>这点小差异其实一般人都不会太关心，但后来有一部分功能我不想用 <code>IB</code> 了，于是代码写了个界面，就发现颜色差异不能忍了，代码的颜色是对的，<code>IB</code> 的颜色偏深。</p>
 
 <p>自己写了个 Demo ，截图如下：（这里差别还不是很大，因为我是在 Mac Pro Retian 自己的屏上输入的颜色，当你在外接显示器上用 <code>IB</code> 时，颜色差异十分明显）</p>
 
-<p><img src="http://rickytan.github.io/images/IB/s0.png" alt="image2" /></p>
+<p><img src="http://rickytan.cn/images/IB/s0.png" alt="image2" /></p>
 
 <p>其中上半部分是用 Color Inspector 输入的值：</p>
 
-<p><img src="http://rickytan.github.io/images/IB/s1.png" alt="image3" /></p>
+<p><img src="http://rickytan.cn/images/IB/s1.png" alt="image3" /></p>
 
 <p>可以对比下第 2 张图，与上面这张图，第 2 张图是在外接显示器上输入的，颜色差异之大，不可能是由 228 与 229 造成的！</p>
 
 <p>我一再强调了显示器的不同，对，其实看到这里大家已经猜到，这种不同就来自显示器。点开 <code>RGB Sliders</code> 左边的按钮（我之前都不知道它能点的……），可以看到多种显示器配置文件</p>
 
-<p><img src="http://rickytan.github.io/images/IB/color-picker.png" alt="image4" /></p>
+<p><img src="http://rickytan.cn/images/IB/color-picker.png" alt="image4" /></p>
 
 <p>选择 <code>Generic RGB</code>，然后三个值会变掉，不管它，你自己再改成 54 137 229。这时它在这个显示器上显示的颜色可能与你要的不对，但是运行时，在模拟器上显示的就与代码无差别了！</p>
 
-<p><img src="http://rickytan.github.io/images/IB/s3.png" alt="image5" /></p>
+<p><img src="http://rickytan.cn/images/IB/s3.png" alt="image5" /></p>
 
 <p>可以用 Mac 自带的 <em>数码测色计</em> 来验证，注意要选 <strong>显示原生值</strong>！</p>
 
@@ -2809,9 +2809,9 @@ npm install -g node-spdyproxy/package.json
   
   <entry>
     <title type="html"><![CDATA[如何为您的站点请求一个免费的ssl证书？]]></title>
-    <link href="http://rickytan.github.io/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/"/>
+    <link href="http://rickytan.cn/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website/"/>
     <updated>2014-03-01T02:39:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website</id>
+    <id>http://rickytan.cn/blog/2014/03/01/how-to-request-a-free-ssl-certificate-for-your-website</id>
     <content type="html"><![CDATA[<h3>SSL证书</h3>
 
 <p>关于什么是<code>SSL</code>证书请自行<code>Google</code>，你的每次<code>https</code>请求，都有一个证书在幕后做支持，它为网络上的服务器之间建立起了信任，保障了每次线上交易、浏览的安全。</p>
@@ -2839,9 +2839,9 @@ npm install -g node-spdyproxy/package.json
   
   <entry>
     <title type="html"><![CDATA[iOS 下如何复制一个视图（包括它的所有属性）]]></title>
-    <link href="http://rickytan.github.io/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios/"/>
+    <link href="http://rickytan.cn/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios/"/>
     <updated>2014-02-20T02:43:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios</id>
+    <id>http://rickytan.cn/blog/2014/02/20/how-to-copy-a-view-and-its-all-attribute-in-ios</id>
     <content type="html"><![CDATA[<p>在某些效果中，我们需要在当前视图上创建一个新的、一样的视图，并且叠在老的上面，然后让新的视图移动、缩放，或什么的，这样做出来的动画看起来比较流畅。对于简单的界面，我们可能按原有的样子生成一个新的就好，有没有更好更通用的办法呢？</p>
 
 <h1>NSCoding</h1>
@@ -2866,9 +2866,9 @@ npm install -g node-spdyproxy/package.json
   
   <entry>
     <title type="html"><![CDATA[iOS 下如何设置全局字体？]]></title>
-    <link href="http://rickytan.github.io/blog/2014/02/20/global-font-of-ios/"/>
+    <link href="http://rickytan.cn/blog/2014/02/20/global-font-of-ios/"/>
     <updated>2014-02-20T01:52:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/02/20/global-font-of-ios</id>
+    <id>http://rickytan.cn/blog/2014/02/20/global-font-of-ios</id>
     <content type="html"><![CDATA[<h1>背景</h1>
 
 <p><code>iOS 6</code>跟 <code>iOS 7</code>的字体还是有点不一样的，有时候为了两者的统一，或者，应设计师的要求，界面中所有的 Label，Button 等都用自定义字体，一般来说，我们在初始化的时候就需要不断地添加冗余的代码来设置自己的字体。</p>
@@ -2996,9 +2996,9 @@ npm install -g node-spdyproxy/package.json
   
   <entry>
     <title type="html"><![CDATA[蛐蛐儿 SDK 破解]]></title>
-    <link href="http://rickytan.github.io/blog/2014/01/18/crack-xququer/"/>
+    <link href="http://rickytan.cn/blog/2014/01/18/crack-xququer/"/>
     <updated>2014-01-18T15:23:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/01/18/crack-xququer</id>
+    <id>http://rickytan.cn/blog/2014/01/18/crack-xququer</id>
     <content type="html"><![CDATA[<p><a href="http://xququ.com">蛐蛐儿</a> 是一套利用声音传输信息的解决方案，大家可能知道 <code>支付宝</code> 在早些时候就推出了当面付的功能，其实就是利用超声波将加密后的支付信息传输给附近的人。蛐蛐儿SDK可以在其官网上下载到，通过它的提供的Demo可以看出，它需要将一段任意字符串<em>S</em>上传它们的后台，然后生成一段16字节的<em>Token</em>，发送时只能发送此<em>Token</em>。同时，在接收方接收到<em>Token</em>后，需要访问它们的后台把原始字符串<em>S</em>下载下来。这个过程也正好解释了，为什么无论发送什么东西，声音长度是一致的，真正的数据并不是通过声音传的，而是通过网络下载的。</p>
 
 <p>当然，其实大部分情况下这个过程已经够用了，因为开发者可以将自己需要传输的任何字符串编码为<em>Token</em>（这个字符串可以是<code>BASE64</code>编码，也可以是一个文件的下载链接），通过声音传输，然后再解码。</p>
@@ -3125,18 +3125,18 @@ return Token;
   
   <entry>
     <title type="html"><![CDATA[iZJU中浙大黄页的实现]]></title>
-    <link href="http://rickytan.github.io/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/"/>
+    <link href="http://rickytan.cn/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian/"/>
     <updated>2013-06-16T11:33:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian</id>
+    <id>http://rickytan.cn/blog/2013/06/16/izjuzhong-zhe-da-huang-ye-de-shi-xian</id>
     <content type="html"><![CDATA[<h2>简介</h2>
 
 <p>用过<a href="https://itunes.apple.com/cn/app/izju/id573810521?mt=8">iZJU iOS</a>版的同学应该会注意到，在2.1.1版本之后新增了“浙大黄页”的功能。</p>
 
-<p><img src="http://rickytan.github.io/images/screenshot20130616.png" alt="iZJU" /></p>
+<p><img src="http://rickytan.cn/images/screenshot20130616.png" alt="iZJU" /></p>
 
 <p>这个功能是原先“紧急电话”的加强版，细心的同学会知道，所有的电话号码数据来自“浙大电话黄页”网站（<a href="http://zjutel.zju.edu.cn">http://zjutel.zju.edu.cn</a>），如下图：</p>
 
-<p><img src="http://rickytan.github.io/images/QQ20130616-1.png" alt="浙大黄页" /></p>
+<p><img src="http://rickytan.cn/images/QQ20130616-1.png" alt="浙大黄页" /></p>
 
 <h2>数据获取</h2>
 
@@ -3196,7 +3196,7 @@ return Token;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>打包为.crx 后<strong><a href="http://rickytan.github.io/download/zjutel.crx">安装</a></strong>，在Chrome访问<a href="http://zjutel.zju.edu.cn/tree.php">http://zjutel.zju.edu.cn/tree.php</a>，插件就开始工作了，这时你可以坐下来喝喝咖啡，等它停止。</p>
+<p>打包为.crx 后<strong><a href="http://rickytan.cn/download/zjutel.crx">安装</a></strong>，在Chrome访问<a href="http://zjutel.zju.edu.cn/tree.php">http://zjutel.zju.edu.cn/tree.php</a>，插件就开始工作了，这时你可以坐下来喝喝咖啡，等它停止。</p>
 
 <p>停止之后，将整个网页下载下来，可以用<code>Vim</code>等文本编辑器用搜索替换的方式去除HTML标签等不必要的信息，最终整理成如下所示文本文件（tree.txt）：</p>
 
@@ -3291,9 +3291,9 @@ return Token;
   
   <entry>
     <title type="html"><![CDATA[开始！Hello Markdown]]></title>
-    <link href="http://rickytan.github.io/blog/2013/06/06/kai-shi-%21hello-markdown/"/>
+    <link href="http://rickytan.cn/blog/2013/06/06/kai-shi-%21hello-markdown/"/>
     <updated>2013-06-06T13:50:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2013/06/06/kai-shi-!hello-markdown</id>
+    <id>http://rickytan.cn/blog/2013/06/06/kai-shi-!hello-markdown</id>
     <content type="html"><![CDATA[<p><strong>新的开始</strong></p>
 
 <p>在<a href="http://biaobiaoqi.me">biaobiaoqi</a>的影响下，开始学着高端洋气一点，利用

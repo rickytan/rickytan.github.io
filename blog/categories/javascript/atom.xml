@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: javascript | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.github.io/blog/categories/javascript/atom.xml" rel="self"/>
-  <link href="http://rickytan.github.io/"/>
-  <updated>2016-04-18T00:23:11+08:00</updated>
-  <id>http://rickytan.github.io/</id>
+  <title><![CDATA[Category: Javascript | I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.cn/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://rickytan.cn/"/>
+  <updated>2016-10-28T21:21:15+08:00</updated>
+  <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何生成分级的类别列表？]]></title>
-    <link href="http://rickytan.github.io/blog/2015/04/11/how-to-generate-a-category-list/"/>
+    <link href="http://rickytan.cn/blog/2015/04/11/how-to-generate-a-category-list/"/>
     <updated>2015-04-11T21:21:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/04/11/how-to-generate-a-category-list</id>
+    <id>http://rickytan.cn/blog/2015/04/11/how-to-generate-a-category-list</id>
     <content type="html"><![CDATA[<h2>分类问题</h2>
 
 <p>最近在做一个网页时，有这样一个需求，事实上很多电商之类的网站都有这样的需求：分类。然而这种分类又可以有无穷多子类，如：</p>
@@ -168,16 +168,16 @@
 <p>对于从数据库中取出来的分类数组，要正确构建成一棵树还是有点工作量的，应该可以有更好的方法。于是有了下面的递归的思路：</p>
 
 <p>```javascript
-var categorys = [{id: &lsquo;xxx&rsquo;, pid: &lsquo;xxx&rsquo;, name: &lsquo;xxx&rsquo;}, {}, {}];</p>
+var categories = [{id: &lsquo;xxx&rsquo;, pid: &lsquo;xxx&rsquo;, name: &lsquo;xxx&rsquo;}, {}, {}];</p>
 
 <p>function insert(pid, level) {</p>
 
 <pre><code>var arr = [];
-categorys.forEach(function(o) {
+categories.forEach(function(o) {
     if (o.pid == pid) {
         o.level = level;
         arr.push(o);
-        arr = arr.concat(insert(o.pid, level + 1));
+        arr = arr.concat(insert(o.id, level + 1));
     }
 });
 return arr;

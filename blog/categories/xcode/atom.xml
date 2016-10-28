@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: xcode | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.github.io/blog/categories/xcode/atom.xml" rel="self"/>
-  <link href="http://rickytan.github.io/"/>
-  <updated>2016-04-18T00:23:11+08:00</updated>
-  <id>http://rickytan.github.io/</id>
+  <title><![CDATA[Category: Xcode | I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.cn/blog/categories/xcode/atom.xml" rel="self"/>
+  <link href="http://rickytan.cn/"/>
+  <updated>2016-10-28T21:21:15+08:00</updated>
+  <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[UIButton 状态的新理解]]></title>
-    <link href="http://rickytan.github.io/blog/2015/07/06/uibutton-state/"/>
+    <link href="http://rickytan.cn/blog/2015/07/06/uibutton-state/"/>
     <updated>2015-07-06T19:45:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/07/06/uibutton-state</id>
+    <id>http://rickytan.cn/blog/2015/07/06/uibutton-state</id>
     <content type="html"><![CDATA[<p><code>UIButton</code> 可能是 <strong>iOS</strong> 开发中使用的最多的控件之一了，它拥有极高的可定制性，通过合理的设置可以满足大部分点击响应的需求。一般认为，一个 <code>UIButton</code> 有四种状态，即：</p>
 
 <ul>
@@ -168,9 +168,9 @@ UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
   
   <entry>
     <title type="html"><![CDATA[自动生成低清图的 Xcode 插件]]></title>
-    <link href="http://rickytan.github.io/blog/2015/01/17/rtimageassets/"/>
+    <link href="http://rickytan.cn/blog/2015/01/17/rtimageassets/"/>
     <updated>2015-01-17T00:02:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/01/17/rtimageassets</id>
+    <id>http://rickytan.cn/blog/2015/01/17/rtimageassets</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>随着 iPhone 6 Plus 等的发布，在普通消费者眼中，又要少两个肾，在 <strong>iOS</strong> 开发者眼中，又有两款新屏幕需要支持了。新的 iPhone 6 Plus 拥有一块 5.5 英寸的视网膜屏，分辨率为 <code>1080x1920</code>，<strong>PPI</strong> 为 401，在程序中表现为 <strong>3x</strong>，即，对于一张代码中指定的 <code>100x100</code> 的图片，实际需要 <code>300*300</code> 的图片填充才不会产生模糊。为此开发者们及美术们又要伤不少脑筋了，开发者需要一遍又一遍地向美术解释，每张图需要切三份，每份应该怎么样。有时候少切了，或者不满足要求，程序员还得自己动手缩放。</p>
@@ -188,7 +188,7 @@ UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
 
 <ul>
 <li>只会填补空位，如果你已经设置好了自己的 @2x 图，则不会生成；</li>
-<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#78;&#64;&#x32;&#x78;&#46;&#x70;&#x6e;&#x67;">&#78;&#x40;&#50;&#120;&#46;&#x70;&#x6e;&#x67;</a> <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#78;&#x40;&#51;&#x78;&#x2e;&#x70;&#x6e;&#103;">&#x4e;&#x40;&#x33;&#x78;&#x2e;&#x70;&#110;&#x67;</a> 等）；</li>
+<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x4e;&#x40;&#50;&#x78;&#46;&#x70;&#110;&#103;">&#78;&#64;&#x32;&#120;&#x2e;&#112;&#110;&#x67;</a> <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#78;&#64;&#51;&#x78;&#46;&#x70;&#110;&#103;">&#78;&#x40;&#51;&#x78;&#x2e;&#112;&#x6e;&#x67;</a> 等）；</li>
 <li>使用简单，不用再麻烦美术同学缩放了；</li>
 </ul>
 
@@ -216,10 +216,10 @@ UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Xcode 6 默认不再构建 armv7s 指令集的代码]]></title>
-    <link href="http://rickytan.github.io/blog/2015/01/16/xcode-6-drops-armv7s/"/>
+    <title type="html"><![CDATA[Xcode 6 默认不再构建 Armv7s 指令集的代码]]></title>
+    <link href="http://rickytan.cn/blog/2015/01/16/xcode-6-drops-armv7s/"/>
     <updated>2015-01-16T11:21:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/01/16/xcode-6-drops-armv7s</id>
+    <id>http://rickytan.cn/blog/2015/01/16/xcode-6-drops-armv7s</id>
     <content type="html"><![CDATA[<blockquote><p>原文 <a href="http://www.cocoanetics.com/2014/10/xcode-6-drops-armv7s/">Xcode 6 drops armv7s</a></p></blockquote>
 
 <p>最新的 <code>Xcode</code> 默认已经不再为 <code>armv7s</code> 构建可执行代码了，这到底是计划之中还是一时疏忽？</p>

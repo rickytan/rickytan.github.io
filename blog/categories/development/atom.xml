@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Development | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.github.io/blog/categories/development/atom.xml" rel="self"/>
-  <link href="http://rickytan.github.io/"/>
-  <updated>2016-04-18T00:23:11+08:00</updated>
-  <id>http://rickytan.github.io/</id>
+  <link href="http://rickytan.cn/blog/categories/development/atom.xml" rel="self"/>
+  <link href="http://rickytan.cn/"/>
+  <updated>2016-10-28T21:21:15+08:00</updated>
+  <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[是时候使用 PDF 资源了]]></title>
-    <link href="http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets/"/>
+    <link href="http://rickytan.cn/blog/2015/11/06/time-to-use-pdf-assets/"/>
     <updated>2015-11-06T17:56:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2015/11/06/time-to-use-pdf-assets</id>
+    <id>http://rickytan.cn/blog/2015/11/06/time-to-use-pdf-assets</id>
     <content type="html"><![CDATA[<p>一年前我做了这个插件 <a href="https://github.com/rickytan/RTImageAssets">RTImageAssets</a>，为了解决自己在开发过
 程中的一个痛点，这个痛点貌似也恰好是许多其他 iOS 开发者的痛点，那就是要不断地向美术解释如何正确切图。</p>
 

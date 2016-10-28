@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: 优雅 | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.github.io/blog/categories/you-ya/atom.xml" rel="self"/>
-  <link href="http://rickytan.github.io/"/>
-  <updated>2016-04-18T00:23:11+08:00</updated>
-  <id>http://rickytan.github.io/</id>
+  <link href="http://rickytan.cn/blog/categories/you-ya/atom.xml" rel="self"/>
+  <link href="http://rickytan.cn/"/>
+  <updated>2016-10-28T21:21:15+08:00</updated>
+  <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何优雅地编写 iOS 第三方库]]></title>
-    <link href="http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/"/>
+    <link href="http://rickytan.cn/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/"/>
     <updated>2016-04-17T10:00:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library</id>
+    <id>http://rickytan.cn/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library</id>
     <content type="html"><![CDATA[<p><strong>iOS</strong> 经过八年多的发展，已经涌现出诸多优秀的第三方库，但怎样才算是优雅？总体来说，<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> 就十分优雅，而 <a href="https://github.com/BradLarson/GPUImage">GPUImage</a> 就只是可用，而不算优雅。编写优雅的第三方库，就像制作一件精美的艺术品一样，过程让人沉醉，结果令人赏心悦目。否则就是单纯的代码堆积与功能实现，过程像搬砖，完成后也没有成就感。下面就本人的一点经验，分享下如何优雅地封装第三方库。</p>
 
 <!--more-->

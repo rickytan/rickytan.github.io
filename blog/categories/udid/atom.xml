@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: udid | I'm Ricky -- 个人主页]]></title>
-  <link href="http://rickytan.github.io/blog/categories/udid/atom.xml" rel="self"/>
-  <link href="http://rickytan.github.io/"/>
-  <updated>2016-04-18T00:23:11+08:00</updated>
-  <id>http://rickytan.github.io/</id>
+  <title><![CDATA[Category: Udid | I'm Ricky -- 个人主页]]></title>
+  <link href="http://rickytan.cn/blog/categories/udid/atom.xml" rel="self"/>
+  <link href="http://rickytan.cn/"/>
+  <updated>2016-10-28T21:21:15+08:00</updated>
+  <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
     <email><![CDATA[ricky.tan.xin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[RTID]]></title>
-    <link href="http://rickytan.github.io/blog/2014/06/06/rtid/"/>
+    <link href="http://rickytan.cn/blog/2014/06/06/rtid/"/>
     <updated>2014-06-06T01:44:00+08:00</updated>
-    <id>http://rickytan.github.io/blog/2014/06/06/rtid</id>
+    <id>http://rickytan.cn/blog/2014/06/06/rtid</id>
     <content type="html"><![CDATA[<h2>背景</h2>
 
 <p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
