@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 字体 | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.cn/blog/categories/zi-ti/atom.xml" rel="self"/>
   <link href="http://rickytan.cn/"/>
-  <updated>2016-10-28T21:21:15+08:00</updated>
+  <updated>2019-03-25T21:43:12+08:00</updated>
   <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -22,12 +22,17 @@
 
 <p><code>iOS 6</code>跟 <code>iOS 7</code>的字体还是有点不一样的，有时候为了两者的统一，或者，应设计师的要求，界面中所有的 Label，Button 等都用自定义字体，一般来说，我们在初始化的时候就需要不断地添加冗余的代码来设置自己的字体。</p>
 
-<p>{% codeblock lang:objc %}
-UILabel *label = [[UILabel alloc] init];
-label.font = [UIFont fontWithName:@&ldquo;myFont&rdquo;];
-&hellip;</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">UILabel</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="n">label</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="err">@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">myFont</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;];</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>如果你的界面全部是代码实现的，而且项目初期就已经定下统一用什么字体了，这就不是什么难事。但是，试想，如果你的界面是由大量<code>IB</code>实现的，而且用的是自定义的字体，在<code>IB</code>中选都没法选；或是项目已经完成差不多了，上面要求统一改字体，那该如何是好？</p>
 
@@ -42,62 +47,119 @@ label.font = [UIFont fontWithName:@&ldquo;myFont&rdquo;];
 
 <p><strong>注意：</strong> <em>以下方法只用于全局修改由 <code>Xib</code> 加载的界面的 UIButton, UILabel的字体，其他的如UITextField等类似，新建Catogery就好，想修改代码生成的界面，修改 initWithCoder 为 init就好</em></p>
 
-<p>{% codeblock lang:objc %}</p>
-
-<h1>import &lt;UIKit/UIKit.h></h1>
-
-<h1>import &lt;objc/runtime.h></h1>
-
-<p>@interface UIButton (myFont) @end
-@interface UILabel (myFont) @end</p>
-
-<p>@implementation UIButton (myFont)</p>
-
-<ul>
-<li><p>(void)load
-{
-  Method imp = class_getInstanceMethod([self class], @selector(initWithCoder:));
-  Method myImp = class_getInstanceMethod([self class], @selector(myInitWithCoder:));
-  method_exchangeImplementations(imp, myImp);
-}</p></li>
-<li><p>(id)myInitWithCoder:(NSCoder*)aDecode
-{
-  [self myInitWithCoder:aDecode];
-  if (self) {
-      CGFloat fontSize = self.titleLabel.font.pointSize;
-      self.titleLabel.font = &lt;# Your Font Here #>;
-  }
-  return self;
-}</p></li>
-</ul>
-
-
-<p>@end</p>
-
-<p>@implementation UILabel (myFont)</p>
-
-<ul>
-<li><p>(void)load
-{
-  Method imp = class_getInstanceMethod([self class], @selector(initWithCoder:));
-  Method myImp = class_getInstanceMethod([self class], @selector(myInitWithCoder:));
-  method_exchangeImplementations(imp, myImp);
-}</p></li>
-<li><p>(id)myInitWithCoder:(NSCoder*)aDecode
-{
-  [self myInitWithCoder:aDecode];
-  if (self) {
-      CGFloat fontSize = self.font.pointSize;
-      self.font = &lt;# Your Font Here #>;
-  }
-  return self;
-}</p></li>
-</ul>
-
-
-<p>@end</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">UIKit</span><span class="o">/</span><span class="n">UIKit</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">objc</span><span class="o">/</span><span class="n">runtime</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@interface</span> <span class="nc">UIButton</span> <span class="nl">(myFont)</span> <span class="k">@end</span>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">UILabel</span> <span class="nl">(myFont)</span> <span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@implementation</span> <span class="nc">UIButton</span> <span class="nl">(myFont)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">load</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">imp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">initWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">myImp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">myInitWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">myImp</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nl">myInitWithCoder:</span><span class="p">(</span><span class="n">NSCoder</span><span class="o">*</span><span class="p">)</span><span class="n">aDecode</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span> <span class="nl">myInitWithCoder:</span><span class="n">aDecode</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">CGFloat</span> <span class="n">fontSize</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">pointSize</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="err">#</span> <span class="n">Your</span> <span class="n">Font</span> <span class="n">Here</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@implementation</span> <span class="nc">UILabel</span> <span class="nl">(myFont)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">load</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">imp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">initWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">Method</span> <span class="n">myImp</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="nl">myInitWithCoder:</span><span class="p">));</span>
+</span><span class='line'>  <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">myImp</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nl">myInitWithCoder:</span><span class="p">(</span><span class="n">NSCoder</span><span class="o">*</span><span class="p">)</span><span class="n">aDecode</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span> <span class="nl">myInitWithCoder:</span><span class="n">aDecode</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">CGFloat</span> <span class="n">fontSize</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">pointSize</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">self</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="err">#</span> <span class="n">Your</span> <span class="n">Font</span> <span class="n">Here</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   

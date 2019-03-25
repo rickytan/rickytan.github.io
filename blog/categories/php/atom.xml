@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Php | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.cn/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://rickytan.cn/"/>
-  <updated>2016-10-28T21:21:15+08:00</updated>
+  <updated>2019-03-25T21:43:12+08:00</updated>
   <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -22,20 +22,32 @@
 
 <p>在做一个微信的 <code>PHP</code> 后台时需要读微信服务器 <code>POST</code> 过来的 <code>XML</code>，然后保存到 <code>Memcache</code> 中。</p>
 
-<p>{% codeblock index.php lang:php %}
-&lt;?php
-public index() {</p>
-
-<pre><code>$postData = $GLOBALS["HTTP_RAW_POST_DATA"];
-$postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-$this-&gt;cache-&gt;memcached-&gt;save("openid_".$something, $postObj-&gt;FromUserName);
-
-...
-</code></pre>
-
-<p>}
-?>
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>index.php </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">&amp;lt;?php</span>
+</span><span class='line'><span class="x">public index() {&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt;$postData = $GLOBALS[&quot;HTTP_RAW_POST_DATA&quot;];</span>
+</span><span class='line'><span class="x">$postObj = simplexml_load_string($postStr, &#39;SimpleXMLElement&#39;, LIBXML_NOCDATA);</span>
+</span><span class='line'><span class="x">$this-&amp;gt;cache-&amp;gt;memcached-&amp;gt;save(&quot;openid_&quot;.$something, $postObj-&amp;gt;FromUserName);</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">...</span>
+</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;p&gt;}</span>
+</span><span class='line'><span class="x">?&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>怎么也出不来结果，然后发现运行到 <code>save</code> 时有异常<!--more-->，是 <code>Memcache</code> 抛出的，说无法串行化。通过 <code>var_dump</code> 后发现 <code>$postObj-&gt;FromUserName</code> 是个 <code>SimepleXMLElement</code> 类型，而用 <code>var_dump</code> <code>$postObj</code> 时发现是 <code>string</code>！！</p>
 
@@ -48,45 +60,63 @@ $this-&gt;cache-&gt;memcached-&gt;save("openid_".$something, $postObj-&gt;FromUs
 </ol>
 
 
-<p>{% codeblock lang:php %}
-&lt;?php</p>
-
-<pre><code>    $this-&gt;cache-&gt;memcached-&gt;save("openid_".$something, (string)$postObj-&gt;FromUserName);
-</code></pre>
-
-<p>?>
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">&amp;lt;?php&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt;    $this-&amp;gt;cache-&amp;gt;memcached-&amp;gt;save(&quot;openid_&quot;.$something, (string)$postObj-&amp;gt;FromUserName);</span>
+</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;p&gt;?&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <ol>
 <li>强制转换为 <code>array</code></li>
 </ol>
 
 
-<p>{% codeblock lang:php %}
-&lt;?php</p>
-
-<pre><code>    $postData = $GLOBALS["HTTP_RAW_POST_DATA"];;
-    $postObj = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-    $this-&gt;cache-&gt;memcached-&gt;save("openid_".$something, $postObj["FromUserName"]);
-</code></pre>
-
-<p>?>
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">&amp;lt;?php&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt;    $postData = $GLOBALS[&quot;HTTP_RAW_POST_DATA&quot;];;</span>
+</span><span class='line'><span class="x">    $postObj = (array)simplexml_load_string($postStr, &#39;SimpleXMLElement&#39;, LIBXML_NOCDATA);</span>
+</span><span class='line'><span class="x">    $this-&amp;gt;cache-&amp;gt;memcached-&amp;gt;save(&quot;openid_&quot;.$something, $postObj[&quot;FromUserName&quot;]);</span>
+</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;p&gt;?&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <ol>
 <li>转为 <code>stdClass</code></li>
 </ol>
 
 
-<p>{% codeblock lang:php %}
-&lt;?php</p>
-
-<pre><code>    $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-    $postObj = json_decode(json_encode($postObj));
-</code></pre>
-
-<p>?>
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">&amp;lt;?php&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt;    $postObj = simplexml_load_string($postStr, &#39;SimpleXMLElement&#39;, LIBXML_NOCDATA);</span>
+</span><span class='line'><span class="x">    $postObj = json_decode(json_encode($postObj));</span>
+</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;p&gt;?&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>这个大坑耗去了快两小时！</p>
 ]]></content>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ios | I'm Ricky -- 个人主页]]></title>
+  <title><![CDATA[Category: iOS | I'm Ricky -- 个人主页]]></title>
   <link href="http://rickytan.cn/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://rickytan.cn/"/>
-  <updated>2016-10-28T21:21:15+08:00</updated>
+  <updated>2019-03-25T21:43:12+08:00</updated>
   <id>http://rickytan.cn/</id>
   <author>
     <name><![CDATA[Ricky]]></name>
@@ -14,34 +14,98 @@
 
   
   <entry>
-    <title type="html"><![CDATA[UIButton 状态的新理解]]></title>
-    <link href="http://rickytan.cn/blog/2015/07/06/uibutton-state/"/>
-    <updated>2015-07-06T19:45:00+08:00</updated>
-    <id>http://rickytan.cn/blog/2015/07/06/uibutton-state</id>
-    <content type="html"><![CDATA[<p><code>UIButton</code> 可能是 <strong>iOS</strong> 开发中使用的最多的控件之一了，它拥有极高的可定制性，通过合理的设置可以满足大部分点击响应的需求。一般认为，一个 <code>UIButton</code> 有四种状态，即：</p>
-
-<ul>
-<li>正常（Normal）</li>
-<li>高亮（Highlighted）</li>
-<li>选中（Selected）</li>
-<li>禁止（Disabled）</li>
-</ul>
-
-
-<p>但在实际项目中发现，当用户点在一个选中态的按钮上时，按钮显示的是正常状的样式，这是为什么呢？</p>
+    <title type="html"><![CDATA[如何优雅地编写 iOS 第三方库]]></title>
+    <link href="http://rickytan.cn/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library/"/>
+    <updated>2016-04-17T10:00:00+08:00</updated>
+    <id>http://rickytan.cn/blog/2016/04/17/how-to-write-elegant-thirdpart-ios-library</id>
+    <content type="html"><![CDATA[<p><strong>iOS</strong> 经过八年多的发展，已经涌现出诸多优秀的第三方库，但怎样才算是优雅？总体来说，<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> 就十分优雅，而 <a href="https://github.com/BradLarson/GPUImage">GPUImage</a> 就只是可用，而不算优雅。编写优雅的第三方库，就像制作一件精美的艺术品一样，过程让人沉醉，结果令人赏心悦目。否则就是单纯的代码堆积与功能实现，过程像搬砖，完成后也没有成就感。下面就本人的一点经验，分享下如何优雅地封装第三方库。</p>
 
 <!--more-->
 
 
-<p>事实上，<code>UIControlState</code> 是个 BitMask：</p>
+<h2>命名</h2>
 
-<p>```objective-c
-typedef NS_OPTIONS(NSUInteger, UIControlState) {</p>
+<p>好的命名规则是一个成功的第三库的开始，然而现实中很许多人随性命名，导致沟通成本上升。事实上命名问题上，苹果有其官方统一的标准，即首字母小写的驼峰式，如：<code>setName:</code>，<code>reloadDataWithName:andEmail:</code> 等，且一般约定在 <strong>getter</strong> 不使用 <code>getName</code>，而直接使用 <code>name</code>。</p>
+
+<h3>属性</h3>
+
+<p>属性的命名最好是能直接表达其意义的英文名词，当然合适的时候添加形容词，如：</p>
+
+<p><code>obj-c
+@interface XTUser : NSObject
+@property (nonatomic, strong) NSString *fullName;
+@property (nonatomic, strong) NSString *firstName, *lastName;
+@property (nonatomic, strong) NSString *phoneNumber;
+@property (nonatomic, strong) NSString *email;
+@end
+</code></p>
+
+<p>如果是数组或集合等，用名词的复数形式：</p>
+
+<p><code>obj-c
+@interface XTDownloadManager : NSObject
+@property (nonatomic, strong) NSArray&lt;NSURL *&gt; *downloadURLs;
+@end
+</code></p>
+
+<p>表达数量的属性，可以加 <code>numberOfXXX</code>，或 <code>XXXCount</code> 如：</p>
+
+<p><code>obj-c
+@interface XTBook : NSObject
+@property (nonatomic, assign) NSInteger numberOfPages;
+@property (nonatomic, assign) NSInteger pageCount;
+@end
+</code></p>
+
+<p>表示对象状态的属性，使用英文的<strong>正在进行时</strong>，或<strong>完成时</strong>等可以表示状态的词，如：</p>
+
+<ul>
+<li><code>@property (nonatomic, assign) BOOL isClosed;</code> ，已经关闭</li>
+<li><code>@property (nonatomic, assing) BOOL isClosing;</code> ，正在关闭</li>
+<li><code>@property (nonatomic, assing) BOOL isAvaliable;</code>，目前可用</li>
+<li><code>@property (nonatomic, assign) BOOL hasChanged;</code>，已经被改变</li>
+</ul>
+
+
+<p>而以下写法表意是不明确的：</p>
+
+<ul>
+<li><del><code>@property (nonatomic, assing) BOOL isClose;</code></del></li>
+</ul>
+
+
+<p>当然，前面的代码还能有更优雅的写法：</p>
+
+<ul>
+<li><code>@property (nonatomic, assign, getter=isClosed) BOOL closed;</code></li>
+<li><code>@property (nonatomic, assing, getter=isClosing) BOOL closing;</code></li>
+<li><code>@property (nonatomic, assing, getter=isAvaliable) BOOL avaliable;</code></li>
+<li><code>@property (nonatomic, assign, getter=hasChanged) BOOL changed;</code></li>
+</ul>
+
+
+<h3>枚举</h3>
+
+<p><strong>iOS</strong> 基础类库有着比其它任何官方库都好用的枚举类型，因为在使用过程中没有任何痛苦，也无需查文档，照着它的类型打完然后就有表意明确的自动补全，如 <code>UIKit</code> 中很常用的：</p>
+
+<p>```obj-c
+typedef NS_ENUM(NSInteger, UIControlContentHorizontalAlignment) {</p>
+
+<pre><code>UIControlContentHorizontalAlignmentCenter = 0,
+UIControlContentHorizontalAlignmentLeft   = 1,
+UIControlContentHorizontalAlignmentRight  = 2,
+UIControlContentHorizontalAlignmentFill   = 3,
+</code></pre>
+
+<p>};</p>
+
+<p>typedef NS_OPTIONS(NSUInteger, UIControlState) {</p>
 
 <pre><code>UIControlStateNormal       = 0,
 UIControlStateHighlighted  = 1 &lt;&lt; 0,                  // used when UIControl isHighlighted is set
 UIControlStateDisabled     = 1 &lt;&lt; 1,
 UIControlStateSelected     = 1 &lt;&lt; 2,                  // flag usable by app (see below)
+UIControlStateFocused NS_ENUM_AVAILABLE_IOS(9_0) = 1 &lt;&lt; 3, // Applicable only when the screen supports focus
 UIControlStateApplication  = 0x00FF0000,              // additional flags available for application use
 UIControlStateReserved     = 0xFF000000               // flags reserved for internal framework use
 </code></pre>
@@ -49,355 +113,651 @@ UIControlStateReserved     = 0xFF000000               // flags reserved for inte
 <p>};
 ```</p>
 
-<p>3 个有效的 Bit 组合其实可以拥有 8 种状态！</p>
+<p>等等。它的特点也很明显，就是</p>
 
-<p>我们可以用代码实际测试一下：</p>
+<p><code>c
+enum 类型名 {
+  类型名+枚举名0 = 枚举值0,
+  类型名+枚举名1 = 枚举值1,
+  类型名+枚举名2 = 枚举值2,
+}
+</code></p>
 
-<p>```objective-c
-&ndash; (void)viewDidLoad {</p>
+<p>于是有一段时间，本人都想把 <strong>OpenGL</strong> 里那些恶心的宏重写成这样形式（<a href="https://github.com/rickytan/Cocoa-Style-OpenGL">https://github.com/rickytan/Cocoa-Style-OpenGL</a>），如：</p>
 
-<pre><code>[super viewDidLoad];
-// Do any additional setup after loading the view, typically from a nib.
-self.view.backgroundColor = [UIColor whiteColor];
+<p>```c
+CC_ENUM(int, GLUnsignedType) {</p>
 
-CGPoint center = CGPointMake(CGRectGetWidth(self.view.frame) / 2, 60.f);
-UIButton *btn0 = [self getButton];
-btn0.center = center;
+<pre><code>GLUnsignedTypeByte  = GL_UNSIGNED_BYTE,
+GLUnsignedTypeShort = GL_UNSIGNED_SHORT,
+GLUnsignedTypeInt   = GL_UNSIGNED_INT,
+</code></pre>
 
-center.y += 60.f;
-UIButton *btn1 = [self getButton];
-btn1.center = center;
-btn1.highlighted = YES;
-btn1.enabled = YES;
+<p>};</p>
 
-center.y += 60.f;
-UIButton *btn2 = [self getButton];
-btn2.center = center;
-btn2.selected = YES;
+<p>CC_ENUM(int, GLDrawMode) {</p>
 
-center.y += 60.f;
-UIButton *btn3 = [self getButton];
-btn3.center = center;
-btn3.enabled = NO;
+<pre><code>GLDrawModePoints        = GL_POINTS,
+GLDrawModeLines         = GL_LINES,
+GLDrawModeLineLoop      = GL_LINE_LOOP,
+GLDrawModeLineStrip     = GL_LINE_STRIP,
+GLDrawModeTriangles     = GL_TRIANGLES,
+GLDrawModeTriangleStrip = GL_TRIANGLE_STRIP,
+GLDrawModeTriangleFan   = GL_TRIANGLE_FAN,
+GLDrawModeQuads         = GL_QUADS,
+GLDrawModeQuadStrip     = GL_QUAD_STRIP,
+GLDrawModePolygon       = GL_POLYGON,
+</code></pre>
 
-center.y += 60.f;
-UIButton *btn4 = [self getButton];
-btn4.center = center;
-btn4.selected = YES;
-btn4.enabled = NO;
+<p>};
+```</p>
 
-center.y += 60.f;
-UIButton *btn5 = [self getButton];
-btn5.center = center;
-btn5.highlighted = YES;
-btn5.enabled = NO;
+<p>然而苦于功底有限，同时对 <strong>OpenGL</strong> 底层了解也不够，作罢。</p>
 
-center.y += 60.f;
-UIButton *btn6 = [self getButton];
-btn6.center = center;
-btn6.highlighted = YES;
-btn6.selected = YES;
-btn6.enabled = NO;
+<p>而当前市面上已有的部分厂商并没有按照这个约定来发布 SDK，以致于要不断查看文档才知道如何操作。如一直倍受诟病的鹅厂：</p>
 
-center.y += 60.f;
-UIButton *btn7 = [self getButton];
-btn7.center = center;
-btn7.highlighted = YES;
-btn7.selected = YES;
-btn7.enabled = YES;
+<p>```obj-c
+enum QQApiInterfaceReqType
+{</p>
 
-[self.view addSubview:btn0];
-[self.view addSubview:btn1];
-[self.view addSubview:btn2];
-[self.view addSubview:btn3];
-[self.view addSubview:btn4];
-[self.view addSubview:btn5];
-[self.view addSubview:btn6];
-[self.view addSubview:btn7];
+<pre><code>EGETMESSAGEFROMQQREQTYPE = 0,   ///&lt; 手Q -&gt; 第三方应用，请求第三方应用向手Q发送消息
+ESENDMESSAGETOQQREQTYPE = 1,    ///&lt; 第三方应用 -&gt; 手Q，第三方应用向手Q分享消息
+ESHOWMESSAGEFROMQQREQTYPE = 2   ///&lt; 手Q -&gt; 第三方应用，请求第三方应用展现消息中的数据
+</code></pre>
+
+<p>};</p>
+
+<p>/<em>*
+ QQApi请求消息基类
+ </em>/
+@interface QQBaseReq : NSObject</p>
+
+<p>/<em>* 请求消息类型，参见\ref QQApiInterfaceReqType </em>/
+@property (nonatomic, assign) int type;</p>
+
+<p>@end
+```</p>
+
+<p>以上 <strong>SDK</strong> 有三个问题：</p>
+
+<ol>
+<li><code>QQBaseRequest</code> 不需要缩写为 <code>QQBaseReq</code>，在 <strong>Objective-C</strong> 的世界，名字再长都不过份，而要能将类、方法等功能表述清楚；</li>
+<li><code>type</code> 应当明确指定类型，就一个 <code>int</code> 让使用者不知所措；</li>
+<li><code>QQApiInterfaceReqType</code> 的枚举名应当以 QQApiInterfaceReqType 开头，且以驼峰式命名，方便自动补全。全大写一般是宏定义。</li>
+</ol>
+
+
+<h2>接口及实现</h2>
+
+<p>在编写第三方库时，尽量面向接口编程，并给一个默认的实现，方便使用者扩展。</p>
+
+<p>例如，你实现了一个照片显示的 <strong>View</strong>，你的类定义如下：</p>
+
+<p>```obj-c
+@interface MyPhoto : NSObject
+@property (nonatomic, strong) UIImage <em>thumbnailImage;
+@property (nonatomic, strong) NSString </em>name;
+@property (nonatomic, strong) NSURL *originURL;
+@end</p>
+
+<p>@interface MyPhotoGalleryView : UIView
+@property (nonatomic, strong) NSArray<MyPhoto *> *photos;
+@end
+```</p>
+
+<p>然而在实际项目中，使用者一般会有自定义的照片对象（如：<code>@class XTPhoto</code>），为了使用你的实现，他不得不将他的对象转成你的，再设置到 <code>photos</code> 属性，造成不必要的内存浪费。</p>
+
+<p>```obj-c
+@interface XTPhoto : NSObject
+@property (nonatomic, strong) UIImage <em>image;
+@property (nonatomic, strong) NSString </em>photoPath;
+@end</p>
+
+<p>&hellip;</p>
+
+<p>NSMutableArray <em>photos = [NSMutableArray arrayWithCapacity:self.photoGallery.count];
+for (XTPhoto </em>photo in self.photoGallery) {</p>
+
+<pre><code>MyPhoto *my = ...;
+[photos addObject:my];
+</code></pre>
+
+<p>}
+photoGalleryView.photos = [NSArray arrayWithArray:photos];
+```</p>
+
+<p>而如果换一种实现，定义一个接口，就可以一定程度上避免这种问题：</p>
+
+<p>```obj-c
+@protocol MyPhoto <NSObject>
+@required
+@property (nonatomic, readonly) UIImage <em>thumbnailImage;
+@property (nonatomic, readonly) NSString </em>name;</p>
+
+<p>@optional
+@property (nonatomic, readonly) NSURL *originURL;</p>
+
+<p>@end</p>
+
+<p>@interface MyPhoto : NSObject <MyPhoto>
+@property (nonatomic, strong) UIImage <em>thumbnailImage;
+@property (nonatomic, strong) NSString </em>name;
+@property (nonatomic, strong) NSURL *originURL;
+@end</p>
+
+<p>@interface MyPhotoGalleryView : UIView
+@property (nonatomic, strong) NSArray&lt;id<MyPhoto> > *photos;
+@end</p>
+
+<p>@interface XTPhoto : NSObject <MyPhoto>
+@property (nonatomic, strong) UIImage <em>image;
+@property (nonatomic, strong) NSString </em>photoPath;
+@end</p>
+
+<p>@implementation XTPhoto</p>
+
+<ul>
+<li><p>(UIImage *)thumbnailImage
+{
+  return self.image;
+}</p></li>
+<li><p>(NSString *)name
+{
+  return self.photoPath.lastPathComponent;
+}</p></li>
+<li><p>(NSURL *)originURL
+{
+  return [NSURL URLWithString:self.photoPath];
+}
+@end
+```</p></li>
+</ul>
+
+
+<p>这样可以直接将 <code>self.photoGallery</code> 直接赋值到 <code>photoGalleryView.photos</code>。</p>
+
+<p>除了面向接口编程，在类的实现上也应遵循以下原则：</p>
+
+<ul>
+<li><p>保持简单。只向外暴露能实现功能的最少的接口。假如你有一个视图，里面有一个 Label 显示了剩余的金币数，大于 0 时为红色，小于 0 时为绿色，那么应当只暴露一个 <strong>NSInteger</strong> 接口。</p>
+
+<pre><code>  @interface XTStatsView : UIView
+  @property (nonatomic, assign) NSInteger numberOfGold;
+  @end
+</code></pre>
+
+<p>  然后在具体的实现中设置 Label 的值：</p>
+
+<pre><code>  @interface XTStatsView ()
+  @property (nonatomic, strong) UILabel *goldLabel;
+  @end
+
+  @implementation XTStatsView
+  - (void)setNumberOfGold:(NSInteger)numberOfGold
+  {
+      _numberOfGold = numberOfGold;
+      self.goldLabel.text = [NSString stringWithFormat:@"%d 金币", _numberOfGold];
+      if (_numberOfGold &gt;= 0) {
+          self.goldLabel.textColor = [UIColor redColor];
+      }
+      else {
+          self.goldLabel.textColor = [UIColor greenColor];
+      }
+  }
+  @end
+</code></pre>
+
+<p>  一种比较懒的办法是直接暴露 <code>goldLabel</code>，给了使用者较多的灵活性，但也容易造成一些不可预料的结果。</p>
+
+<p>  另外有一些情况属于暴露多余接口，如你自定义了一个 Cell，用来展示某个 Entity 的内容，于是定义如下：</p>
+
+<pre><code>  @interface MyCell: UITableViewCell
+  @property (nonatomic, strong) MyEntity *entity;
+  - (void)renderData;
+  @end
+</code></pre>
+
+<p>  使用者设置了 Entity 后还要调用 <code>- (void)renderData</code> 才能显示出来，这其实是多余的，可以去掉 <code>- (void)renderData</code> 而在 Entity 的 <strong>setter</strong> 中内部调用 <code>- (void)renderData</code> 或其他类似的方法。使用者所设置的，即是所看到（所得到）的，不需要再调用其他方法。</p></li>
+<li><p>调用顺序无关。如果你实现的类有较多的状态无关的属性，它应该是调用顺序无关的。例如，一个 <strong>VC</strong> 暴露了一个 <code>titleColor</code> 属性，可以设置视图中 Label 的颜色，一个比较常见的错误是如下实现：</p>
+
+<pre><code>  @interface MyViewController: UIViewController
+  @property (nonatomic, strong) UIColor *titleColor;
+  @end
+
+  @implementation MyViewController
+  - (void)viewDidLoad
+  {
+      [super viewDidLoad];
+      self.titleLabel.textColor = self.titleColor;
+  }
+  @end
+</code></pre>
+
+<p>  以上实现的问题在于，如果 <strong>VC</strong> 的视图已经加载，那么设置 <code>titleColor</code> 将无效。正确的实现应该如下：</p>
+
+<pre><code>  @implementation MyViewController
+  - (void)viewDidLoad
+  {
+      [super viewDidLoad];
+      self.titleLabel.textColor = self.titleColor;
+  }
+
+  - (void)setTitleColor:(UIColor *)titleColor
+  {
+      if (_titleColor != titleColor) {
+          _titleColor = titleColor;
+          if (self.isViewLoaded) {
+              self.titleLabel.textColor = self.titleColor;
+          }
+      }
+  }
+  @end
+</code></pre>
+
+<p>  这样保证使用者无论何时设置都是有效的。</p></li>
+</ul>
+
+
+<h2>宏</h2>
+
+<p>合理地使用 <strong>NS</strong> 自带的编译器预处理宏定义可以马上提高整个代码的逼格，如：</p>
+
+<p>```obj-c
+UIKIT_EXTERN NSString *const MyUserDidLoginNotification;</p>
+
+<p>@interface MyUser: NSObject
+@property (nonatomic, strong) NSString <em>name DEPRECATED_MSG_ATTRIBUTE(&ldquo;Use userName instead!&rdquo;);
+@property (nonatomic, strong) NSString </em>userName;</p>
+
+<ul>
+<li>(instancetype)initWithName:(NSString <em>)name email:(NSString </em>)email NS_DESIGNATED_INITIALIZER;</li>
+<li>(void)reloadData NS_REQUIRES_SUPER;
+@end</li>
+</ul>
+
+
+<p>@interface MyUserManager : NSObject
++ (instancetype)sharedManager;</p>
+
+<ul>
+<li>(instancetype)init NS_UNAVAILABLE;</li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>更多宏请参见 <code>&lt;Foundation/NSObjCRuntime.h&gt;</code>。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[为什么你不应该使用 Interface Builder]]></title>
+    <link href="http://rickytan.cn/blog/2015/11/23/why-shouldnt-you-use-ib/"/>
+    <updated>2015-11-23T13:55:00+08:00</updated>
+    <id>http://rickytan.cn/blog/2015/11/23/why-shouldnt-you-use-ib</id>
+    <content type="html"><![CDATA[<p><strong>Xcode</strong> 太卡了！！！！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[为什么你应该开始使用 Interface Builder]]></title>
+    <link href="http://rickytan.cn/blog/2015/11/23/why-should-you-start-to-use-ib/"/>
+    <updated>2015-11-23T11:26:00+08:00</updated>
+    <id>http://rickytan.cn/blog/2015/11/23/why-should-you-start-to-use-ib</id>
+    <content type="html"><![CDATA[<p>众所周知，用 <strong>Xcode</strong> 开发 <strong>App Watch</strong> 应用只能使用 <code>Interface Builder</code> （以下简称 <strong>IB</strong>），甚至于它的 <strong>API</strong> 中都没有 <code>-(void)init</code> 接口，如下：</p>
+
+<p>``` objective-c
+@interface WKInterfaceButton : WKInterfaceObject</p>
+
+<ul>
+<li>(void)setTitle:(nullable NSString *)title;</li>
+<li><p>(void)setAttributedTitle:(nullable NSAttributedString *)attributedTitle;</p></li>
+<li><p>(void)setBackgroundColor:(nullable UIColor *)color;</p></li>
+<li>(void)setBackgroundImage:(nullable UIImage *)image;</li>
+<li>(void)setBackgroundImageData:(nullable NSData *)imageData;</li>
+<li><p>(void)setBackgroundImageNamed:(nullable NSString *)imageName;</p></li>
+<li><p>(void)setEnabled:(BOOL)enabled;</p></li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>另外，在 <strong>Xcode 6</strong> 之后，新增了一个很强的特性 <strong>IBInspectable</strong>，它允许开发者自定义的控件使用 <strong>IB</strong> 来设置参数。</p>
+
+<p>回顾计算机的发展历程，人类一直在为 <strong>WYSIWYG</strong> （所见即所得）做着不懈的努力（当然，程序员有时候会逆其道而行之，比如写文档像码代码的 <a href="https://www.latex-project.org/"><strong>LaTeX</strong></a>），毕竟人是视觉动物。我个人而言是十分崇尚在生产环境中使用 <strong>Xib</strong> 和 <strong>StoryBoard</strong> 的，而 <strong>IBInspectable</strong> 的出现更加坚定了继续使用它们的信心，同时也表明的苹果官方的态度，苹果希望开发者们使用 <strong>IB</strong>。</p>
+
+<p>接下来就说明一下 <strong>IBInspectable</strong> 可以为封装控件带来什么新的启发。<!--more--></p>
+
+<h2><strong>IBInspectable</strong></h2>
+
+<p><strong>IBInspectable</strong> 的使用非常简单，首先定义自己的类，然后在定义的上一行添加 <strong>IB_DESIGNABLE</strong> 宏即可（如果是 <strong>Swift</strong>，使用 <code>@IBDesignable</code>）。这里以本人的开源项目 <a href="https://github.com/rickytan/RTIconButton"><strong>RTIconButton</strong>（https://github.com/rickytan/RTIconButton）</a> 为例：</p>
+
+<p>``` objective-c
+typedef NS_ENUM(NSInteger, GSIconPosition) {</p>
+
+<pre><code>GSIconPositionTop       = 0,
+GSIconPositionLeft,
+GSIconPositionBottom,
+GSIconPositionRight
+</code></pre>
+
+<p>};</p>
+
+<p>IB_DESIGNABLE
+@interface RTIconButton : UIButton
+@property (nonatomic, assign) IBInspectable CGFloat iconMargin;
+@property (nonatomic, assign) IBInspectable NSInteger iconPosition;
+@property (nonatomic, assign) IBInspectable CGSize iconSize;    // default is image size;
+@end
+```</p>
+
+<p>然后在需要使用 <strong>IB</strong> 来设置值的属性上添加 <strong>IBInspectable</strong> 宏。这个并不是什么新的黑科技，事实上它只是告诉了 <strong>Xcode</strong> 使用 <strong>Runtime Attribute</strong> 来设置它的值。</p>
+
+<p><img src="/images/use-ib/0.png" alt="" /></p>
+
+<p>所以它支持的属性类型也是有限的，只有以下几种（不支持 <strong>UIFont</strong> 和 <strong>ENUM</strong>，所以本项目中的 <code>iconPosition</code> 使用了 <code>NSInteger</code>），但也基本够用：</p>
+
+<ul>
+<li>Boolean</li>
+<li>Number</li>
+<li>String</li>
+<li>Localized String</li>
+<li>Point</li>
+<li>Size</li>
+<li>Rect</li>
+<li>Range</li>
+<li>Color</li>
+<li>Image</li>
+<li>Nil</li>
+</ul>
+
+
+<p>上面的代码中，三个属性都定义为可以使用 <strong>IB</strong>，那么当你拖拽一个 <strong>UIButton</strong> 到界面上，设置它的 <strong>Class</strong> 为 <strong>RTIconButton</strong> 后，<strong>Xcode</strong> 的 <strong>Attributes Inspector</strong> 面板会多出如下几个可设置的项目：</p>
+
+<p><img src="/images/use-ib/1.png" alt="" /></p>
+
+<p>如果不设置，它将使用默认值，即代码在 <code>-(void)init</code> 时自己设置的值。这里需要注意的是，从 <strong>IB</strong> 生成的界面调用的是 <code>- (instancetype)initWithCoder:(NSCoder *)aDecoder</code>，所以通常的做法写一个 <code>-(void)commonInit</code> 之类的。</p>
+
+<p>``` objective-c
+&ndash; (void)commonInit
+{</p>
+
+<pre><code>self.iconSize = CGSizeZero;
 </code></pre>
 
 <p>}</p>
 
 <ul>
-<li><p>(UIButton <em>)getButton
+<li><p>(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-  UIButton </em>btn = [UIButton buttonWithType:UIButtonTypeCustom];
-  [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];</p>
-
-<p>  [btn setTitle:@&ldquo;Normal&rdquo; forState:UIControlStateNormal];
-  [btn setTitle:@&ldquo;Selected&rdquo; forState:UIControlStateSelected];
-  [btn setTitle:@&ldquo;Highlighted&rdquo; forState:UIControlStateHighlighted];
-  [btn setTitle:@&ldquo;Highlighted &amp; Disabled&rdquo; forState:UIControlStateHighlighted | UIControlStateDisabled];
-  [btn setTitle:@&ldquo;Disabled&rdquo; forState:UIControlStateDisabled];
-  [btn setTitle:@&ldquo;Selected &amp; Disabled&rdquo; forState:UIControlStateSelected | UIControlStateDisabled];
-  [btn setTitle:@&ldquo;Selected &amp; Highlighted &amp; Disabled&rdquo; forState:UIControlStateSelected | UIControlStateHighlighted | UIControlStateDisabled];
-  [btn setTitle:@&ldquo;Selected &amp; Highlighted&rdquo; forState:UIControlStateSelected | UIControlStateHighlighted];</p>
-
-<p>  btn.bounds = CGRectMake(0, 0, 240, 30);</p>
-
-<p>  return btn;
+  self = [super initWithCoder:aDecoder];
+  if (self) {
+      [self commonInit];
+  }
+  return self;
+}</p></li>
+<li><p>(instancetype)initWithFrame:(CGRect)frame
+{
+  self = [super initWithFrame:frame];
+  if (self) {
+      [self commonInit];
+  }
+  return self;
 }
 ```</p></li>
 </ul>
 
 
-<p>实验证明，</p>
+<h2><code>intrinsicContentSize</code></h2>
+
+<p>其次，为了支持 <strong>NSLayoutConstraint</strong>，一定要实现 <code>- (CGSize)intrinsicContentSize</code> 方法，否则在运行时，控件的 <strong>size</strong> 会发生改变：</p>
+
+<p>``` objective-c
+&ndash; (CGSize)intrinsicContentSize
+{</p>
+
+<pre><code>CGRect contentRect = [self contentRectForBounds:self.bounds];
+</code></pre>
+
+<h1>pragma clang diagnostic push</h1>
+
+<h1>pragma clang diagnostic ignored &ldquo;-Wdeprecated&rdquo;</h1>
+
+<pre><code>CGSize titleSize = [[self titleForState:self.state] sizeWithFont:self.font];
+</code></pre>
+
+<h1>pragma clang diagnostic pop</h1>
+
+<pre><code>CGSize imageSize = CGSizeEqualToSize(self.iconSize, CGSizeZero) ? [super imageRectForContentRect:contentRect].size : self.iconSize;
+
+switch (_iconPosition) {
+    case GSIconPositionTop:
+    case GSIconPositionBottom:
+        return CGSizeMake(MAX(titleSize.width, imageSize.width), titleSize.height + imageSize.height + self.iconMargin);
+
+        break;
+    default:
+        return CGSizeMake(titleSize.width + imageSize.width + self.iconMargin, MAX(titleSize.height, imageSize.height));
+        break;
+}
+</code></pre>
+
+<p>}</p>
 
 <ul>
-<li><code>UIControlStateHighlighted</code> 跟 <code>UIControlStateHighlighted | UIControlStateDisabled</code></li>
-<li><code>UIControlStateSelected | UIControlStateHighlighted</code> 跟 <code>UIControlStateSelected | UIControlStateHighlighted | UIControlStateDisabled</code></li>
+<li>(CGSize)sizeThatFits:(CGSize)size
+{
+  return [self intrinsicContentSize];
+}
+```</li>
 </ul>
 
 
-<p>的效果是一样的，会相互覆盖（苹果的 Bug？），剩下还有 6 种可能的状态。同时我们还能发现，当一种状态（或组合状态）没有设置时，它会使用正常态的设置。</p>
+<p>本项目解决了 <strong>Icon</strong> 与 <strong>Title</strong> 混排的一些常见需求，支持设置间距、调整 <strong>Icon</strong> 大小、<strong>Icon</strong> 位置，及水平和竖直方向对齐，并且所有的设置所见即所得！</p>
 
-<p><img src="/images/uibutton-state.png" alt="UIButton State" /></p>
+<p><img src="/images/use-ib/2.png" alt="" /></p>
 
-<p>所以，如果你的按钮正常是白色的，选中时是<span style="color: red">红色</span>的，而你想让用户在点击一个选中按钮时让它保持<span style="color: red">红色</span>，应该这么做：</p>
+<p>所有源代码可以在 <a href="https://github.com/rickytan/RTIconButton">https://github.com/rickytan/RTIconButton</a> 上找到。</p>
 
-<p><code>objective-c
-UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-[btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-[btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
-[btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected | UIControlStateHighlighted];
-</code></p>
+<p>目前已知问题：</p>
 
-<p>因为点击选中的按钮其实就是选中态与高亮态的叠加，如果没有设置它就用正常态的白色了。</p>
+<ol>
+<li>如果设置了 <strong>Shows Touch On Highlight</strong>（即点上去发白光的那个属性），白光可能不在正中间</li>
+</ol>
+
+
+<hr />
+
+<p>这就完了吗？并没有！有些控件需要 <strong>Delegate</strong> 提供数据源，在真正运行前是看不到样子的怎么办？其实也可以让它们可见，至少来说部分可见。同时，这里以本人的另一个项目 <a href="https://github.com/rickytan/RSlideView"><strong>RSlideView</strong></a> 为例：</p>
+
+<p>``` objective-c
+IB_DESIGNABLE
+@interface RSlideView : UIView
+// 这里省略了不支持 IB 的属性
+@property (nonatomic, assign, getter = isLoopSlide) IBInspectable BOOL loopSlide;
+@property (nonatomic, assign, getter = isContinuousScroll) IBInspectable BOOL continuousScroll;
+@property (nonatomic, assign, getter = isPageControlHidden) IBInspectable BOOL pageControlHidden;   // Default YES
+@property (nonatomic, assign) IBInspectable UIColor *pageControlBackgroundColor;
+@property (nonatomic, assign) IBInspectable CGSize pageSize;  // Default to be the RSlideView&rsquo;s size</p>
+
+<pre><code>// The Gap between two pages, default to be 0
+</code></pre>
+
+<p>@property (nonatomic, assign) IBInspectable CGFloat pageMargin;
+@end
+```</p>
+
+<p>本项目提供一个可以循环滚动的 <strong>Banner</strong> 控件，但是在运行前没有任何数据可以生成 <strong>Banner</strong>，我们可以覆盖 <code>- (void)drawRect:(CGRect)rect</code> 方法将 <strong>Banner</strong> 的布局样子绘制出来：</p>
+
+<p>``` objective-c</p>
+
+<h1>if TARGET_INTERFACE_BUILDER</h1>
+
+<ul>
+<li><p>(void)drawRect:(CGRect)rect
+{
+  // Drawing code
+  if (CGSizeEqualToSize(<em>pageSize, CGSizeZero)) {
+      </em>pageSize = self.bounds.size;
+  }
+  [self updateVisibalePages];</p>
+
+<p>  CGSize size = CGSizeMake(<em>pageSize.width + </em>pageMargin, _pageSize.height);</p>
+
+<p>  CGRect scrollRect = CGRectMake((CGRectGetWidth(self.bounds) &ndash; <em>pageSize.width &ndash; </em>pageMargin) / 2,
+                                 (CGRectGetHeight(self.bounds) &ndash; <em>pageSize.height) / 2,
+                                 self.pageSize.width + </em>pageMargin, _pageSize.height);</p>
+
+<p>  NSDictionary *attri = @{NSFontAttributeName: [UIFont systemFontOfSize:13],
+                          NSForegroundColorAttributeName: [UIColor darkTextColor]};</p>
+
+<p>  NSInteger start = self.loopSlide ? &ndash;<em>extraPagesForLoopShow : 0;
+  for (NSInteger i = start; i &lt;= </em>extraPagesForLoopShow; ++i) {
+      [[UIColor grayColor] setStroke];
+      [[UIColor colorWithWhite:0.9 alpha:1.0] setFill];</p>
+
+<pre><code>  CGRect rect = CGRectMake(_pageMargin / 2 + size.width * i,
+                           (size.height - _pageSize.height) / 2,
+                           _pageSize.width, _pageSize.height);
+  rect = CGRectOffset(rect, scrollRect.origin.x, scrollRect.origin.y);
+  UIBezierPath *path = [UIBezierPath bezierPathWithRect:rect];
+  [path stroke];
+  [path fill];
+  NSString *page = [NSString stringWithFormat:@"Page %s%ld", self.loopSlide &amp;&amp; i &lt; 0 ? "N" : "", i];
+  CGSize textSize = [page sizeWithAttributes:attri];
+  CGPoint textPoint = CGPointMake(CGRectGetMidX(rect) - textSize.width / 2, CGRectGetMidY(rect) - textSize.height / 2);
+  [page drawAtPoint:textPoint
+     withAttributes:attri];
+</code></pre>
+
+<p>  }</p>
+
+<p>  self.pageControl.numberOfPages = MIN(10, _extraPagesForLoopShow * 2 + 1);
+  self.pageControl.title = @&ldquo;Page 0&rdquo;;
+}</p>
+
+<h1>endif</h1>
+
+<p>```</p></li>
+</ul>
+
+
+<p>于是得到以下结果，我们没有数据也可以看到有数据后它们应该有的布局了！</p>
+
+<p><img src="/images/use-ib/3.png" alt="" /></p>
+
+<p>你可以调整 <strong>pageSize</strong>，<strong>pageMargin</strong> 等属性，同样所见即所得！</p>
+
+<blockquote><p>这里需要注意的是，我们并不需要在真正使用这个控件的时候出现绘制的边框，所以代码需要用 <strong>TARGET_INTERFACE_BUILDER</strong> 宏包起来，告诉编译器，只在使用 <strong>IB</strong> 时编译这段代码。</p></blockquote>
+
+<h2>结语</h2>
+
+<p>所以为什么还不使用 <strong>IB</strong> 呢？所见即所得不应该成为程序员的终极目标么？赶紧拿出你之前写的代码做一次最佳实践吧！</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[自动生成低清图的 Xcode 插件]]></title>
-    <link href="http://rickytan.cn/blog/2015/01/17/rtimageassets/"/>
-    <updated>2015-01-17T00:02:00+08:00</updated>
-    <id>http://rickytan.cn/blog/2015/01/17/rtimageassets</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
+    <title type="html"><![CDATA[是时候使用 PDF 资源了]]></title>
+    <link href="http://rickytan.cn/blog/2015/11/06/time-to-use-pdf-assets/"/>
+    <updated>2015-11-06T17:56:00+08:00</updated>
+    <id>http://rickytan.cn/blog/2015/11/06/time-to-use-pdf-assets</id>
+    <content type="html"><![CDATA[<p>一年前我做了这个插件 <a href="https://github.com/rickytan/RTImageAssets">RTImageAssets</a>，为了解决自己在开发过
+程中的一个痛点，这个痛点貌似也恰好是许多其他 iOS 开发者的痛点，那就是要不断地向美术解释如何正确切图。</p>
 
-<p>随着 iPhone 6 Plus 等的发布，在普通消费者眼中，又要少两个肾，在 <strong>iOS</strong> 开发者眼中，又有两款新屏幕需要支持了。新的 iPhone 6 Plus 拥有一块 5.5 英寸的视网膜屏，分辨率为 <code>1080x1920</code>，<strong>PPI</strong> 为 401，在程序中表现为 <strong>3x</strong>，即，对于一张代码中指定的 <code>100x100</code> 的图片，实际需要 <code>300*300</code> 的图片填充才不会产生模糊。为此开发者们及美术们又要伤不少脑筋了，开发者需要一遍又一遍地向美术解释，每张图需要切三份，每份应该怎么样。有时候少切了，或者不满足要求，程序员还得自己动手缩放。</p>
+<p>于是一时间也获得了不少反馈，但这始终只是个临时解决办法。事实上从 <strong>Xcode 6</strong> 开始就已经支持使用 PDF
+矢量图了。现在 iOS 设备越来越多，谁知道以后需要支持什么样的屏幕，而矢量图正是解决这一问题的良策。<!--more-->另外，很多同行反应从 @3x 的图生成的 @2x 的图点用的磁盘空间还大些，这其实是色彩空间和 PNG
+压缩算法决定的，我也没有时间深入研究这个，开发这个插件的目的只是让它有 @2x 的图以保证运行时图片大小跟
+期望的一致，事实上 <strong>Xcode</strong> 在打包时会自动优化 PNG 图片。所以终极解决方案，还是从现在开始，全部使用矢量图吧！</p>
 
-<p>程序员总是懒的，于是我做了一个 <code>Xcode</code> 插件来完成此事：<a href="https://github.com/rickytan/RTImageAssets">RTImageAssets</a></p>
+<p>如果对 PNG 图片压缩有兴趣，相关信息可以在 <a href="https://tinypng.com/">https://tinypng.com/</a> 和 <a href="https://imageoptim.com/">https://imageoptim.com/</a> 上找到。</p>
+
+<p>使用矢量图的方法跟普通 PNG 一样，按下图设置好后，原来的三个槽会变成一个，重新把图片拖进去就好：</p>
+
+<p><img src="/images/pdf-asset/1.png" alt="image0" /></p>
+
+<p>一定要选为 <em>Vector</em> ，之前碰到过将 <strong>PDF</strong> 图当 <strong>PNG</strong> 用的人……</p>
+
+<p>这样一来，无需再担心屏幕的分辨率问题，随着 <strong>Xcode</strong> 的更新，它会自动加入所需的分辨率。</p>
+
+<p>你不需要担心移动设置上使用矢量图的性能问题，因为事实上在打包的时候 <strong>Xcode</strong> 将它们变成 PNG 了：</p>
+
+<p><img src="/images/pdf-asset/2.png" alt="image1" /></p>
+
+<blockquote><p><em>最低支持到 <strong>iOS 6</strong> 时，会使用原始 PNG 图，可以看到以上的命名方式，<strong>iOS 7</strong> 以上已经将所有图片打包为 <code>Assets.car</code> 了</em></p></blockquote>
+
+<p>关于矢量图的生成问题，如果美术会使用 <a href="http://www.sketchcn.com/">Sketch</a> ，那么它对生成  PDF 等十分友好，如果 TA 不会用 Sketch，你是时候招个新的了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[XCode 中如何自动增长 Build 号]]></title>
+    <link href="http://rickytan.cn/blog/2014/09/28/xcode-build-number/"/>
+    <updated>2014-09-28T19:46:00+08:00</updated>
+    <id>http://rickytan.cn/blog/2014/09/28/xcode-build-number</id>
+    <content type="html"><![CDATA[<h2>iTunes Connect 新步骤</h2>
+
+<p>随着 iOS8 的推出，苹果 itunes connect 中上传新应用多了一个新步骤：测试。</p>
+
+<p>几个月前听闻 Apple 收购 <a href="https://testflightapp.com">TestFlight</a>，但一直没有看到任何变化，如今 TestFlight 已经集成到新应用的发布
+、审核过程中了。打开 <a href="https://itunesconnect.apple.com">iTunesConnect</a>，可以看到在 <code>Versions</code> 旁边新
+增了一个 <code>Prerelease</code> 标签页。原先通过 <code>XCode</code> 上传的应用会直接进入苹果的审核队列中，现在它会先出现
+在这里，这里其实就是一个 <code>TestFlight</code> 的功能，你可以在 <strong><em>Users and Roles</em></strong> 中增加测试人员的 <em>Apple ID</em>，
+然后在 <code>Prerelease</code> 下的 <code>Internal Testers</code> 中可以看到。每上传一个新的 <strong><em>Build</em></strong>，苹果会自动发邮件给
+测试人员，测试人号点开邮件中的链接，在 <code>Safari</code> 中打开，然后 <code>Safari</code> 会打开设备上的 <code>Test Flight</code>，
+开始自动下载应用进行测试。</p>
 
 <!--more-->
 
 
-<blockquote><h2>简介</h2>
+<p>这样的好处很明显，正在进行测试的版本与正式上线的版本是完全一样的，因为原来我们要做测试可能测试版与正式
+版使用了不同的签名证书，然后每次加新人又要添加设备 <code>UDID</code> 到 <strong><em>Provisioning Profile</em></strong> 等等。</p>
+
+<p>测试通过之后，回到 <code>iTunesConnect</code> 中的 <code>Versions</code>，下拉找到 <code>Build</code>，选择刚刚测试好的 <strong><em>Build</em></strong> 号，
+点 <code>Save</code>，然后就可以进入正常的审核队列了。</p>
+
+<blockquote><p><strong><em>注意：</em></strong>测试功能只有使用苹果开发者网站最近生成的 <strong><em>Provisioning Profile</em></strong> 才能开启，而且会自
+动加入，不要去 <strong><em>Entitlement</em></strong> 中勾选了。</p></blockquote>
+
+<h2>Build 号</h2>
+
+<p>在 <code>iOS</code> 应用的 <code>Info.plist</code> 中有两个版本号，即 <strong><em>Version</em></strong> 和 <strong><em>Build</em></strong>，对应键值为 <code>CFBundleShortVersionString</code> 和 <code>CFBundleVersion</code>。
+一个是应用程序本身发布时的版本号，一个是表示这个发布版的二进制代码是第几次编译得到的。在 <strong><em>iOS8</em></strong>
+之前由于苹果并没有约束这两者的关系，本人一般就把两个填一样的，如 <code>2.1.4</code> 等，也一直没出过问题，但是
+最近由于苹果加入了测试功能，所有上传的 <strong><em>Build</em></strong> 都会保存，然后第一个因为某原因审核不过，再上传第
+二个就出现了 <strong><em>Build</em></strong> 号冲突的问题。于是想到这才是 <strong><em>Build</em></strong> 的正确使用方法，它本应该是个整数，
+在 <strong><em>Version</em></strong> 保持不变，<strong><em>Build</em></strong> 应该是要随着编译次数增长的！</p>
+
+<h2>自动增长</h2>
+
+<p>那么如何让 <strong><em>Build</em></strong> 号自动增加呢？很早前搜到过一段代码，现在可以用上了：</p>
+
+<ol>
+<li><p>在 <code>XCode</code> 中选中项目，打开 <code>Build Phases</code>，如下图：</p>
+
+<p> <img src="/images/run-script.png" alt="RunScript" /></p></li>
+<li><p>点 “+” 增加一个过程，选择“Run Script”，移到“Link Binary With Libraries”之后，并贴入以下代码：</p>
+
+<p> <div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;buildNumber<span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c &amp;ldquo;Print CFBundleVersion&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;<span class="k">)</span>
+</span><span class='line'><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span><span class='line'>/usr/libexec/PlistBuddy -c &amp;ldquo;Set :CFBundleVersion <span class="nv">$buildNumber</span>&amp;rdquo; &amp;ldquo;<span class="nv">$INFOPLIST_FILE</span>&amp;rdquo;
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
+</ol>
 
-<p>本项目是一个 Xcode 插件，用来生成 @3x 的图片资源对应的 @2x 和 @1x 版本，只要拖拽高清图到 @3x 的位置上，然后按 Ctrl+Shift+A 即可自动生成两张低清的补全空位。当然你也可以从 @2x 的图生成 @3x 版本，如果你对图片质量要求不高的话。</p>
-
-<h2>特性</h2>
-
-<ul>
-<li>只会填补空位，如果你已经设置好了自己的 @2x 图，则不会生成；</li>
-<li>自动重命名，保持项目干净（把 N.imageset 下的图片名字改为 N.png <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#78;&#64;&#x32;&#x78;&#46;&#112;&#x6e;&#x67;">&#x4e;&#64;&#x32;&#120;&#46;&#x70;&#x6e;&#103;</a> <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x4e;&#x40;&#51;&#x78;&#x2e;&#x70;&#110;&#103;">&#x4e;&#64;&#51;&#x78;&#46;&#112;&#110;&#x67;</a> 等）；</li>
-<li>使用简单，不用再麻烦美术同学缩放了；</li>
-</ul>
-
-
-<p><strong>注意：</strong>本插件从 @3x 到 @2x 的缩放保证图片在屏幕上显示的物理尺寸一样，而不是与屏幕比例一样，缩放系数是 1.5，而不是 1242 / 640 = 1.94。</p></blockquote>
-
-<p>更多信息，请移步：<a href="https://github.com/rickytan/RTImageAssets">https://github.com/rickytan/RTImageAssets</a></p>
-
-<h2>安装</h2>
-
-<p>你可以从源码构建安装（推荐）：</p>
-
-<pre><code>git clone https://github.com/rickytan/RTImageAssets.git
-</code></pre>
-
-<p>或者运行如下命令安装 <code>Xcode</code> 插件管理器（官网：<a href="http://alcatraz.io/">http://alcatraz.io/</a>）：</p>
-
-<pre><code>curl -fsSL https://raw.github.com/supermarin/Alcatraz/master/Scripts/install.sh | sh
-</code></pre>
-
-<p>搜索：<code>RTImageAssets</code></p>
-
-<p>本插件还在不断完善之中，并在不久后会加入自动生成所有 <strong>Icon</strong> 的功能，欢迎各位测试吐槽！如有任何问题，请到 <a href="https://github.com/rickytan/RTImageAssets/issues">https://github.com/rickytan/RTImageAssets/issues</a> 创建 <strong>Issue</strong></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Xcode 6 默认不再构建 Armv7s 指令集的代码]]></title>
-    <link href="http://rickytan.cn/blog/2015/01/16/xcode-6-drops-armv7s/"/>
-    <updated>2015-01-16T11:21:00+08:00</updated>
-    <id>http://rickytan.cn/blog/2015/01/16/xcode-6-drops-armv7s</id>
-    <content type="html"><![CDATA[<blockquote><p>原文 <a href="http://www.cocoanetics.com/2014/10/xcode-6-drops-armv7s/">Xcode 6 drops armv7s</a></p></blockquote>
-
-<p>最新的 <code>Xcode</code> 默认已经不再为 <code>armv7s</code> 构建可执行代码了，这到底是计划之中还是一时疏忽？</p>
-
-<p>当前最新版 <code>Xcode 6</code> 已经将 <code>${ARCHS_STANDARD}</code> 定义为 <code>armv7</code> 和 <code>arm64</code> 了，同时当你更新 <code>Xcode</code> 时它会不断提醒你删除你自己的定义，让 <code>Xcode</code> 帮你做决定。而在你不堪骚扰按它的做之后，你会发现你的项目不再构建 <code>armv7s</code> 的代码了。</p>
-
-<p><code>armv7s</code> 的指令集运行于 Apple A6 （iPhone 5）和 Apple A6X （iPad 4）CPU 上。接下来的 Apple A7 （iPhone 5S，iPad Air，iPad Mini Retina）已经使用了 64 位的 <code>arm64</code> 架构。</p>
-
-<!--more-->
-
-
-<p>当苹果在 <code>Xcode</code> 中加入 <code>armv7s</code> 的支持后，它让许多使用了第三方的二进制库，如 Google Analytics，的开发者困惑了很久。为了构建应用，链接器需要所有链接的外部库包含相同的架构。开发者们不得不从他们的应用中移除 <code>armv7s</code> 的支持，而第三方库需要更新他们的二进制代码以添加新架构的支持。</p>
-
-<p>这并不是一个真的问题，因为尽管少了一些优化，但 A6 芯片还是可以很好地运行 <code>armv7</code> 的代码。只是你升级了 <code>Xcode</code> 之后，原来好好的代码突然出现链接错误会让你很不爽而已。</p>
-
-<p><img src="/images/Screen-Shot-2014-10-10-at-10.42.32.png" alt="Image0" /></p>
-
-<p>修复方法也很简单。作为一个应用开发者，你可以简单地按照 <code>Xcode</code> 的建议删掉你自己覆写的编译架构设置。如果设置是以<strong>粗体</strong>显示的，你可以按下 <code>CMD + delete</code> 让它回到项目推荐设置。</p>
-
-<p>作为一个组件的开发商，你需要采用其他途径。你想要开发者自行决定是否支持 <code>armv7s</code>，那么你应该在你所有的静态库及 <strong>Framework</strong> 中加入 <code>armv7s</code> 的支持。</p>
-
-<p><img src="/images/Screen-Shot-2014-10-10-at-10.49.50.png" alt="Image1" /></p>
-
-<p>开发者的链接器会自动选择所需的架构片断，用以生成应用。如果你设置了 <strong>Build Active Architecture Only</strong> 你会发现只有特定的架构包含进去了。<strong>Debug</strong> 编译时，这个设置默认为 <strong>YES</strong>，它只会生成当前活动的设备或模拟器的架构代码以加快编译速度。<strong>Release</strong> 编译时默认为 <strong>NO</strong>，所有指定的架构都会生成。</p>
-
-<p>在静态库的生成日志中，每一行是一个架构的编译命令，最后是一行将所有架构代码合并，生成一个大的二进制文件。</p>
-
-<p><img src="/images/Screen-Shot-2014-10-10-at-10.53.48.png" alt="Image2" /></p>
-
-<p>另一种检验库文件中包含的架构片断的方法是使用 <code>file</code> 命令：</p>
-
-<p><code>
-file libBarCodeKit.a
-libBarCodeKit.a: Mach-O universal binary with 3 architectures
-libBarCodeKit.a (for architecture armv7):   current ar archive random library
-libBarCodeKit.a (for architecture arm64):   current ar archive random library
-libBarCodeKit.a (for architecture armv7s):  current ar archive random library
-</code></p>
-
-<p>这个库包含所有的移动架构的代码。如果你要生成一个静态的 <strong>Framework</strong> 或者是通用的静态库做为二进制包发布你甚至还要包含模拟器的架构，如下所示：</p>
-
-<p><code>
-file DTRichTextEditor
-DTRichTextEditor: Mach-O universal binary with 5 architectures
-DTRichTextEditor (for architecture armv7):  current ar archive random library
-DTRichTextEditor (for architecture armv7s): current ar archive random library
-DTRichTextEditor (for architecture arm64):  current ar archive random library
-DTRichTextEditor (for architecture i386):   current ar archive random library
-DTRichTextEditor (for architecture x86_64): current ar archive random library
-</code></p>
-
-<p>总而言之，苹果再一次将我们推向指定的方向：停止支持 <code>armv7s</code>。这个架构目前已经被两代新产品的更强大的 64 位 CPU 取代。但是，作为组件开发商，我相信我们仍然需要加入 <code>armv7s</code> 的支持而将选择权交给应用开发者。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RTID]]></title>
-    <link href="http://rickytan.cn/blog/2014/06/06/rtid/"/>
-    <updated>2014-06-06T01:44:00+08:00</updated>
-    <id>http://rickytan.cn/blog/2014/06/06/rtid</id>
-    <content type="html"><![CDATA[<h2>背景</h2>
-
-<p>很多时候我们需要设备的唯一标识符，但自从 <code>iOS 5.0</code> 之后，苹果公司开始限制 <code>[UIDevice currentDevice].uniqueIdentifier</code> 的访问，而现在，这个接口已经被移除，多了一个新的 <code>identifierForVendor</code> 接口。对每个单独的应用，它返回一个唯一的字符串，但是应用删除重装安装后，这个字符串就变了（本人在一个 <code>iOS 6.1.2</code> 越狱设备上测试，可能会有些问题）。这样的话，统计或是作为用户身份登录都会产生问题。</p>
-
-<h3>网卡地址</h3>
-
-<p>读 <code>MAC</code> 地址是个不错的想法<!--more-->，但在目前最新的 <code>iOS 7.0</code> 中返回 <strong>02:00:00:00</strong> ，已经失效。即使是在 <code>iOS 6.0</code> 中，读 <code>MAC</code> 地址也是做为私有接口存在。</p>
-
-<h3>OpenUDID</h3>
-
-<p>这是一个不错的实现，它不依赖 <code>iOS</code> 设备的任何硬件和系统中的 <code>ID</code>，而是随机生成一串字符，并保存在某处。它的限制也很明显，就是当系统升级后，或者所有用到 <code>OpenUDID</code> SDK 的应用都删除了，再安装一个新的用到 <code>OpenUDID</code> 的应用，它返回的 <code>UDID</code> 就变了。</p>
-
-<p>例如，在应用 A 中调用 <code>OpenUDID</code> 接口，返回如下：</p>
-
-<pre><code>3a2ee6eea4d427abcf7e8ce6a0463bfcacf957df
-</code></pre>
-
-<p>再安装一个 <em>bundle identifier</em> 不同的应用 B，也返回</p>
-
-<pre><code>3a2ee6eea4d427abcf7e8ce6a0463bfcacf957df
-</code></pre>
-
-<p>这时删除 A，返回还是一样。无论关机、重启也好。很大程度上可以保存它是设备的唯一标识。但是这时把 B 也删了了，关机重启，再安装，
-就返回一个新的了：</p>
-
-<pre><code>22f76530318d5cdad310dd2d8e89c7c03aebb82b
-</code></pre>
-
-<p>这还不算，毕竟用户把所有用到 <code>OpenUDID</code> 的应用全删除可能性不大。问题是，<code>OpenUDID</code> 的实现用到了公共剪切板，而貌似以后苹果将
-限制跨应用的剪切板访问，所以最终 <code>OpenUDID</code> 也会失效！</p>
-
-<h2>需求</h2>
-
-<p>我们不一定需要一个设备的唯一标识，我们只要在我们自己的应用中能读到一个<strong>唯一</strong>、<strong>不变</strong>的标识，这样就可以做统计分析，或是<em>无帐号</em>系统的游戏登录（因为有帐号的话，用户很大可能就不去玩了，流失率比较高）。它应该有以下特点：</p>
-
-<ul>
-<li>是自己生成的随机串，与系统硬件无关</li>
-<li>只生成一次，以后每次打开读到一样的内容</li>
-<li>用户删除本应用，然后重装，读到一样的内容</li>
-<li>用户升级系统（不是重装系统），仍能读到一样的内容</li>
-</ul>
-
-
-<p>为此，实现了 <code>RTID</code>！</p>
-
-<h2>RTID</h2>
-
-<h3>使用方法</h3>
-
-<p>在你的项目中引入 <code>RTID.h</code>，然后在编译设置中 <code>Other Link Flags</code> 中增加 <code>-ObjC</code>，可能需要添加依赖：</p>
-
-<ul>
-<li>Security.framework</li>
-</ul>
-
-
-<p>然后就可以通过以下方式获取一个唯一且不变的 ID：</p>
-
-<pre><code>NSString *rtid = [UIDevice currentDevice].RTID;
-</code></pre>
-
-<p>经实测，应用删除后，再重装，此 ID 依然不变。除非，重装系统！</p>
-
-<p><img src="https://github.com/rickytan/RTID/raw/master/Screenshot/s0.png" alt="image" /></p>
-
-<h3>风险</h3>
-
-<p>此实现没有调用苹果的私用接口，但本人仍无法保证用到此代码的应用能顺利上线！如果您用到了，且成功上线了，还请<a href="mailto:ricky.tan.xin@gmail.com?subject=%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8%E6%88%90%E5%8A%9F%E4%B8%8A%E7%BA%BF">告知</a>一下，谢谢！</p>
-
-<h3>商用</h3>
-
-<p>本项目开源、免费，但如果您在商用软件中用到此代码，请将您的应用下载链接及简介发送到<a href="mailto:ricky.tan.xin@gmail.com?subject=%E6%88%91%E7%94%A8%E5%88%B0%E4%BA%86RTID">此邮箱</a>，本人感激不尽！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[代码生成的 UIColor 与在 IB 中填写的颜色 RGB 最终颜色不一致的问题]]></title>
-    <link href="http://rickytan.cn/blog/2014/05/26/uicolor-and-colorpicker-in-ib/"/>
-    <updated>2014-05-26T14:58:00+08:00</updated>
-    <id>http://rickytan.cn/blog/2014/05/26/uicolor-and-colorpicker-in-ib</id>
-    <content type="html"><![CDATA[<p>iOS 应用界面的编写，按程序员的习惯可以分为两派：代码党和 <code>IB</code> 党。本人是倾向于 <code>Interface Builder</code> 的，毕竟能少写点就少写点，能用 <code>IB</code> 实现坚决不用代码。</p>
-
-<p>但是在实际使用中，却发现一些问题，这个问题早有发现，我以为只是色差的原因，但是最近发现不那么简单了。</p>
-
-<p>如下图，美术在 <code>PhotoShop</code> 中标了蓝色为 <code>#3689e5</code>，换成 <code>RGB</code> 为 54，137，229，于是在 <code>IB</code> 的颜色中填入此值，但是看到的颜色有差异。</p>
-
-<p><img src="/images/IB/QQ20140510-1.png" alt="image0" /></p>
-
-<!--more-->
-
-
-<p><img src="/images/IB/QQ20140510-2.png" alt="image1" /></p>
-
-<p>这点小差异其实一般人都不会太关心，但后来有一部分功能我不想用 <code>IB</code> 了，于是代码写了个界面，就发现颜色差异不能忍了，代码的颜色是对的，<code>IB</code> 的颜色偏深。</p>
-
-<p>自己写了个 Demo ，截图如下：（这里差别还不是很大，因为我是在 Mac Pro Retian 自己的屏上输入的颜色，当你在外接显示器上用 <code>IB</code> 时，颜色差异十分明显）</p>
-
-<p><img src="/images/IB/s0.png" alt="image2" /></p>
-
-<p>其中上半部分是用 Color Inspector 输入的值：</p>
-
-<p><img src="/images/IB/s1.png" alt="image3" /></p>
-
-<p>可以对比下第 2 张图，与上面这张图，第 2 张图是在外接显示器上输入的，颜色差异之大，不可能是由 228 与 229 造成的！</p>
-
-<p>我一再强调了显示器的不同，对，其实看到这里大家已经猜到，这种不同就来自显示器。点开 <code>RGB Sliders</code> 左边的按钮（我之前都不知道它能点的……），可以看到多种显示器配置文件</p>
-
-<p><img src="/images/IB/color-picker.png" alt="image4" /></p>
-
-<p>选择 <code>Generic RGB</code>，然后三个值会变掉，不管它，你自己再改成 54 137 229。这时它在这个显示器上显示的颜色可能与你要的不对，但是运行时，在模拟器上显示的就与代码无差别了！</p>
-
-<p><img src="/images/IB/s3.png" alt="image5" /></p>
-
-<p>可以用 Mac 自带的 <em>数码测色计</em> 来验证，注意要选 <strong>显示原生值</strong>！</p>
-
-<p>个人的理解，每个显示器在制造时就会有色偏，为了纠正这种色偏，在出厂时会调好一个配置文件，指定显示器在显示 240 这个颜色时（打个比方），你应该显示 248 才能让人的眼睛看着是 240，即显示器上显示的颜色是在原生值上纠偏过的，而<em>数码测色计</em>取的的显示器上的原生值，即 248，显示器根本不知道 240 的存在。这就是为什么用取色的方式总有色差了。</p>
-
-<p>附 <a href="http://stackoverflow.com/questions/7488378/weird-colors-in-xcode-interface-builder">StackOverflow</a> 上的链接 <a href="http://stackoverflow.com/questions/7488378/weird-colors-in-xcode-interface-builder">http://stackoverflow.com/questions/7488378/weird-colors-in-xcode-interface-builder</a></p>
 ]]></content>
   </entry>
   
